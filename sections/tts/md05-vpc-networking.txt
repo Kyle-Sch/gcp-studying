@@ -1,0 +1,25 @@
+Section 5: VPC Networking.
+
+VPC, which stands for Virtual Private Cloud, is the networking foundation for everything you build on Google Cloud. Understanding VPC scope rules is essential, because Google Cloud's networking model is unique compared to other cloud providers.
+
+A VPC itself is global. That means a single VPC can span all regions around the world. This is a powerful feature that simplifies network design for multi-region applications. Subnets, however, are regional. Each subnet lives within a specific region. That said, a subnet can span multiple zones within its region, so virtual machines in different zones can share the same subnet. This is an important detail to remember.
+
+Now let's look at the two ways to connect VPCs together. The first method is VPC Peering. VPC Peering lets two separate VPCs exchange traffic with each other. It is straightforward to set up, but it does not give you IAM-based access control over who can use the peered network.
+
+The second method is Shared VPC. With Shared VPC, one project is designated as the host project, and its VPC network is shared with one or more service projects. Shared VPC gives you full IAM control over which projects and users can use the shared network, making it the preferred option for large enterprise environments.
+
+Moving on to load balancers, Google Cloud offers several types organized by layer and scope. At Layer 7, which handles HTTP and HTTPS traffic, there are three options. The Global External Application Load Balancer is the broadest option. It uses a single anycast IP address, automatically routes traffic to the nearest healthy region, provides SSL termination, and requires no pre-warming, even during traffic spikes. It is ideal for web applications serving users across multiple regions.
+
+The Regional External Application Load Balancer works similarly but is confined to a single region, making it appropriate for applications that only need to serve users in one geographic area. The Regional Internal Application Load Balancer is also regional and handles HTTP and HTTPS traffic, but it routes traffic between internal services rather than serving external users. It is commonly used for microservices communicating within a private network.
+
+At Layer 4, which handles raw TCP and UDP traffic, there are two options. The Network Load Balancer in Proxy mode is regional and handles TCP and SSL proxy traffic. The Network Load Balancer in Passthrough mode is also regional and is used for UDP traffic, raw TCP traffic, or cases where you need to preserve the original client IP address.
+
+Now let's cover how you can connect your on-premises network to Google's network. There are five options, and they differ primarily in whether they offer a service level agreement. The first option is Dedicated Interconnect, which provides a private physical circuit that connects directly to Google's network. This is the most reliable option and is the only one that comes with a guaranteed SLA, or Service Level Agreement.
+
+The second option is Partner Interconnect, which also carries an SLA but connects to Google's network through a third-party service provider rather than a direct physical circuit. The third option is Direct Peering, which uses an unmanaged BGP, or Border Gateway Protocol, connection. It does not carry an SLA. The fourth option is Carrier Peering, which routes traffic through an internet service provider. It also does not carry an SLA.
+
+The fifth option is Cloud VPN, which sends encrypted traffic over the public internet. Cloud VPN is the easiest to set up and is suitable for lower-bandwidth or less latency-sensitive use cases.
+
+Finally, let's look at four additional networking services. Cloud DNS is Google's authoritative domain name system service and carries a one hundred percent uptime SLA. Cloud CDN, which stands for Content Delivery Network, caches your content at Google's Points of Presence around the world, reducing latency for end users. It integrates with the global load balancer.
+
+Cloud NAT, which stands for Network Address Translation, allows virtual machines that have no public IP address to still reach the internet for outbound connections, such as downloading software updates. Firewall rules in Google Cloud are stateful and distributed, meaning they are enforced at the VM level rather than at a gateway. You can apply firewall rules using network tags attached to VMs or by specifying IP address ranges.

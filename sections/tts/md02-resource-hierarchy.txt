@@ -1,0 +1,19 @@
+Section 2: Resource Hierarchy.
+
+Google Cloud organizes everything inside a four-level hierarchy. At the very top sits the Organization Node. Beneath that, you can optionally create Folders, which are nestable containers for organizing your work. Inside folders, or directly under the organization if you choose not to use folders, you have Projects. Projects are the core billing and API unit. And finally, within each project live the actual Resources, such as virtual machines, storage buckets, and databases.
+
+There are several key rules that govern how this hierarchy behaves. First, policies inherit downward. This means if you set a policy at the folder level, it automatically applies to every project inside that folder. Second, a more permissive parent policy always overrides a more restrictive child policy. So if a folder grants broad access, a project inside it cannot be made more restrictive by its own policy alone.
+
+It's also important to note that each resource belongs to exactly one project. Resources cannot span across multiple projects. Additionally, APIs are enabled and disabled at the project level, not at the folder level or the organization level.
+
+Now let's look at the three identifiers that every project has. Each identifier behaves differently, so it's worth understanding each one carefully.
+
+The first is the Project ID. The Project ID is globally unique across all of Google Cloud. Google assigns it, but you can edit it during the creation process. Once the project is created, the Project ID is immutable, meaning it can never be changed.
+
+The second identifier is the Project Name. Unlike the Project ID, the Project Name does not need to be globally unique. You set it yourself, and you can change it at any time after creation.
+
+The third identifier is the Project Number. The Project Number is also globally unique, but it is assigned entirely by Google. You cannot set or change it. It's primarily used internally and in certain API calls.
+
+Moving on to the Organization Node itself, there are a few important things to know. You must have an Organization Node if you want to use Folders, since folders must live somewhere above projects. If your organization is already a Google Workspace customer, an Organization Node is automatically created for you. If you are not a Google Workspace customer, you can still create an Organization Node by using Cloud Identity.
+
+Two special roles exist at the organization level. The Organization Policy Administrator can set and manage policies that apply across the entire organization. The Project Creator role controls who is allowed to create new projects within the organization.

@@ -1,0 +1,17 @@
+Section 7: Databases.
+
+Choosing the right database is one of the most important decisions you'll make when building on Google Cloud. Google Cloud Platform offers six main database services, and each one is designed for a different kind of problem. Let's walk through each of them clearly so you can match the right tool to the right workload.
+
+The first option is Cloud SQL. Cloud SQL is a relational database service that supports MySQL, PostgreSQL, and SQL Server. It's the best choice for web applications, traditional online transaction processing workloads, and any situation where you're migrating an existing SQL-based application to the cloud. Cloud SQL supports databases up to 64 terabytes in size.
+
+The second option is Cloud Spanner. Cloud Spanner is also a relational database, but it goes a step further by being horizontally scalable, meaning it can spread across multiple machines and regions while still behaving like a standard SQL database. It's ideal for global online transaction processing workloads and can scale into the petabyte range. If you need SQL but your data has outgrown what Cloud SQL can handle, Cloud Spanner is the answer.
+
+The third option is Firestore. Firestore is a NoSQL document database, meaning it stores data as flexible documents rather than rigid rows and columns. It's designed for mobile and web applications that need real-time data synchronization and offline support. Firestore can scale into the terabyte range and is especially popular for apps that need to stay in sync across many devices simultaneously.
+
+The fourth option is Bigtable. Bigtable is a NoSQL wide-column database built for extremely high read and write throughput. It excels at Internet of Things workloads, advertising technology platforms, and any scenario involving heavy, continuous data ingestion. Importantly, Bigtable does not support joins between tables, so it's not a replacement for relational databases. It scales into the petabyte range.
+
+The fifth option is BigQuery. BigQuery is Google Cloud's data warehouse service. It's built for analytics and SQL-based reporting on massive datasets, not for real-time transactional updates. If you need to run complex analytical queries across petabytes of historical data, BigQuery is the right choice.
+
+The sixth and final option is Cloud Storage. Cloud Storage is an object store, meaning it holds files as individual blobs rather than structured data. It's perfect for images, videos, backups, and any kind of unstructured file. Like BigQuery and Bigtable, it scales into the petabyte range.
+
+Now let's look at some quick selection rules to help you decide. If you need SQL and your data is larger than 64 terabytes, choose Spanner. If you need SQL and your data is under 64 terabytes, choose Cloud SQL. If you're building a mobile or web app with real-time requirements, choose Firestore. If you need heavy analytics but don't need SQL joins, choose Bigtable. If you need reporting or a data warehouse, choose BigQuery. And if you're simply storing files or binary large objects, choose Cloud Storage.

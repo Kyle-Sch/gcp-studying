@@ -1,0 +1,15 @@
+Section 19: Gemini Cloud Assist.
+
+Gemini Cloud Assist is Google's AI-powered assistant built into the Google Cloud console. It is designed to help cloud practitioners work faster and more effectively across three main areas.
+
+The first area is Design and Build. In this mode, Gemini Cloud Assist can generate gcloud commands and Terraform configuration code directly from natural language descriptions. Instead of looking up the exact syntax for a command, you can describe what you want to accomplish and Gemini will produce the appropriate code or command for you to review and run.
+
+The second area is Diagnose and Resolve. This is where Gemini provides AI-powered root cause analysis through a feature called Cloud Assist Investigations, which we will look at in more detail shortly.
+
+The third area is Optimize Cost and Usage. Gemini surfaces cost-saving opportunities through the FinOps Hub and can provide specific recommendations for reducing database costs based on your actual usage patterns.
+
+Now let's look more closely at Cloud Assist Investigations. This is an AI-powered root cause analysis tool, often abbreviated as RCA. The primary metric it is designed to reduce is MTTR, which stands for Mean Time to Recovery. The faster you can identify the root cause of an incident, the faster you can resolve it and restore service.
+
+You can trigger a Cloud Assist Investigation from several places in the console: from Logs Explorer when you notice something unusual in your logs, from the GKE Health page when a Kubernetes workload is misbehaving, from a Cloud Monitoring alert that has fired, or directly from the Gemini chat panel.
+
+Once an investigation is triggered, it follows a structured analytical flow. It starts with the observed issue, then gathers observations from across your environment, forms hypotheses about what might be causing the problem, identifies the most likely root cause, and proposes a recommended fix. If the issue requires further support, the investigation can also help you open a Google Cloud support case with the relevant context already attached. This end-to-end flow is designed to dramatically compress the time between when an incident is detected and when it is resolved.

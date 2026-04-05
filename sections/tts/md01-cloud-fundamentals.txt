@@ -1,0 +1,19 @@
+Section 1: Cloud Fundamentals.
+
+Let's begin with the five traits of cloud computing as defined by NIST, which stands for the National Institute of Standards and Technology. According to NIST, there are five essential characteristics that define cloud computing. Understanding these five traits is fundamental to everything else in this course.
+
+The first trait is on-demand self-service. This means you can get resources without calling anyone or waiting for a human to provision anything. The second trait is broad network access, meaning you can access cloud resources from anywhere via the internet. The third trait is resource pooling, where the cloud provider shares its infrastructure across many users simultaneously.
+
+The fourth trait is rapid elasticity, which means you can scale your resources up or down almost instantly to match your needs. The fifth and final trait is measured service, meaning you pay only for what you actually use. Think of it like a utility bill for electricity or water.
+
+Now let's look at the three service models of cloud computing. These models describe how much of the infrastructure you are responsible for managing versus how much the cloud provider handles for you.
+
+The first model is IaaS, which stands for Infrastructure as a Service. With IaaS, you are responsible for managing the operating system, the runtime environment, and your application. Google Compute Engine is the primary example of IaaS in Google Cloud.
+
+The second model is PaaS, which stands for Platform as a Service. With PaaS, you only manage your application and its data. The underlying infrastructure is handled for you. Google App Engine and Cloud Run are examples of PaaS on Google Cloud.
+
+The third model is SaaS, which stands for Software as a Service. With SaaS, you manage nothing at all from an infrastructure perspective. You simply use the software. Google Workspace is the primary SaaS example from Google.
+
+Moving on to cloud history, it helps to think of cloud computing as having evolved through three distinct waves. The first wave was colocation, where companies would rent physical space inside a data center but still owned and managed their own hardware. The second wave introduced virtualized data centers, where virtual machines replaced physical servers, though users were still responsible for managing much of the environment themselves.
+
+The third wave is where we are today, and it is the era of container-based computing. This wave is characterized by fully automated, elastic infrastructure. This is the model that Google Cloud is built on, and it represents the most modern approach to running software at scale.

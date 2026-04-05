@@ -1,0 +1,47 @@
+Section 21: Exam Traps to Avoid.
+
+This section covers the most common mistakes people make on the Google Cloud exam. Each trap is a subtle distinction that is easy to get wrong under pressure. Go through each one carefully, because these are the kinds of details that separate a passing score from a failing one.
+
+
+Trap number one: VPC scope. Remember that a Virtual Private Cloud, or VPC, is a global resource. However, subnets within that VPC are regional. Do not confuse the two. The network itself spans the globe, but each subnet lives in a specific region.
+
+Trap number two: Preemptible versus Spot virtual machines. Both types offer the same discounted price, but they differ in one important way. Preemptible VMs have a maximum runtime of 24 hours. Spot VMs have no maximum runtime. If a question asks about a cost-saving VM with no time limit, the answer is Spot.
+
+Trap number three: APIs per project. Google Cloud APIs and services are enabled or disabled on a per-project basis. This is not a per-folder setting and not a per-organization setting. It is always per project.
+
+Trap number four: IAM role order. The three types of Identity and Access Management, or IAM, roles go from broadest to finest-grained in this order: Basic roles first, then Predefined roles, and finally Custom roles. Custom roles give you the most precise control over permissions.
+
+Trap number five: Project ID. A Project ID is immutable after it has been created. You cannot change it once the project exists. However, during the creation process itself, you can modify it before you finalize the project. After creation, it is locked forever.
+
+
+Trap number six: Cloud Storage type. Cloud Storage is object storage. It is not a file system and it is not a database. Exam questions sometimes try to lead you toward thinking of it as one of those things. Stay clear on this distinction.
+
+Trap number seven: Archive storage cost. The Archive storage class has the lowest storage cost of any Cloud Storage class. But it also has the highest retrieval cost. If your data is accessed frequently, Archive will end up being more expensive overall, not cheaper.
+
+Trap number eight: Data Access audit logs. Data Access audit logs are turned off by default for almost every service. The one exception is BigQuery, where Data Access logs are always on. Admin Activity audit logs, on the other hand, are always on for every service and cannot be disabled.
+
+Trap number nine: Interconnect service-level agreements. Only Dedicated Interconnect comes with a service-level agreement from Google. Partner Interconnect, Direct Peering, and Carrier Peering do not carry that same contractual SLA from Google directly.
+
+Trap number ten: GKE nodes. Google Kubernetes Engine, or GKE, node pools are made up of Compute Engine virtual machines. The nodes are not a separate abstraction. They are real VMs running in your project.
+
+
+Trap number eleven: GKE Autopilot versus Standard mode. In Autopilot mode, Google manages the node infrastructure for you. In Standard mode, you are responsible for managing the nodes yourself. If a question describes a team that does not want to manage nodes, the answer is Autopilot.
+
+Trap number twelve: Scale-to-zero behavior. Cloud Run can scale to zero. App Engine Standard can also scale to zero. App Engine Flexible cannot scale to zero, because it runs on Compute Engine VMs that must remain running. This distinction comes up frequently on the exam.
+
+Trap number thirteen: SLO versus SLA. A Service Level Objective, or SLO, is an internal reliability target. A Service Level Agreement, or SLA, is a contractual commitment to customers. The SLO should always be stricter than the SLA, so that you catch problems internally before they breach your customer commitments.
+
+Trap number fourteen: Windows-based SLOs. A windows-based SLO can hide burst failures. If an error spikes and recovers within a single measurement window, the window may still be counted as good. Request-based SLOs are more precise because they measure individual requests, not time windows.
+
+Trap number fifteen: Log Analytics upgrade. Upgrading a Cloud Logging bucket to use Log Analytics is a permanent change. It cannot be undone. Make sure you understand the implications before enabling it.
+
+
+Trap number sixteen: Policy Denied audit logs. Policy Denied audit logs cannot be disabled. You can exclude them from being stored in a logging bucket, but you cannot turn the logging off entirely. This is an important distinction from other log types.
+
+Trap number seventeen: Cloud Shell disk. The Cloud Shell environment includes a persistent home directory of 5 gigabytes. This storage persists between sessions, unlike the rest of the Cloud Shell environment which is ephemeral.
+
+Trap number eighteen: Terraform state and secrets. Terraform state files store secrets in plaintext. This means you should never put sensitive credentials or secrets directly in your Terraform configuration files, because they will end up readable in the state file.
+
+Trap number nineteen: terraform validate versus terraform vet. The terraform validate command performs a syntax check only. It checks that your configuration files are syntactically correct. The gcloud beta terraform vet command is different: it validates your Terraform plan against organization policy constraints before you apply it.
+
+Trap number twenty: SLOs must be achievable and realistic. A service level objective of 100 percent availability is never a valid SLO. SLOs must follow the SMART criteria, meaning they must be Specific, Measurable, Achievable, Relevant, and Time-bound. Promising 100 percent uptime is neither achievable nor realistic, and any exam question offering it as a choice is a trap.

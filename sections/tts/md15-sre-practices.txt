@@ -1,0 +1,21 @@
+Section 15: SRE Practices.
+
+Let's start by distinguishing between two terms that are closely related but not the same: DevOps and SRE, which stands for Site Reliability Engineering.
+
+DevOps is a philosophy and cultural movement. It encourages collaboration between development and operations teams, but it does not prescribe specific practices. SRE, on the other hand, is a concrete implementation of DevOps principles. It was created at Google by Benjamin Treynor Sloss in 2003. Where DevOps gives you a mindset, SRE gives you actual tools and techniques: error budgets, SLOs, and toil reduction.
+
+Now let's walk through the five pillars of DevOps and how SRE puts each one into practice.
+
+The first pillar is reducing organizational silos. SRE implements this through shared SLOs and error budgets, and by giving teams shared ownership of production systems. The second pillar is accepting failure as normal. SRE implements this through blameless postmortems and by building a culture of psychological safety where people feel comfortable reporting problems.
+
+The third pillar is implementing gradual change. SRE implements this through CI/CD, which stands for Continuous Integration and Continuous Delivery, and through a technique called canarying, which we will cover shortly. The fourth pillar is leveraging tooling and automation. SRE implements this by identifying and eliminating toil, automating everything that can be automated. The fifth pillar is measuring everything. SRE implements this through SLIs, SLOs, error budgets, OKRs, and toil tracking.
+
+Moving on to blameless postmortems. When an incident occurs, SRE practice calls for writing a formal record of what happened. A blameless postmortem contains five things. First, the incident details and a timeline of events. Second, the actions taken to mitigate and resolve the incident. Third, an impact assessment of how users and the business were affected. Fourth, the trigger and all root causes, typically uncovered using the five whys technique, which means repeatedly asking "why" until you reach the underlying systemic issue. Fifth, follow-up action items to prevent the same type of incident from recurring. The word "blameless" is key here. The focus is always on systemic causes, never on assigning fault to an individual.
+
+Now let's talk about toil. In SRE terminology, toil has a very specific definition. Work only qualifies as toil if it meets all of the following criteria: it is manual, it is repetitive, it could be automated, it is tactical rather than strategic, it produces no lasting value, and it grows proportionally as the service grows. The SRE rule of thumb is that no SRE should spend more than 50% of their time on toil. The rest should be engineering work that improves systems permanently.
+
+Let's look at canarying. The idea is to deploy a change to a small, representative subset of users before rolling it out to everyone. The canary group needs to be large enough to be statistically meaningful, but small enough that if something goes wrong, the rest of the service is unaffected. The deployment also needs to be simple enough that you can monitor it clearly and roll it back quickly if needed.
+
+Now for CI/CD. Continuous Integration means that code is built, integrated, and tested in a development environment continuously as changes are committed. Continuous Delivery means that software is deployed to production frequently, at whatever cadence the business chooses. Together, these practices reduce the risk of any single release by making each change smaller and more incremental.
+
+Finally, let's cover OKRs, which stands for Objectives and Key Results. This is Google's framework for setting organizational goals. Each OKR has an objective, which is a qualitative statement of what you want to achieve, and key results, which are measurable outcomes that indicate progress toward the objective. OKRs are scored on a scale from 0.0 to 1.0. The optimal score is 60 to 70%, which reflects stretch goals that push teams without being fully achievable. OKRs are graded publicly and are often shared across cross-functional teams to align efforts.

@@ -1,0 +1,27 @@
+Section 6: Cloud Storage.
+
+Cloud Storage is Google Cloud's object storage service. Before diving into the details, it's important to establish one foundational point: Cloud Storage is object storage only. It is not a file system, it is not a database, and it is not a data warehouse. Understanding this distinction will help you choose the right storage product when faced with exam questions.
+
+Cloud Storage offers four storage classes, each designed for a different data access pattern. The right class for your data depends on how frequently you need to access it and how long you plan to keep it stored.
+
+The first class is Standard storage. Standard is designed for frequently accessed, or hot, data. It has no minimum storage duration requirement, so you can store and delete objects at any time. It carries the highest storage cost per gigabyte, but there is no retrieval fee, making it economical for data you access regularly.
+
+The second class is Nearline storage. Nearline is designed for data you access roughly once per month. It has a minimum storage duration of thirty days, meaning you are charged for at least thirty days even if you delete the object sooner. It has a lower storage cost than Standard, but you pay a retrieval fee each time you access an object.
+
+The third class is Coldline storage. Coldline is designed for data you access roughly once every ninety days. It carries a ninety-day minimum storage duration and has a higher retrieval fee than Nearline. It is a good fit for backup and disaster recovery data that you rarely need but want to access quickly when you do.
+
+The fourth class is Archive storage. Archive is designed for data you access less than once per year, such as long-term regulatory archives. It has the lowest storage cost of all four classes, but it carries the highest retrieval fee and a minimum storage duration of three hundred and sixty-five days.
+
+It's also worth knowing about Autoclass, which is an optional feature that automatically moves objects between storage classes based on their actual access patterns. If you are unsure which class to use, Autoclass takes the guesswork out of it. Importantly, all four storage classes share the same API, the same tools, and the same security model. Switching classes does not require you to change your application code.
+
+Now let's walk through the key features of Cloud Storage. The first is immutability. Objects in Cloud Storage cannot be edited in place. Every time you modify an object, a new version is created. The original is not changed. This design makes Cloud Storage very reliable for storing data that must not be accidentally corrupted.
+
+The second feature is versioning. When versioning is enabled on a bucket, Cloud Storage keeps a full history of every overwrite and every deletion. You can restore a previous version of any object at any time.
+
+The third feature is lifecycle policies. You can configure rules that automatically delete or transition objects based on their age or other conditions. For example, you could set a rule to automatically delete objects that are older than three hundred and sixty-five days, helping you manage storage costs without manual intervention.
+
+The fourth feature is encryption. All data in Cloud Storage is encrypted at rest by default, at no additional charge. All data in transit is also protected using HTTPS and TLS, which stands for Transport Layer Security. Both encryption options are always enabled and require no configuration.
+
+The fifth feature is access control. The preferred method for controlling access is IAM, which applies policies at the bucket level or higher. You can also use ACLs, which stands for Access Control Lists, for finer-grained control at the individual object level.
+
+Finally, the maximum size for a single object in Cloud Storage is five terabytes.

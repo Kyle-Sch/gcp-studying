@@ -1,0 +1,853 @@
+04
+
+Proprietary + Confidential
+Storage in the Cloud
+
+Applications need to store data
+Data
+
+Proprietary + Confidential
+
+Every application needs to store data - for example, media to be streamed or perhaps even sensor data from devices - and different applications and workloads require different storage database solutions.
+
+Google has many options for storing data
+
+Proprietary + Confidential
+
+Structured data Unstructured data Transactional data
+Relational data
+
+Google Cloud has storage options for structured, unstructured, transactional, and relational data.
+
+Storage in the Cloud
+
+01 Cloud Storage
+
+02 Cloud SQL
+
+03 Spanner
+
+04 Firestore
+
+05 06
+
+Bigtable Comparing storage options
+
+Proprietary + Confidential
+
+In this module, we'll explore Google Cloud's five core storage products: Cloud Storage, Bigtable, Cloud SQL, Spanner, and Firestore. Depending on your application, you might use one or several of these services to do the job.
+
+Storage in the Cloud
+
+01 Cloud Storage
+
+02 Cloud SQL
+
+03 Spanner
+
+04 Firestore
+
+05 06
+
+Bigtable Comparing storage options
+
+Proprietary + Confidential
+
+Let's begin with Cloud Storage, which is a service that offers developers and IT organizations durable and highly available object storage.
+
+Types of file storage
+
+Proprietary + Confidential
+
+File storage
+
+Block storage
+
+Object storage
+
+But what is object storage? Object storage is a computer data storage architecture that manages data as "objects" and not as a file and folder hierarchy (file storage), or as chunks of a disk (block storage). These objects are stored in a packaged format which contains the binary form of the actual data itself, as well as relevant associated meta-data (such as date created, author, resource type, permissions, etc), and a globally unique identifier. These unique keys are in the form of URLs, which means object storage interacts well with web technologies. Data commonly stored as objects include video, pictures, and audio recordings.
+Cloud Storage is Google's object storage product. It allows customers to store any amount of data, and to retrieve it as often as needed. In this lesson, we'll learn more about Cloud Storage use cases, features, and pricing.
+
+Cloud Storage is a fully managed scalable service
+
+Proprietary + Confidential
+
+Website content
+
+Archival & disaster recovery
+
+Direct Download
+
+Cloud Storage is a fully managed scalable service that has a wide variety of uses. A few examples include serving website content, storing data for archival and disaster recovery, and distributing large data objects to end users via Direct Download.
+
+Proprietary + Confidential
+Cloud Storage's common object storage use cases
+Binary large-object (BLOB) storage
+Online content Backup and archiving Storage of intermediate results
+Cloud Storage's primary use is whenever binary large-object storage (also known as a "BLOB") is needed for online content such as videos and photos, for backup and archived data, and for storage of intermediate results in processing workflows.
+
+Cloud Storage files are organized into buckets
+
+Proprietary + Confidential
+
+Unique name
+
+Geographic location
+
+Cloud Storage files are organized into buckets. A bucket needs a globally-unique name and a specific geographic location for where it should be stored, and an ideal location for a bucket is where latency is minimized. For example, if most of your users are in Europe, you probably want to pick a European location so either a specific Google Cloud region in Europe, or else the EU multi-region.
+
+Cloud Storage objects are immutable
+
+Proprietary + Confidential
+
+Version 01
+
+Version 02
+
+Cannot directly edit
+
+Create new version
+
+The storage objects offered by Cloud Storage are "immutable," which means that you do not edit them, but instead a new version is created with every change made.
+
+Proprietary + Confidential
+Object versioning keeps a record of modifications
+
+Object versioning
+
+History
+Object 01 Object 02 Object 03
+
+V1
+
+V2
+
+V3
+
+Administrators have the option to either allow each new version to completely overwrite the older one, or to keep track of each change made to a particular object by enabling "versioning" within a bucket. If you choose to use versioning, Cloud Storage will keep a detailed history of modifications -- that is, overwrites or deletes -- of all objects contained in that bucket.
+
+Proprietary + Confidential
+Object versioning allows reversion to an older state
+
+Object versioning
+
+History
+Object 01 Object 02 Object 03
+
+V1
+
+V2
+
+V3
+
+If you don't turn on object versioning, by default new versions will always overwrite older versions.
+With object versioning enabled, you can list the archived versions of an object, restore an object to an older state, or permanently delete a version of an object, as needed.
+Cloud Storage also offers lifecycle management policies for your objects. For example, you could tell Cloud Storage to delete objects older than 365 days, or to delete objects created before January 1, 2013, or to keep only the 3 most recent versions of each object in a bucket that has versioning enabled. We'll look more closely at object lifecycle management in just a few minutes.
+
+Proprietary + Confidential
+Control access to data objects with IAM roles and ACLs
+
+01 For most purposes, IAM is sufficient
+02 If you need finer control, you can create access control lists (ACLs)
+
+Inherited from project to bucket to object
+
+Scope
+
+Permission
+
+In many cases, personally identifiable information may be contained in data objects, so controlling access to stored data is essential to ensuring security and privacy are maintained. Using IAM roles and, where needed, access control lists (ACLs), companies can conform to security best practices, which require each user have access and permissions to only what they need to do their jobs, but no more than that.
+There are a couple of options to control user access to objects and buckets.
+1. For most purposes, IAM is sufficient. Roles are inherited from project to bucket to object.
+2. If you need finer control, you can create access control lists. Each access control list consists of two pieces of information. The first is a scope, which defines who can access and perform an action. This can be a specific user or group of users. The second is a permission, which defines what actions can be performed, like read or write.
+
+Cloud Storage can also be used like a file system
+
+Proprietary + Confidential
+
+Third-party tools can "mount" the bucket and allow it to be used as if it were a Linux or MacOS directory.
+
+Although Cloud Storage is not a file system, it can be accessed as one via third-party tools that can "mount" the bucket and allow it to be used as if it were a typical Linux or MacOS directory.
+
+Lifecycle management policies save money
+
+Proprietary + Confidential
+
+Lifecycle policies
+
+Examples
+Delete objects older than 365 days Delete objects created before MM/DD/YY Keep only the 3 most recent versions
+
+Because storing and retrieving large amounts of object data can quickly become expensive, Cloud Storage also offers lifecycle management policies. For example, you could tell Cloud Storage to delete objects older than 365 days, or to delete objects created before January 1, 2013; or to keep only the 3 most recent versions of each object in a bucket that has versioning enabled. Having this control ensures that you are not paying for more than you actually need.
+
+There are four basic Cloud Storage classes
+
+Proprietary + Confidential
+
+Standard Storage
+
+Nearline Storage
+
+Coldline Storage
+
+Archive Storage
+
+Hot data
+
+Once per month
+
+Once every 90 days
+
+Once a year
+
+There are four primary storage classes in Cloud Storage and stored data is managed and billed according to which "class" it belongs.
+1. The first is Standard Storage. Standard Storage is considered best for frequently accessed, or "hot," data. It's also great for data that is stored for only brief periods of time.
+2. The second storage class is Nearline Storage. This is best for storing infrequently accessed data, like reading or modifying data once per month or less, on average. Examples might include data backups, long-tail multimedia content, or data archiving.
+3. The third storage class is Coldline Storage. This is also a low-cost option for storing infrequently accessed data. However, as compared to Nearline Storage, Coldline Storage is meant for reading or modifying data, at most, once every 90 days.
+4. The fourth storage class is Archive Storage. This is the lowest-cost option, used ideally for data archiving, online backup, and disaster recovery. It's the best choice for data that you plan to access less than once a year, because it has higher costs for data access and operations and a 365-day minimum storage duration.
+
+Each storage class has some common features
+
+Proprietary + Confidential
+
+Archive Storage Coldline Storage Nearline Storage Standard Storage
+
+Unlimited storage (no min object size) Worldwide accessibility and locations Low latency and high durability A uniform experience Geo-redundancy
+
+Although each of these four classes has differences, it's worth noting that several characteristics apply across all these storage classes.
+These include:  Unlimited storage with no minimum object size requirement,  Worldwide accessibility and locations,  Low latency and high durability,  A uniform experience, which extends to security, tools, and APIs, and  Geo-redundancy if data is stored in a multi-region or dual-region. So this means placing physical servers in geographically diverse data centers to protect against catastrophic events and natural disasters, and load-balancing traffic for optimal performance.
+
+Autoclass automatically transitions objects to appropriate storage classes
+Autoclass
+Moves data that is not accessed to colder storage classes to reduce storage cost Moves data that is accessed to Standard storage to optimize future accesses
+
+Proprietary + Confidential
+
+Cloud Storage also provides a feature called Autoclass, which automatically transitions objects to appropriate storage classes based on each object's access pattern.
+The feature moves data that is not accessed to colder storage classes to reduce storage cost and moves data that is accessed to Standard storage to optimize future accesses.
+Autoclass simplifies and automates cost saving for your Cloud Storage data.
+
+Proprietary + Confidential
+Additional Cloud Storage features include encryption
+Pay only for what you use No prior provisioning of capacity Encrypts data on the server side Use HTTPS/TLS (Transport Layer Security)
+Cloud Storage has no minimum fee because you pay only for what you use, and prior provisioning of capacity isn't necessary. And from a security perspective, Cloud Storage always encrypts data on the server side, before it's written to disk, at no additional charge. Data traveling between a customer's device and Google is encrypted by default using HTTPS/TLS (Transport Layer Security).
+
+Bringing data into Cloud Storage
+
+Proprietary + Confidential
+
+Online transfer
+Regardless of which storage class you choose, there are several ways to bring your data into Cloud Storage. Many customers simply carry out their own online transfer using gcloud storage, which is the Cloud Storage command from the Google Cloud SDK. Data can also be moved in by using a drag and drop option in the Google Cloud console, if accessed through the Google Chrome web browser.
+
+Bringing data into Cloud Storage
+
+Proprietary + Confidential
+
+Online transfer
+
+Storage Transfer Service
+
+But what if you have to upload terabytes or even petabytes of data? Storage Transfer Service enables you to import large amounts of online data into Cloud Storage quickly and cost-effectively. The Storage Transfer Service lets you schedule and manage batch transfers to Cloud Storage from another cloud provider, from a different Cloud Storage region, or from an HTTP(S) endpoint.
+
+Bringing data into Cloud Storage
+
+Proprietary + Confidential
+
+Online transfer
+
+Storage Transfer Service
+
+Transfer Appliance
+
+And then there is the Transfer Appliance, which is a rackable, high-capacity storage server that you lease from Google Cloud. You connect it to your network, load it with data, and then ship it to an upload facility where the data is uploaded to Cloud Storage. You can transfer up to a petabyte of data on a single appliance.
+
+Integration with other Google Cloud products
+
+Proprietary + Confidential
+
+Cloud Storage's tight integration with other Google Cloud products and services means that there are many additional ways to move data into the service. For example, you can import and export tables to and from both BigQuery and Cloud SQL. You can also store App Engine logs, Firestore backups, and objects used by App Engine applications like images. Cloud Storage can also store instance startup scripts, Compute Engine images, and objects used by Compute Engine applications.
+
+Storage in the Cloud
+
+01 Cloud Storage
+
+02 Cloud SQL
+
+03 Spanner
+
+04 Firestore
+
+05 06
+
+Bigtable Comparing storage options
+
+The second core storage option is Cloud SQL.
+
+Proprietary + Confidential
+
+Proprietary + Confidential
+Cloud SQL lets you focus on building great applications
+
+Relational databases
+MySQL PostgreSQL SQL Server
+
+Mundane tasks
+Applying patches/updates Managing backups Configuring replications
+
+Cloud SQL offers fully managed relational databases, including MySQL, PostgreSQL, and SQL Server as a service. It's designed to hand off mundane, but necessary and often time-consuming, tasks to Google--like applying patches and updates, managing backups, and configuring replications--so your focus can be on building great applications.
+
+There are many reasons to use Cloud SQL
+Doesn't require any software installation or maintenance Currently can scale up to 128 processor cores, 864 GB of RAM, and 64 TB of storage Supports automatic replication scenarios Supports managed backups ­ The cost of an instance covers 7 backups Encrypts customer data when on Google's internal networks and when stored in database tables, temporary files, and backups Includes a network firewall
+
+Proprietary + Confidential
+
+Cloud SQL:
+ Doesn't require any software installation or maintenance.  Currently can scale up to 128 processor cores, 864 GB of RAM, and 64 TB of
+storage.  Supports automatic replication scenarios, such as from a Cloud SQL primary
+instance, an external primary instance, and external MySQL instances.  Supports managed backups, so backed-up data is securely stored and
+accessible if a restore is required. The cost of an instance covers seven backups.  Encrypts customer data when on Google's internal networks and when stored in database tables, temporary files, and backups.  Includes a network firewall, which controls network access to each database instance.
+
+Cloud SQL instances are accessible by other Google Cloud and external services.
+
+Proprietary + Confidential
+
+A benefit of Cloud SQL instances is that they are accessible by other Google Cloud services, and even external services. Cloud SQL can be used with App Engine using standard drivers like Connector/J for Java or MySQLdb for Python.
+
+Proprietary + Confidential
+Compute Engine accesses Cloud SQL instances and tools
+
+Workbench Toad
+
+Other external applications that
+use standard MySQL drivers
+
+Compute Engine instances can be authorized to access Cloud SQL instances and configure the Cloud SQL instance to be in the same zone as your virtual machine.
+Cloud SQL also supports other applications and tools that you might use, like SQL Workbench, Toad, and other external applications using standard MySQL drivers.
+
+Storage in the Cloud
+
+01 Cloud Storage
+
+02 Cloud SQL
+
+03 Spanner
+
+04 Firestore
+
+05 06
+
+Bigtable Comparing storage options
+
+The third core storage option is Spanner.
+
+Proprietary + Confidential
+
+Spanner is a fully managed relational database
+
+Proprietary + Confidential
+
+Scales horizontally Strongly consistent Speaks SQL
+
+$80B
+business
+
+Spanner is a fully managed relational database service that scales horizontally, is strongly consistent, and speaks SQL. Battle tested by Google's own mission-critical applications and services, Spanner is the service that powers Google's $80 billion business.
+
+Applications that Spanner is especially suited for
+
+Proprietary + Confidential
+
+Applications that require:
+SQL relational database management system with joins and secondary indexes Built-in high availability Strong global consistency And high numbers of input/output operations per second. We're talking tens of thousands of reads/writes per second or more
+
+Spanner is especially suited for applications that require:  An SQL relational database management system with joins and secondary indexes.  Built-in high availability.  Strong global consistency.  And high numbers of input/output operations per second. We're talking tens of thousands of reads/writes per second or more.
+
+Storage in the Cloud
+
+01 Cloud Storage
+
+02 Cloud SQL
+
+03 Spanner
+
+04 Firestore
+
+05 06
+
+Bigtable Comparing storage options
+
+The fourth core storage option is Firestore.
+
+Proprietary + Confidential
+
+Proprietary + Confidential
+Firestore is ideal for mobile and web development
+Flexible Scales horizontally NoSQL cloud database
+Firestore is a flexible, horizontally scalable, NoSQL cloud database for mobile, web, and server development.
+
+Firestore stores data as "documents"
+
+Incoming data
+
+Documents
+
+Proprietary + Confidential
+Collection
+
+With Firestore, incoming data is stored in a document structure and these documents are then organized into collections. Documents can contain complex nested objects in addition to subcollections.
+Each document contains a set of key-value pairs. For example, a document to represent a user has the keys for the firstname and lastname with the associated values.
+More information about Firestore data model can be found at https://cloud.google.com/firestore/docs/data-model
+
+Firestore NoSQL queries connect apps with data
+
+Proprietary + Confidential
+
+Retrieve individual documents Retrieve all the documents in a collection Can include multiple, chained filters Can combine filtering and sorting options Indexed by default
+
+Firestore's NoSQL queries can then be used to retrieve individual, specific documents or to retrieve all the documents in a collection that match your query parameters. Queries can include multiple, chained filters and combine filtering and sorting options. They're also indexed by default, so query performance is proportional to the size of the result set, not the dataset.
+
+Proprietary + Confidential
+Firestore uses online and offline data synchronization
+On/Offline Write Read Listen Query
+Firestore uses data synchronization to update data on any connected device. However, it's also designed to make simple, one-time fetch queries efficiently. It caches data that an app is actively using, so the app can write, read, listen to, and query data even if the device is offline. When the device comes back online, Firestore synchronizes any local changes back to Firestore.
+
+Firestore leverages Google Cloud's infrastructure
+
+Proprietary + Confidential
+
+Automatic multi-region data replication Strong consistency guarantees Atomic batch operations Real transaction support
+
+Firestore leverages Google Cloud's powerful infrastructure: automatic multi-region data replication, strong consistency guarantees, atomic batch operations, and real transaction support.
+
+Storage in the Cloud
+
+01 Cloud Storage
+
+02 Cloud SQL
+
+03 Spanner
+
+04 Firestore
+
+05 06
+
+Bigtable Comparing storage options
+
+Proprietary + Confidential
+
+And the final core storage option we're going to explore is Bigtable.
+
+Bigtable
+Bigtable
+Google's NoSQL big data database service
+
+Proprietary + Confidential
+Handle massive workloads Consistent low latency High throughput Great choice for: Operational applications Analytical applications
+
+Bigtable is Google's NoSQL big data database service. It's the same database that powers many core Google services, including Search, Analytics, Maps, and Gmail.
+Bigtable is designed to handle massive workloads at consistent low latency and high throughput, so it's a great choice for both operational and analytical applications, including Internet of Things, user analytics, and financial data analysis.
+
+Why customers often choose Bigtable
+Work with more than 1TB of semi-structured or structured data Data is fast with high throughput, or it's rapidly changing Work with NoSQL data Data is a time-series or has natural semantic ordering Work with big data, running asynchronous batch or synchronous real-time processing on the data Run machine learning algorithms on the data
+
+Proprietary + Confidential
+
+When deciding which storage option is best, customers often choose Bigtable if:
+ They're working with more than 1TB of semi-structured or structured data.  Data is fast with high throughput, or it's rapidly changing.  They're working with NoSQL data. This usually means transactions where
+strong relational semantics are not required.  Data is a time-series or has natural semantic ordering.  They're working with big data, running asynchronous batch or synchronous
+real-time processing on the data.  Or they're running machine learning algorithms on the data.
+
+Using APIs to read and write data
+
+Proprietary + Confidential
+
+APIs
+
+Data service
+layer
+
+Examples:
+Managed VMs
+
+HBase REST Server
+
+Java Server
+
+Bigtable can interact with other Google Cloud services and third-party clients.
+Using APIs, data can be read from and written to Bigtable through a data service layer like Managed VMs, the HBase REST Server, or a Java Server using the HBase client. Typically this is used to serve data to applications, dashboards, and data services.
+
+Streaming data into Bigtable
+
+Proprietary + Confidential
+
+Stream processing frameworks
+
+Examples:
+Dataflow
+
+Spark Streaming
+
+Storm
+
+Data can also be streamed in through a variety of popular stream processing frameworks like Dataflow Streaming, Spark Streaming, and Storm.
+
+Using batch processes to read and write data
+
+Proprietary + Confidential
+
+Batch processes
+
+Examples:
+Hadoop MapReduce
+
+Dataflow
+
+Spark
+
+And if streaming is not an option, data can also be read from and written to Bigtable through batch processes like Hadoop MapReduce, Dataflow, or Spark. Often, summarized or newly calculated data is written back to Bigtable or to a downstream database.
+
+BigQuery and Bigtable are different products with different uses
+BigQuery
+On the edge between data storage and data processing
+
+Proprietary + Confidential
+
+BigQuery is not mentioned in this module, because it sits on the edge between data storage and data processing, and is covered in more depth in other courses. The usual reason to store data in BigQuery is so you can use its big data analysis and interactive querying capabilities. It is not purely a data storage product.
+
+Storage in the Cloud
+
+01 Cloud Storage
+
+02 Cloud SQL
+
+03 Spanner
+
+04 Firestore
+
+05 06
+
+Bigtable Comparing storage options
+
+Proprietary + Confidential
+
+Comparing storage options
+
+Proprietary + Confidential
+
+Cloud Storage
+
+Bigtable
+
+Cloud SQL
+
+Spanner
+
+Firestore
+
+Now that we've covered Google Cloud's core storage options, let's do a comparison to help highlight the most suitable service for a specific application or workflow.
+
+Proprietary + Confidential
+
+Option
+Cloud Storage
+
+Best for Storing immutable blobs larger than 10 MB
+
+Capacity
+Petabytes Max unit size: 5 TB per object
+
+Cloud SQL
+
+ Full SQL support for an online transaction processing system  Web frameworks and existing applications
+
+Up to 64 TB
+
+Spanner
+
+ Full SQL support for an online transaction processing system  Horizontal scalability
+
+Petabytes
+
+Firestore
+
+Massive scaling and predictability together with real time query results and offline query support
+
+Terabytes. Max unit size: 1 MB per entity
+
+Bigtable
+
+ Storing large amount of structured objects  Does not support SQL queries and multi-row transactions  Analytical data with heavy read and write events
+
+Petabytes. Max unit size: 10 MB p/cell, 100 MB p/row
+
+Consider using Cloud Storage if you need to store immutable blobs larger than 10 MB, such as large images or movies. This storage service provides petabytes of capacity with a maximum unit size of 5 TB per object.
+
+Proprietary + Confidential
+
+Option
+Cloud Storage
+
+Best for Storing immutable blobs larger than 10 MB
+
+Capacity
+Petabytes Max unit size: 5 TB per object
+
+Cloud SQL
+
+ Full SQL support for an online transaction processing system  Web frameworks and existing applications
+
+Up to 64 TB
+
+Spanner
+
+ Full SQL support for an online transaction processing system  Horizontal scalability
+
+Petabytes
+
+Firestore
+
+Massive scaling and predictability together with real time query results and offline query support
+
+Terabytes. Max unit size: 1 MB per entity
+
+Bigtable
+
+ Storing large amount of structured objects  Does not support SQL queries and multi-row transactions  Analytical data with heavy read and write events
+
+Petabytes. Max unit size: 10 MB p/cell, 100 MB p/row
+
+Consider using Cloud SQL or Spanner if you need full SQL support for an online transaction processing system. Cloud SQL provides up to 64 TB, depending on machine type, and Spanner provides petabytes. Cloud SQL is best for web frameworks and existing applications, like storing user credentials and customer orders.
+
+Proprietary + Confidential
+
+Option
+Cloud Storage
+
+Best for Storing immutable blobs larger than 10 MB
+
+Capacity
+Petabytes Max unit size: 5 TB per object
+
+Cloud SQL
+
+ Full SQL support for an online transaction processing system  Web frameworks and existing applications
+
+Up to 64 TB
+
+Spanner
+
+ Full SQL support for an online transaction processing system  Horizontal scalability
+
+Petabytes
+
+Firestore
+
+Massive scaling and predictability together with real time query results and offline query support
+
+Terabytes. Max unit size: 1 MB per entity
+
+Bigtable
+
+ Storing large amount of structured objects  Does not support SQL queries and multi-row transactions  Analytical data with heavy read and write events
+
+Petabytes. Max unit size: 10 MB p/cell, 100 MB p/row
+
+If Cloud SQL does not fit your requirements because you need horizontal scalability, not just through read replicas, consider using Spanner.
+
+Proprietary + Confidential
+
+Option
+Cloud Storage
+
+Best for Storing immutable blobs larger than 10 MB
+
+Capacity
+Petabytes Max unit size: 5 TB per object
+
+Cloud SQL
+
+ Full SQL support for an online transaction processing system  Web frameworks and existing applications
+
+Up to 64 TB
+
+Spanner
+
+ Full SQL support for an online transaction processing system  Horizontal scalability
+
+Petabytes
+
+Firestore
+
+Massive scaling and predictability together with real time query results and offline query support
+
+Terabytes. Max unit size: 1 MB per entity
+
+Bigtable
+
+ Storing large amount of structured objects  Does not support SQL queries and multi-row transactions  Analytical data with heavy read and write events
+
+Petabytes. Max unit size: 10 MB p/cell, 100 MB p/row
+
+Consider Firestore if you need massive scaling and predictability together with real time query results and offline query support. This storage service provides terabytes of capacity with a maximum unit size of 1 MB per entity. Firestore is best for storing, syncing, and querying data for mobile and web apps.
+
+Proprietary + Confidential
+
+Option
+Cloud Storage
+
+Best for Storing immutable blobs larger than 10 MB
+
+Capacity
+Petabytes Max unit size: 5 TB per object
+
+Cloud SQL
+
+ Full SQL support for an online transaction processing system  Web frameworks and existing applications
+
+Up to 64 TB
+
+Spanner
+
+ Full SQL support for an online transaction processing system  Horizontal scalability
+
+Petabytes
+
+Firestore
+
+Massive scaling and predictability together with real time query results and offline query support
+
+Terabytes. Max unit size: 1 MB per entity
+
+Bigtable
+
+ Storing large amount of structured objects  Does not support SQL queries and multi-row transactions  Analytical data with heavy read and write events
+
+Petabytes. Max unit size: 10 MB p/cell, 100 MB p/row
+
+Consider using Bigtable if you need to store a large number of structured objects. Bigtable does not support SQL queries, nor does it support multi-row transactions. This storage service provides petabytes of capacity with a maximum unit size of 10 MB per cell and 100 MB per row. Bigtable is best for analytical data with heavy read and write events, like AdTech, financial, or IoT data.
+
+Proprietary + Confidential
+
+Option
+Cloud Storage
+
+Best for Storing immutable blobs larger than 10 MB
+
+Capacity
+Petabytes Max unit size: 5 TB per object
+
+Cloud SQL
+
+ Full SQL support for an online transaction processing system  Web frameworks and existing applications
+
+Up to 64 TB
+
+Spanner
+
+ Full SQL support for an online transaction processing system  Horizontal scalability
+
+Petabytes
+
+Firestore
+
+Massive scaling and predictability together with real time query results and offline query support
+
+Terabytes. Max unit size: 1 MB per entity
+
+Bigtable
+
+ Storing large amount of structured objects  Does not support SQL queries and multi-row transactions  Analytical data with heavy read and write events
+
+Petabytes. Max unit size: 10 MB p/cell, 100 MB p/row
+
+Depending on your application, it's possible that you might use one, or several, of these services to do the job.
+
+Module Quiz
+
+Proprietary + Confidential
+
+Quiz | Question 1
+
+Proprietary + Confidential
+
+Question
+
+What is the correct use case for Cloud Storage?
+
+A.
+
+Cloud Storage is well suited to providing the root file system of a Linux virtual machine.
+
+B. Cloud Storage is well suited to providing durable and highly available object storage.
+
+C. Cloud Storage is well suited to providing data warehousing services.
+
+D. Cloud Storage is well suited to providing RDBMS services.
+
+Quiz | Question 1
+
+Proprietary + Confidential
+
+Answer
+
+What is the correct use case for Cloud Storage?
+
+A.
+
+Cloud Storage is well suited to providing the root file system of a Linux virtual machine.
+
+B. Cloud Storage is well suited to providing durable and highly available object storage.
+
+C. Cloud Storage is well suited to providing data warehousing services.
+
+D. Cloud Storage is well suited to providing RDBMS services.
+
+What is the correct use case for Cloud Storage?
+A:Cloud Storage is well suited to providing the root file system of a Linux virtual machine. Feedback: Sorry, the statement is false. Cloud Storage is object storage rather than file storage. Compute Engine virtual machines use Persistent Disk storage to contain their file systems.
+B: Cloud Storage is well suited to providing durable and highly available object storage Feedback: That's correct! Cloud Storage is object storage rather than file storage.
+C: Cloud Storage is well suited to providing data warehousing services Feedback: Sorry, the statement is false. Cloud Storage is object storage rather than data warehousing. BigQuery is Google Clouds data warehousing service.
+D:Cloud Storage is well suited to providing RDBMS services. Feedback: Sorry, the statement is false. Cloud Storage is object storage rather than Database storage. Cloud SQL or Spanner are Google Cloud's RDBMS offerings.
+
+Quiz | Question 2
+Question
+Which relational database service can scale to higher database sizes? A. Spanner B. Cloud SQL C. Bigtable D. Firestore
+
+Proprietary + Confidential
+
+Quiz | Question 2
+Answer
+Which relational database service can scale to higher database sizes? A. Spanner B. Cloud SQL C. Bigtable D. Firestore
+
+Proprietary + Confidential
+
+Which relational database service can scale to higher database sizes?
+A: Spanner. Feedback: Correct! Spanner can scale to petabyte database sizes, while Cloud SQL is limited by the size of the database instances you choose. At the time this quiz was created, the maximum was 64 TB.
+B: Cloud SQL. Feedback: Sorry, that's not correct. Spanner can scale to petabyte database sizes, while Cloud SQL is limited by the size of the database instances you choose. At the time this quiz was created, the maximum was 64 TB.
+C: Bigtable Feedback: Sorry, that's not correct. Bigtable is Google's NoSQL, big data database service.
+D: Firestore Feedback: Sorry, that's not correct. Firestore is Google's flexible, horizontally scalable NoSQL cloud database to store and sync data.
+
+Quiz | Question 3
+Question
+Why would a customer consider the Coldline storage class? A. To save money on storing infrequently accessed data. B. To save money on storing frequently accessed data. C. To improve security. D. To use the Coldline Storage API.
+
+Proprietary + Confidential
+
+Quiz | Question 3
+Answer
+Why would a customer consider the Coldline storage class? A. To save money on storing infrequently accessed data. B. To save money on storing frequently accessed data. C. To improve security. D. To use the Coldline Storage API.
+
+Proprietary + Confidential
+
+Why would a customer consider the Coldline storage class?
+A: To save money on storing infrequently accessed data. Feedback: That's correct! Data stored in Coldline is billed at a low monthly storage rate, although a fee is assessed on retrievals.
+B: To save money on storing frequently accessed data. Feedback: Sorry, that's not correct. Data stored in Coldline is billed at a low monthly storage rate, although a fee is assessed on retrievals. Therefore, storing frequently accessed data in Coldline might actually be the most expensive option.
+C: To improve security. Feedback: Sorry, that's not correct. You use the same tools and techniques to manage the security of data in Coldline as you do for data in other storage classes.
+D: To use the Coldline Storage API. Feedback: Sorry, that's not correct. You use the same API to access data in Coldline as you do for data in other storage classes.
+
+Lab Intro
+Google Cloud Fundamentals: Getting Started with Cloud Storage and Cloud SQL
+In this lab, you create a Cloud Storage bucket and place an image in it. You'll also configure an application running in Compute Engine to use a database managed by Cloud SQL. For this lab, you will configure a web server with PHP, a web development environment that is the basis for popular blogging software.
+
+Proprietary + Confidential
+
+

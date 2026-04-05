@@ -1,0 +1,2304 @@
+Professional Cloud DevOps Engineer Practice Questions
+100 practice questions with detailed answer explanations.
+
+---
+
+Question 1
+
+Your team manages a microservices application on GKE. One of the services is experiencing intermittent high latency that is difficult to reproduce. You need to identify the root cause across multiple service calls. What should you do?
+
+A. Add log statements throughout the service code and export logs to BigQuery for analysis.
+B. Enable Cloud Trace and instrument the service code to capture distributed trace data.
+C. Create a Cloud Monitoring dashboard with custom metrics for the service.
+D. Configure Cloud Profiler to capture CPU usage of the service.
+
+Correct answer
+B. Enable Cloud Trace and instrument the service code to capture distributed trace data.
+
+Feedback
+A: Incorrect. Log statements can help with debugging but do not provide a correlated view of latency across service boundaries, making it hard to pinpoint which call is causing the latency.
+B: Correct. Cloud Trace is designed for distributed tracing. It provides a correlated view of how requests flow through multiple services, making it ideal for identifying latency bottlenecks across service calls.
+C: Incorrect. Custom metrics can surface that latency is high but cannot show you which downstream call is responsible across distributed services.
+D: Incorrect. Cloud Profiler analyzes CPU and memory usage within a single process. It does not trace requests across service boundaries.
+
+https://cloud.google.com/trace/docs/overview
+https://cloud.google.com/trace/docs/setup
+
+---
+
+Question 2
+
+Your organization uses Cloud Build to build container images and push them to Artifact Registry. You want to ensure that only container images that have passed a vulnerability scan can be deployed to your GKE production cluster. What should you do?
+
+A. Configure Cloud Build to run a vulnerability scan step and fail the build if critical vulnerabilities are found.
+B. Enable Binary Authorization on the GKE cluster and configure an attestation policy that requires a vulnerability scan attestation before deployment.
+C. Use Cloud Armor to block deployments that originate from untrusted container images.
+D. Enable Container Analysis on Artifact Registry and configure a Cloud Monitoring alert when vulnerabilities are discovered.
+
+Correct answer
+B. Enable Binary Authorization on the GKE cluster and configure an attestation policy that requires a vulnerability scan attestation before deployment.
+
+Feedback
+A: Incorrect. Failing the build prevents a vulnerable image from being pushed, but it does not prevent a previously built or manually pushed image from being deployed to the cluster.
+B: Correct. Binary Authorization enforces a policy at deploy time that requires an attestation (a cryptographic signature) proving the image passed a vulnerability scan. This is the recommended way to enforce supply chain security at the cluster level.
+C: Incorrect. Cloud Armor is a network security service. It cannot inspect or block container image deployments.
+D: Incorrect. A Cloud Monitoring alert notifies you of vulnerabilities after the fact but does not prevent a vulnerable image from being deployed.
+
+https://cloud.google.com/binary-authorization/docs/overview
+https://cloud.google.com/binary-authorization/docs/vulnerability-scanning-kritis
+
+---
+
+Question 3
+
+Your team runs a stateless web application on Cloud Run. You want to implement a deployment strategy that allows you to roll back to the previous version within seconds if a problem is detected. What should you do?
+
+A. Use Cloud Deploy to manage the deployment and configure a canary strategy.
+B. Deploy the new revision with traffic split, keeping the previous revision active. Roll back by shifting 100% of traffic back to the previous revision.
+C. Keep a backup container image in Artifact Registry and redeploy it using Cloud Build when a rollback is needed.
+D. Deploy the new revision and use Cloud Monitoring to trigger a Cloud Function that restarts the old revision on error.
+
+Correct answer
+B. Deploy the new revision with traffic split, keeping the previous revision active. Roll back by shifting 100% of traffic back to the previous revision.
+
+Feedback
+A: Incorrect. Cloud Deploy canary strategies can be useful but involve additional pipeline stages and are more complex to configure for a simple, fast rollback scenario.
+B: Correct. Cloud Run keeps previous revisions active and allows instant traffic shifting between them. Rolling back is simply redirecting 100% of traffic back to the prior revision, which takes effect in seconds.
+C: Incorrect. Re-triggering a Cloud Build pipeline adds unnecessary latency to a rollback operation and introduces more potential points of failure.
+D: Incorrect. This is overly complex and unreliable. Cloud Run's built-in traffic splitting is simpler and faster for rollbacks.
+
+https://cloud.google.com/run/docs/rollouts-rollbacks-traffic-migration
+https://cloud.google.com/run/docs/managing/revisions
+
+---
+
+Question 4
+
+Your organization wants to enforce that all Google Cloud resources are created using Terraform and that no one uses the Google Cloud console or gcloud CLI to create resources directly. What should you do?
+
+A. Restrict access to the Google Cloud console using an IAM deny policy.
+B. Configure an organization policy to disable all APIs that are not used by Terraform.
+C. Use a combination of VPC Service Controls and Terraform to enforce resource creation workflows.
+D. Use the "Essential Contacts" feature to alert administrators when resources are created outside of Terraform.
+
+Correct answer
+A. Restrict access to the Google Cloud console using an IAM deny policy.
+
+Feedback
+A: Correct. IAM deny policies allow you to explicitly deny specific permissions (such as resource creation permissions) to all users except a designated Terraform service account. This prevents direct console or gcloud resource creation while allowing Terraform automation to continue.
+B: Incorrect. Disabling APIs would break all access to those services, including the Terraform automation itself.
+C: Incorrect. VPC Service Controls restricts access to services from outside a defined perimeter but does not enforce that resources are created only via Terraform.
+D: Incorrect. Essential Contacts sends alerts but does not prevent resources from being created manually.
+
+https://cloud.google.com/iam/docs/deny-overview
+https://cloud.google.com/docs/terraform/best-practices-for-terraform
+
+---
+
+Question 5
+
+Your company's SRE team has defined an SLO of 99.5% availability per rolling 30-day window for a critical API. At the start of the current window the error budget is fully intact. Midway through the window a major incident consumes 60% of the error budget. The development team wants to continue releasing new features. What should you do?
+
+A. Continue releasing features, but implement more thorough automated testing before each release.
+B. Halt feature releases and focus engineering effort on reliability improvements until the error budget recovers.
+C. Ask the customer to relax the SLO temporarily so feature releases can continue.
+D. Increase the SLO target to 99.9% to create a larger error budget.
+
+Correct answer
+B. Halt feature releases and focus engineering effort on reliability improvements until the error budget recovers.
+
+Feedback
+A: Incorrect. While improved testing is valuable, continuing to release features when the error budget is significantly consumed violates SRE error budget policy, which recommends prioritizing reliability work when the budget is spent.
+B: Correct. SRE error budget policy recommends halting risky changes such as feature releases when the error budget is significantly consumed. This aligns incentives between reliability and feature velocity.
+C: Incorrect. Asking customers to relax SLOs reactively after budget burn is not a recommended SRE practice. SLOs should be negotiated proactively.
+D: Incorrect. Increasing the SLO target makes the SLO stricter, which would make the error budget smaller, not larger.
+
+https://sre.google/workbook/error-budget-policy/
+https://sre.google/sre-book/embracing-risk/
+
+---
+
+Question 6
+
+You want to centrally manage Terraform state files for multiple teams and projects across your organization. You need a solution that provides locking, versioning, and access control. What should you do?
+
+A. Store Terraform state files in a Cloud Storage bucket with versioning enabled and use IAM to control access.
+B. Store Terraform state files in Cloud Source Repositories with branch protection rules.
+C. Store Terraform state files locally on developer machines and require developers to commit changes before running Terraform.
+D. Use a shared Compute Engine VM to run all Terraform operations and store state on its persistent disk.
+
+Correct answer
+A. Store Terraform state files in a Cloud Storage bucket with versioning enabled and use IAM to control access.
+
+Feedback
+A: Correct. Cloud Storage with versioning enabled is the Google-recommended backend for Terraform remote state. It provides object versioning, state locking (via Cloud Storage object locking or Terraform's built-in GCS locking), and fine-grained IAM access control.
+B: Incorrect. Source repositories are for source code, not binary or JSON state files. They do not provide state locking and are not a supported Terraform backend.
+C: Incorrect. Local state is not suitable for teams because it cannot be shared, does not support locking, and is easily lost.
+D: Incorrect. A single shared VM is a single point of failure and does not provide the versioning or fine-grained access controls required.
+
+https://developer.hashicorp.com/terraform/language/settings/backends/gcs
+https://cloud.google.com/docs/terraform/best-practices-for-terraform
+
+---
+
+Question 7
+
+Your organization wants to ensure that container images stored in Artifact Registry do not contain known HIGH or CRITICAL vulnerabilities before they are promoted to production. You want this check to happen automatically as part of the CI pipeline. What should you do?
+
+A. Enable Artifact Registry vulnerability scanning and add a Cloud Build step that queries the scan results and fails the build if HIGH or CRITICAL vulnerabilities are found.
+B. Configure a Cloud Monitoring alert to notify the team when Artifact Registry detects a HIGH or CRITICAL vulnerability.
+C. Enable Binary Authorization and configure it to block images with known vulnerabilities from being pulled.
+D. Periodically run the gcloud artifacts docker images scan command and email the results to the security team.
+
+Correct answer
+A. Enable Artifact Registry vulnerability scanning and add a Cloud Build step that queries the scan results and fails the build if HIGH or CRITICAL vulnerabilities are found.
+
+Feedback
+A: Correct. Enabling vulnerability scanning on Artifact Registry allows the scan to happen automatically on push. Adding a build step that checks and fails on HIGH/CRITICAL findings integrates the gate directly into the CI pipeline before promotion.
+B: Incorrect. A monitoring alert notifies the team after the image has already been stored, but does not block the promotion pipeline automatically.
+C: Incorrect. Binary Authorization enforces policy at deploy time, not at the CI pipeline stage. It is a complementary control but does not automate the CI check.
+D: Incorrect. Running a manual or periodic scan and emailing results is not automated and does not block a promotion pipeline.
+
+https://cloud.google.com/artifact-registry/docs/analysis
+https://cloud.google.com/build/docs/securing-builds/scan-images-within-pipeline
+
+---
+
+Question 8
+
+Your company runs a large GKE workload. Operations engineers have noticed that many Pods are being OOMKilled due to memory limits that are set too low. You need a Google-recommended, low-effort way to automatically tune resource requests and limits over time. What should you do?
+
+A. Manually review metrics from Cloud Monitoring and update resource requests in each Deployment manifest.
+B. Enable the Vertical Pod Autoscaler (VPA) in recommendation mode, review suggestions, and apply them to your Deployment manifests.
+C. Enable the Horizontal Pod Autoscaler (HPA) with CPU and memory metrics to scale out Pods when memory is constrained.
+D. Configure Node Auto Provisioning to add nodes with more memory to the cluster.
+
+Correct answer
+B. Enable the Vertical Pod Autoscaler (VPA) in recommendation mode, review suggestions, and apply them to your Deployment manifests.
+
+Feedback
+A: Incorrect. Manually reviewing metrics and editing manifests is labor-intensive and does not scale well across many Deployments.
+B: Correct. VPA analyzes historical resource utilization and recommends (or automatically applies) appropriate CPU and memory requests and limits. Using it in recommendation mode first gives operators a chance to review changes before applying them.
+C: Incorrect. HPA scales the number of Pod replicas based on metrics, but it does not adjust the resource requests and limits of individual Pods. It would not resolve OOMKill issues caused by incorrect limits.
+D: Incorrect. Node Auto Provisioning adds nodes to accommodate unschedulable Pods, but it does not fix incorrectly configured memory limits that cause OOMKills.
+
+https://cloud.google.com/kubernetes-engine/docs/concepts/verticalpodautoscaler
+https://cloud.google.com/kubernetes-engine/docs/how-to/vertical-pod-autoscaling
+
+---
+
+Question 9
+
+You are designing a CI/CD pipeline for a team that develops a Python application. The team wants to enforce code quality standards and prevent merges to the main branch if tests fail or code coverage drops below 80%. What Google Cloud services should you use? (Choose two)
+
+A. Cloud Build to run automated tests and code coverage checks on each pull request.
+B. Cloud Armor to block pull request merges from unauthorized IP addresses.
+C. Artifact Registry to store the Python packages and enforce coverage thresholds.
+D. GitHub or Cloud Source Repositories branch protection rules requiring the Cloud Build check to pass before merging.
+E. Cloud Monitoring to alert the team when code coverage drops.
+
+Correct answers
+A. Cloud Build to run automated tests and code coverage checks on each pull request.
+D. GitHub or Cloud Source Repositories branch protection rules requiring the Cloud Build check to pass before merging.
+
+Feedback
+A: Correct. Cloud Build can be triggered on pull requests and configured to run test suites and coverage tools, reporting pass/fail status back to the source repository.
+B: Incorrect. Cloud Armor is a network security product and cannot enforce merge policies or code quality standards.
+C: Incorrect. Artifact Registry stores build artifacts and packages but does not enforce code coverage thresholds.
+D: Correct. Branch protection rules enforce that the Cloud Build status check must pass before a pull request can be merged, completing the quality gate.
+E: Incorrect. Cloud Monitoring alerts are reactive and notify people after the fact. They do not block merges.
+
+https://cloud.google.com/build/docs/automating-builds/create-manage-triggers
+https://cloud.google.com/source-repositories/docs/configure-webhooks
+
+---
+
+Question 10
+
+Your team maintains a monorepo containing multiple services. You want Cloud Build triggers to only run the build for the service whose code was changed, rather than rebuilding all services on every commit. What should you do?
+
+A. Create one Cloud Build trigger per service and configure each trigger with an included files filter matching that service's directory.
+B. Create a single Cloud Build trigger and use a shell script to detect changed files and conditionally run build steps.
+C. Split the monorepo into separate repositories so that each Cloud Build trigger fires only for its repository.
+D. Use Cloud Scheduler to poll for repository changes and trigger builds accordingly.
+
+Correct answer
+A. Create one Cloud Build trigger per service and configure each trigger with an included files filter matching that service's directory.
+
+Feedback
+A: Correct. Cloud Build triggers support included files glob patterns. When a trigger has an included files filter, it only fires if a commit changes files matching that pattern. One trigger per service directory is the recommended approach for monorepos.
+B: Incorrect. A single trigger would still fire on every commit regardless of which service changed. Using shell scripts to conditionally skip steps is fragile and less maintainable.
+C: Incorrect. Splitting a monorepo into multiple repos is a significant architectural change that may not be desirable and introduces other coordination challenges.
+D: Incorrect. Using Cloud Scheduler to poll for changes is inefficient and introduces unnecessary latency in the build pipeline.
+
+https://cloud.google.com/build/docs/automating-builds/create-manage-triggers#build_trigger_behavior
+
+---
+
+Question 11
+
+Your application is deployed on Cloud Run and receives intermittent spikes in traffic. The application occasionally returns HTTP 429 Too Many Requests errors during spikes. You need to reduce these errors with minimal code changes. What should you do?
+
+A. Increase the maximum number of container instances in the Cloud Run service configuration.
+B. Enable Cloud CDN in front of Cloud Run to cache responses.
+C. Increase the concurrency setting of the Cloud Run service to allow each container instance to handle more simultaneous requests.
+D. Configure a Cloud Tasks queue to buffer incoming requests.
+
+Correct answer
+A. Increase the maximum number of container instances in the Cloud Run service configuration.
+
+Feedback
+A: Correct. Cloud Run automatically scales the number of container instances to handle traffic. If the maximum instance limit is too low, requests are queued or rejected with 429 errors. Increasing the maximum instance limit allows Cloud Run to scale out further during spikes.
+B: Incorrect. Cloud CDN caches static content but does not help with dynamic request processing capacity. It would not reduce 429 errors for non-cacheable requests.
+C: Incorrect. Increasing concurrency may help if instances are underutilized, but if the service is already CPU-bound, increasing concurrency per instance will not help and could increase latency. The primary lever for capacity is the instance count.
+D: Incorrect. Cloud Tasks adds complexity and latency. It is appropriate for asynchronous workloads but not for real-time user-facing traffic reduction of 429 errors.
+
+https://cloud.google.com/run/docs/about-concurrency
+https://cloud.google.com/run/docs/configuring/max-instances
+
+---
+
+Question 12
+
+You are setting up a multi-environment GKE platform with development, staging, and production clusters. You want to manage Kubernetes manifests across all environments using GitOps principles. What should you do?
+
+A. Create separate branches in a Git repository for each environment and manually merge changes across branches.
+B. Use Config Sync to automatically sync Kubernetes manifests from a Git repository to each GKE cluster.
+C. Use Cloud Build to apply kubectl commands to each cluster on every commit to the repository.
+D. Store Kubernetes manifests in Cloud Storage and configure a cron job to apply them to each cluster periodically.
+
+Correct answer
+B. Use Config Sync to automatically sync Kubernetes manifests from a Git repository to each GKE cluster.
+
+Feedback
+A: Incorrect. Manually merging branches is error-prone and does not provide the automated reconciliation that GitOps requires.
+B: Correct. Config Sync is Google's GitOps tool for GKE. It continuously syncs the desired state of your clusters from a Git repository, providing automated reconciliation and drift detection—core principles of GitOps.
+C: Incorrect. Using Cloud Build to apply kubectl commands is a push-based model, not a true GitOps pull-based model. It does not provide continuous reconciliation or drift detection.
+D: Incorrect. Storing manifests in Cloud Storage with a cron job is not a GitOps pattern. It lacks version control integration, drift detection, and automated reconciliation.
+
+https://cloud.google.com/kubernetes-engine/enterprise/config-sync/docs/overview
+https://cloud.google.com/kubernetes-engine/enterprise/config-sync/docs/how-to/repo
+
+---
+
+Question 13
+
+Your team needs to safely store and rotate API keys used by a Cloud Run application. The application must be able to retrieve the latest key at runtime. You want to follow the principle of least privilege. What should you do?
+
+A. Store the API keys in environment variables in the Cloud Run service configuration.
+B. Store the API keys in a Cloud Storage bucket and grant the Cloud Run service account read access to the bucket.
+C. Store the API keys in Secret Manager and grant the Cloud Run service account the Secret Manager Secret Accessor role on those specific secrets.
+D. Encode the API keys in Base64 and embed them in the container image.
+
+Correct answer
+C. Store the API keys in Secret Manager and grant the Cloud Run service account the Secret Manager Secret Accessor role on those specific secrets.
+
+Feedback
+A: Incorrect. Environment variables in Cloud Run service configurations are visible to anyone with sufficient IAM access to the service and are not automatically rotated. They do not follow best practices for secret management.
+B: Incorrect. Storing secrets in Cloud Storage is not a recommended practice. Cloud Storage objects are not designed for secret management and lack features like rotation notifications and automatic versioning designed for secrets.
+C: Correct. Secret Manager is the Google-recommended service for storing secrets. Granting the Secret Manager Secret Accessor role only on specific secrets follows the principle of least privilege. Cloud Run can automatically inject secret values and supports rotation.
+D: Incorrect. Embedding secrets in a container image exposes them to anyone with access to the image and makes rotation extremely difficult.
+
+https://cloud.google.com/run/docs/configuring/secrets
+https://cloud.google.com/secret-manager/docs/overview
+
+---
+
+Question 14
+
+Your company runs critical workloads on GKE and wants to ensure that nodes in the cluster are always running the latest security patches. You want to minimize disruption to running workloads. What should you do?
+
+A. Configure the GKE cluster to use the Regular release channel and enable node auto-upgrade with a surge upgrade strategy.
+B. Manually upgrade node pools during off-peak hours by cordoning and draining each node.
+C. Recreate the cluster from scratch with new nodes whenever a security patch is available.
+D. Configure the cluster to use the Rapid release channel to receive patches as soon as possible.
+
+Correct answer
+A. Configure the GKE cluster to use the Regular release channel and enable node auto-upgrade with a surge upgrade strategy.
+
+Feedback
+A: Correct. The Regular release channel provides a balance of stability and timeliness for security patches. Node auto-upgrade automates the patching process, and a surge upgrade strategy creates new nodes before draining old ones, minimizing disruption to running workloads.
+B: Incorrect. Manually upgrading nodes is operational overhead and prone to human error. It does not scale well for large clusters.
+C: Incorrect. Recreating the cluster is extremely disruptive and not necessary for routine security patching.
+D: Incorrect. The Rapid release channel provides the newest patches earliest, but it also carries more risk of instability, which is not appropriate for critical production workloads.
+
+https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels
+https://cloud.google.com/kubernetes-engine/docs/concepts/node-upgrades
+
+---
+
+Question 15
+
+Your organization uses Cloud Logging. Compliance requirements mandate that certain log types must be retained for 7 years. The default retention period in Cloud Logging is not sufficient. What should you do?
+
+A. Configure a log sink to export the logs to a Cloud Storage bucket and set the bucket's retention policy to 7 years.
+B. Change the retention setting in the Cloud Logging bucket to 7 years.
+C. Export the logs to BigQuery with a table expiration of 7 years.
+D. Both A and B are valid approaches.
+
+Correct answer
+D. Both A and B are valid approaches.
+
+Feedback
+A: Correct. Exporting logs via a log sink to Cloud Storage with a 7-year retention policy satisfies the compliance requirement. Cloud Storage is cost-effective for long-term log archiving.
+B: Correct. Cloud Logging now supports configuring custom retention periods on _Default and user-defined log buckets for up to 3,650 days (approximately 10 years), which satisfies the 7-year requirement.
+C: Incorrect. BigQuery table expiration deletes tables after the specified time, which is the opposite of what is needed. Also, BigQuery is not the most cost-effective storage for 7-year log archiving.
+D: Correct. Both A and B are valid approaches that satisfy the 7-year compliance requirement.
+
+https://cloud.google.com/logging/docs/buckets
+https://cloud.google.com/logging/docs/export/configure_export_v2
+
+---
+
+Question 16
+
+You have a Cloud Run service that processes user-uploaded files. Occasionally, files that fail processing cause the container to crash. You need to ensure that failed files do not prevent other files from being processed and that failed files can be retried later. What should you do?
+
+A. Configure Cloud Run with a higher request timeout and increase the number of container instances.
+B. Use Cloud Tasks to enqueue file processing jobs, configure retry settings, and have Cloud Run pull tasks from the queue.
+C. Add a try/catch block in the application code to log errors without crashing the container.
+D. Configure Cloud Run to trigger from Pub/Sub push subscriptions and set an acknowledgment deadline with retry policy on the subscription.
+
+Correct answer
+D. Configure Cloud Run to trigger from Pub/Sub push subscriptions and set an acknowledgment deadline with retry policy on the subscription.
+
+Feedback
+A: Incorrect. A higher timeout and more instances do not address the core problem of failed files blocking others. They only delay the inevitable crash.
+B: Correct (also valid). Cloud Tasks provides reliable task queuing with configurable retries and dead-letter queues, but is a pull-based model. D is the more idiomatic event-driven pattern.
+C: Incorrect. Catching errors without crashing helps, but it does not provide an automatic retry mechanism for failed files.
+D: Correct. Using Pub/Sub push subscriptions decouples file processing from the upload event. If Cloud Run fails to process a message (returns a non-2xx response), Pub/Sub automatically retries the message according to the retry policy, ensuring failed files are retried without blocking others.
+
+https://cloud.google.com/run/docs/triggering/pubsub-push
+https://cloud.google.com/pubsub/docs/handling-failures
+
+---
+
+Question 17
+
+Your team has adopted Site Reliability Engineering practices. After a major incident you want to conduct a review that systematically identifies contributing factors without placing blame on individuals. What should you do?
+
+A. Write an incident report that names the engineer who made the change that caused the outage and distribute it to management.
+B. Conduct a blameless postmortem that focuses on systemic and process failures, documents action items, and shares learnings with the broader organization.
+C. Institute a new policy requiring all changes to be reviewed by two additional engineers before deployment.
+D. Have the on-call engineer document their personal mistakes and present them to the team.
+
+Correct answer
+B. Conduct a blameless postmortem that focuses on systemic and process failures, documents action items, and shares learnings with the broader organization.
+
+Feedback
+A: Incorrect. Attributing blame to individuals discourages transparency and does not address the systemic issues that led to the incident. It is counter to SRE practices.
+B: Correct. Blameless postmortems are a core SRE practice. They focus on what systems, processes, and tooling contributed to the incident, not on who made a mistake. This encourages psychological safety and leads to lasting systemic improvements.
+C: Incorrect. Adding more review steps is one possible action item but is not the same as conducting a blameless postmortem to understand the full scope of contributing factors.
+D: Incorrect. Having an engineer document personal mistakes and present them publicly creates blame and discourages transparency.
+
+https://sre.google/workbook/postmortem-culture/
+https://sre.google/sre-book/postmortem-culture/
+
+---
+
+Question 18
+
+Your application is deployed on multiple GKE clusters across regions. You need to monitor the overall health of the application from the end user's perspective, including checking that the application is reachable from different geographic locations. What should you do?
+
+A. Configure Kubernetes liveness probes on each cluster and review the probe results in Cloud Monitoring.
+B. Create Cloud Monitoring uptime checks targeting the application's external URL, selecting multiple regions for the check origin.
+C. Deploy a synthetic monitoring agent to a Compute Engine VM in each region and configure it to check the application URL.
+D. Configure Cloud Trace to measure end-to-end latency for each request from users in different regions.
+
+Correct answer
+B. Create Cloud Monitoring uptime checks targeting the application's external URL, selecting multiple regions for the check origin.
+
+Feedback
+A: Incorrect. Kubernetes liveness probes check whether a process inside a container is alive, but they do not measure reachability from outside the cluster or from different geographic locations.
+B: Correct. Cloud Monitoring uptime checks can target external URLs and originate from multiple geographic regions, giving you a user-perspective view of availability across the globe.
+C: Incorrect. Deploying custom monitoring agents on Compute Engine VMs duplicates functionality already available in Cloud Monitoring and requires additional operational overhead.
+D: Incorrect. Cloud Trace measures request latency for requests that are already reaching the application. It does not detect whether the application is unreachable from a given location.
+
+https://cloud.google.com/monitoring/uptime-checks/introduction
+https://cloud.google.com/monitoring/uptime-checks/manage-checks
+
+---
+
+Question 19
+
+Your organization wants to implement a software supply chain security practice that ensures container images deployed to production have been reviewed and approved by a security team member. What should you do?
+
+A. Require all container images to be stored in Artifact Registry and configure IAM so only the security team can push images.
+B. Use Binary Authorization with an attestation policy that requires a human attestation from the security team before an image can be deployed to production.
+C. Configure Cloud Armor to only allow traffic from the security team's IP addresses during deployment windows.
+D. Require the security team to review Artifact Registry vulnerability scan reports and manually approve each deployment via a Google Chat message.
+
+Correct answer
+B. Use Binary Authorization with an attestation policy that requires a human attestation from the security team before an image can be deployed to production.
+
+Feedback
+A: Incorrect. Restricting push access limits who can store images but does not enforce a human approval step at deployment time. An attacker who gains push access could still deploy unapproved images.
+B: Correct. Binary Authorization supports human review attestors. The security team member cryptographically signs an image (creates an attestation) after review, and Binary Authorization enforces that this attestation exists before allowing deployment to the production cluster.
+C: Incorrect. Cloud Armor controls network traffic and cannot enforce approval workflows for container image deployments.
+D: Incorrect. Manual approval via a chat message is not enforceable or auditable. There is no cryptographic proof that a reviewed and approved image is the same one that gets deployed.
+
+https://cloud.google.com/binary-authorization/docs/making-attestations
+https://cloud.google.com/binary-authorization/docs/deploy-mode
+
+---
+
+Question 20
+
+Your Cloud Build pipeline builds a container image and pushes it to Artifact Registry. You want the pipeline to automatically deploy the image to a staging environment and then, after a manual approval, deploy to production. What should you do?
+
+A. Add additional build steps in Cloud Build to deploy to both environments and use a Cloud Scheduler job to enforce the delay between environments.
+B. Use Cloud Deploy with a delivery pipeline that defines staging and production targets, and configure a manual approval gate before the production stage.
+C. Use Terraform to define both environments and run terraform apply for each environment sequentially in Cloud Build.
+D. Deploy to staging via Cloud Build and send a Pub/Sub notification to trigger a second Cloud Build pipeline for production after manual approval in the Cloud Build console.
+
+Correct answer
+B. Use Cloud Deploy with a delivery pipeline that defines staging and production targets, and configure a manual approval gate before the production stage.
+
+Feedback
+A: Incorrect. Using Cloud Scheduler to enforce a delay between environments is not the same as a manual approval gate and is not a Google-recommended approach for deployment pipelines.
+B: Correct. Cloud Deploy is designed precisely for this use case. It provides a pipeline with ordered targets, promotion actions, and native support for manual approval gates between stages.
+C: Incorrect. Running terraform apply for each environment in sequence does not provide a manual approval gate between environments and is more suited for infrastructure provisioning than application deployment.
+D: Incorrect. This is a complex workaround that lacks the auditability, visibility, and native approval features provided by Cloud Deploy.
+
+https://cloud.google.com/deploy/docs/config-files
+https://cloud.google.com/deploy/docs/deploy-app-run#approving_or_rejecting_a_rollout
+
+---
+
+Question 21
+
+Your application emits custom business metrics from Cloud Run. You want to create a dashboard that shows these metrics alongside infrastructure metrics like CPU and memory, and you want to be alerted when a business metric exceeds a threshold. What should you do?
+
+A. Export all metrics to BigQuery and build a Looker Studio dashboard with alerting configured in Looker.
+B. Use the Cloud Monitoring API or client libraries to write custom metrics, then create a Cloud Monitoring dashboard and alerting policy using those metrics.
+C. Write metrics to Cloud Logging as structured log entries and use log-based metrics to create alerts.
+D. Use Cloud Trace to correlate business metric data with infrastructure performance data.
+
+Correct answer
+B. Use the Cloud Monitoring API or client libraries to write custom metrics, then create a Cloud Monitoring dashboard and alerting policy using those metrics.
+
+Feedback
+A: Incorrect. Exporting to BigQuery and using Looker Studio adds unnecessary complexity. Cloud Monitoring natively supports custom metrics and dashboards alongside infrastructure metrics.
+B: Correct. Cloud Monitoring's custom metrics API lets you write application-defined metrics directly. These metrics appear alongside infrastructure metrics in dashboards and can be used in alerting policies. This is the Google-recommended approach.
+C: Incorrect. Log-based metrics are a valid approach for metrics derived from log data, but writing raw numeric metrics as log entries and then creating metrics from them is less efficient and direct than using the Monitoring API.
+D: Incorrect. Cloud Trace is for distributed request tracing, not for storing or alerting on custom business metrics.
+
+https://cloud.google.com/monitoring/custom-metrics/creating-metrics
+https://cloud.google.com/monitoring/alerts/using-alerting-ui
+
+---
+
+Question 22
+
+A developer on your team accidentally pushed a secret API key to a public GitHub repository. The secret is now compromised. What should you do first?
+
+A. Delete the repository from GitHub to prevent further access to the key.
+B. Immediately revoke or rotate the compromised API key in the system where it is used.
+C. Contact GitHub support to remove the secret from the repository history.
+D. Conduct a postmortem and define a new policy to prevent this from happening in the future.
+
+Correct answer
+B. Immediately revoke or rotate the compromised API key in the system where it is used.
+
+Feedback
+A: Incorrect. Deleting the repository does not help if the key has already been crawled, cloned, or used by a bad actor. The key must be rotated immediately to stop unauthorized access.
+B: Correct. The first priority when a secret is compromised is to revoke or rotate it immediately to prevent further unauthorized use. All other steps—removing it from git history, postmortem, and policy updates—are important but secondary.
+C: Incorrect. Removing the secret from git history is important to prevent future exposure, but the key is already compromised. Rotating the key takes priority.
+D: Incorrect. A postmortem and policy update are important for preventing recurrence, but they are not the immediate first response to an active compromise.
+
+https://cloud.google.com/secret-manager/docs/best-practices
+https://docs.github.com/en/code-security/secret-scanning
+
+---
+
+Question 23
+
+Your team uses Cloud Build to run integration tests against a real Cloud SQL database. You want to ensure that each test run uses a fresh, isolated database instance to prevent test pollution. What is the most cost-effective approach?
+
+A. Create a dedicated Cloud SQL instance for each developer and run tests against their respective instance.
+B. Add Cloud Build steps to create a Cloud SQL instance at the start of the test run, run the tests, and delete the instance at the end of the run.
+C. Use a single shared Cloud SQL instance and run integration tests in sequential builds to avoid conflicts.
+D. Use Cloud Spanner instead of Cloud SQL for integration tests to take advantage of its multi-region capabilities.
+
+Correct answer
+B. Add Cloud Build steps to create a Cloud SQL instance at the start of the test run, run the tests, and delete the instance at the end of the run.
+
+Feedback
+A: Incorrect. Dedicated Cloud SQL instances per developer are costly, especially when they sit idle between test runs.
+B: Correct. Creating an ephemeral Cloud SQL instance per build and deleting it after the run ensures complete isolation and avoids paying for idle instances. Cloud SQL instances can be created and deleted quickly in Cloud Build steps.
+C: Incorrect. Running tests sequentially against a shared instance introduces bottlenecks and risk of test pollution if a test leaves the database in a dirty state.
+D: Incorrect. Switching databases for integration testing adds complexity and may not accurately reflect the behavior of the production Cloud SQL database.
+
+https://cloud.google.com/sql/docs/mysql/create-instance
+https://cloud.google.com/build/docs/configuring-builds/create-basic-configuration
+
+---
+
+Question 24
+
+Your organization is onboarding a new team to Google Cloud. You want to enforce that all new Google Cloud projects created by this team automatically have a specific set of required APIs enabled, a default VPC deleted, and specific labels applied. What should you do?
+
+A. Create a checklist and train the team to manually configure each project when it is created.
+B. Create a Terraform module for project setup and require the team to use it for all new projects.
+C. Use a Cloud Build trigger to detect new project creation events and apply the configuration automatically.
+D. Configure an organization policy that enforces labels and VPC settings at project creation time.
+
+Correct answer
+B. Create a Terraform module for project setup and require the team to use it for all new projects.
+
+Feedback
+A: Incorrect. Manual checklists are error-prone and do not scale. They do not enforce compliance automatically.
+B: Correct. A shared Terraform module for project setup is the Google-recommended approach for consistent project configuration. It enforces required APIs, labels, and network settings every time and serves as living documentation.
+C: Incorrect. While Cloud Build can react to events, project creation events are complex to detect, and this pattern requires additional infrastructure to manage.
+D: Incorrect. Organization policies can enforce some constraints like label requirements and VPC settings, but they cannot enable APIs. A Terraform module provides a more comprehensive and complete solution.
+
+https://cloud.google.com/docs/terraform/best-practices-for-terraform#modules
+https://github.com/terraform-google-modules/terraform-google-project-factory
+
+---
+
+Question 25
+
+Your Cloud Run service is experiencing cold start latency that is degrading user experience for the first request after periods of inactivity. What is the most effective way to reduce cold start latency?
+
+A. Increase the CPU allocation for the Cloud Run service to speed up container startup.
+B. Configure a minimum number of instances so that at least one container is always warm and ready to serve requests.
+C. Reduce the container image size to decrease the time needed to pull the image.
+D. Use Cloud CDN to cache responses from the Cloud Run service.
+
+Correct answer
+B. Configure a minimum number of instances so that at least one container is always warm and ready to serve requests.
+
+Feedback
+A: Incorrect. Increasing CPU allocation may slightly speed up startup but does not eliminate cold starts when there are no running instances. It also increases cost.
+B: Correct. Setting a minimum number of instances greater than zero keeps at least one container warm and ready at all times, eliminating cold start latency for incoming requests. This is the most direct and effective solution.
+C: Incorrect. Reducing image size is a good practice that can reduce cold start time, but it does not eliminate cold starts when scaling from zero.
+D: Incorrect. Cloud CDN caches HTTP responses for cacheable content. It does not affect the cold start latency of the Cloud Run container processing a request.
+
+https://cloud.google.com/run/docs/configuring/min-instances
+https://cloud.google.com/run/docs/tips/general#starting_services_quickly
+
+---
+
+Question 26
+
+You need to implement structured logging in your application deployed on GKE so that logs can be easily queried and filtered in Cloud Logging. What should you do?
+
+A. Write log messages as plain text strings and use Cloud Logging's full-text search to filter them.
+B. Write log messages as JSON objects to stdout or stderr, including standard fields like severity, message, and timestamp.
+C. Use the Cloud Logging agent to parse unstructured log files on each GKE node.
+D. Write log messages to a file on the container's filesystem and use a log sink to export them to Cloud Storage.
+
+Correct answer
+B. Write log messages as JSON objects to stdout or stderr, including standard fields like severity, message, and timestamp.
+
+Feedback
+A: Incorrect. Plain text logs are ingested by Cloud Logging but cannot be filtered on structured fields. They are harder to query and analyze at scale.
+B: Correct. Cloud Logging automatically parses JSON log entries written to stdout or stderr in GKE. Using standard fields like severity, message, and timestamp allows full use of Cloud Logging's filtering, alerting, and querying capabilities.
+C: Incorrect. The Cloud Logging agent (now replaced by the Ops Agent) is used for Compute Engine VMs, not GKE. GKE has built-in logging integration.
+D: Incorrect. Writing logs to a container's filesystem is not reliable (they are lost when the container restarts) and does not provide the real-time querying capabilities of Cloud Logging.
+
+https://cloud.google.com/logging/docs/structured-logging
+https://cloud.google.com/kubernetes-engine/docs/concepts/about-logs
+
+---
+
+Question 27
+
+Your team is rolling out a change to a latency-sensitive API. You want to compare the performance of the new version against the old version using real production traffic while minimizing risk. What deployment strategy should you use?
+
+A. Blue/green deployment: deploy the new version alongside the old and switch 100% of traffic at once.
+B. Canary deployment: route a small percentage of traffic to the new version and gradually increase as confidence grows.
+C. Recreate deployment: terminate all old version instances before deploying the new version.
+D. Rolling deployment with no additional traffic control: update instances one at a time.
+
+Correct answer
+B. Canary deployment: route a small percentage of traffic to the new version and gradually increase as confidence grows.
+
+Feedback
+A: Incorrect. A blue/green deployment does allow quick rollback, but switching 100% of traffic at once still exposes all users to the new version immediately, which maximizes risk.
+B: Correct. Canary deployment routes only a small fraction of traffic to the new version. This limits the blast radius if the new version has performance regressions, allows real performance comparison on production traffic, and enables gradual rollout with easy rollback.
+C: Incorrect. A recreate deployment causes downtime and exposes all users to the new version simultaneously, providing no gradual rollout or comparison capability.
+D: Incorrect. A basic rolling deployment gradually replaces instances but does not provide traffic splitting for comparison purposes or easy rollback.
+
+https://sre.google/workbook/canarying-releases/
+https://cloud.google.com/deploy/docs/deployment-strategies/canary
+
+---
+
+Question 28
+
+Your GKE cluster is running workloads with different priority levels. During peak times, high-priority workloads need guaranteed resource availability. You want to ensure that high-priority Pods can preempt low-priority Pods when resources are scarce. What should you do?
+
+A. Configure resource quotas on namespaces to limit the total resources used by low-priority workloads.
+B. Create PriorityClasses and assign a higher priority value to high-priority workloads and a lower value to low-priority workloads.
+C. Use node taints and tolerations to dedicate specific nodes to high-priority workloads.
+D. Enable the Cluster Autoscaler to automatically add nodes when high-priority Pods cannot be scheduled.
+
+Correct answer
+B. Create PriorityClasses and assign a higher priority value to high-priority workloads and a lower value to low-priority workloads.
+
+Feedback
+A: Incorrect. Resource quotas limit total namespace consumption but do not enable preemption of low-priority Pods by high-priority ones when the cluster is under pressure.
+B: Correct. Kubernetes PriorityClasses define relative scheduling priority. When a high-priority Pod cannot be scheduled due to resource constraints, the scheduler can preempt (evict) lower-priority Pods to make room.
+C: Incorrect. Node taints and tolerations can dedicate nodes to specific workloads, but this requires pre-allocating nodes and does not dynamically preempt lower-priority Pods.
+D: Incorrect. Cluster Autoscaler adds nodes when Pods are unschedulable, but adding a node takes minutes. PriorityClasses and preemption allow immediate reallocation of existing cluster resources.
+
+https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+https://cloud.google.com/kubernetes-engine/docs/how-to/pod-priority
+
+---
+
+Question 29
+
+Your organization uses Cloud Build for CI/CD. You want to enforce that every container image pushed to Artifact Registry was built by Cloud Build and not by a developer's local machine. What should you do?
+
+A. Restrict developer IAM permissions so they cannot push directly to Artifact Registry.
+B. Use Binary Authorization with an attestation that is only created by the Cloud Build pipeline after a successful build.
+C. Configure Artifact Registry to require that all pushed images have a specific label indicating they were built by Cloud Build.
+D. Set up a log-based alert to detect images pushed outside of Cloud Build and delete them automatically.
+
+Correct answer
+B. Use Binary Authorization with an attestation that is only created by the Cloud Build pipeline after a successful build.
+
+Feedback
+A: Incorrect. Restricting direct push access helps but does not provide cryptographic proof that an image was built by Cloud Build. A service account compromise could still allow unauthorized pushes.
+B: Correct. The Cloud Build pipeline creates a cryptographic attestation after a successful build. Binary Authorization enforces that this attestation exists before deployment, providing a verifiable, tamper-resistant proof of build provenance.
+C: Incorrect. Image labels can be added by anyone and are not a secure mechanism. A developer could add the same label to a locally built image.
+D: Incorrect. Detecting and deleting images via log-based alerts is reactive. A briefly pushed malicious image could still be deployed before it is detected and deleted.
+
+https://cloud.google.com/build/docs/securing-builds/use-binary-authorization
+https://cloud.google.com/binary-authorization/docs/overview
+
+---
+
+Question 30
+
+Your team wants to implement Service Level Objectives (SLOs) for a new API. You need to select the most appropriate SLI (Service Level Indicator) to measure availability for a request-based service. What should you do?
+
+A. Measure the percentage of time that the API process is running on the server.
+B. Measure the ratio of successful HTTP requests (2xx responses) to total HTTP requests over a time window.
+C. Measure the average CPU utilization of the API servers over a time window.
+D. Measure the number of HTTP 5xx errors per hour.
+
+Correct answer
+B. Measure the ratio of successful HTTP requests (2xx responses) to total HTTP requests over a time window.
+
+Feedback
+A: Incorrect. Whether the process is running is an infrastructure-level check. It does not measure the user-perceived availability of the service, as a running process could still return errors.
+B: Correct. For request-based services, Google SRE recommends measuring availability as the proportion of successful requests to total requests. This directly reflects the user's experience of the service being available.
+C: Incorrect. CPU utilization is a resource metric, not a user-facing availability metric. High CPU does not necessarily mean the service is unavailable, and low CPU does not mean it is available.
+D: Incorrect. An error count per hour is not a proportion. It does not account for traffic volume, making it difficult to set meaningful thresholds or compare across time periods with different traffic levels.
+
+https://sre.google/sre-book/service-level-objectives/
+https://cloud.google.com/stackdriver/docs/solutions/slo-monitoring
+
+---
+
+Question 31
+
+You need to give a third-party auditing firm temporary, read-only access to your organization's Cloud Logging logs for a two-week audit. You want to follow the principle of least privilege. What should you do?
+
+A. Create a service account for the auditors and grant it the Editor role on the organization for two weeks, then revoke it.
+B. Create a Google group for the auditors, grant the group the Logs Viewer role at the organization level, and configure an IAM condition to expire access after two weeks.
+C. Export logs to Cloud Storage and share the bucket with the auditors using a signed URL.
+D. Give the auditors access to the Google Cloud console with the Organization Administrator role and instruct them to only view logs.
+
+Correct answer
+B. Create a Google group for the auditors, grant the group the Logs Viewer role at the organization level, and configure an IAM condition to expire access after two weeks.
+
+Feedback
+A: Incorrect. The Editor role grants write access to most GCP resources, which violates the principle of least privilege. The auditors only need read access to logs.
+B: Correct. The Logs Viewer role grants read-only access to logs. An IAM condition with a date/time expression automatically revokes access after the audit period without requiring manual action. Using a group makes it easy to add or remove auditors.
+C: Incorrect. Exporting to Cloud Storage and sharing via signed URLs is operationally complex, may not include the most recent logs, and does not provide auditors with the filtering and querying capabilities of Cloud Logging.
+D: Incorrect. The Organization Administrator role is extremely overprivileged. Granting it to external auditors and relying on their good behavior is not a security best practice.
+
+https://cloud.google.com/iam/docs/conditions-overview
+https://cloud.google.com/logging/docs/access-control
+
+---
+
+Question 32
+
+Your application running on Cloud Run needs to call a Cloud SQL database. You want to establish this connection securely without exposing the database to the public internet. What should you do?
+
+A. Connect to Cloud SQL using the public IP address and add the Cloud Run service's IP range to the Cloud SQL authorized networks.
+B. Use the Cloud SQL Auth Proxy sidecar or connect via the built-in Cloud SQL connector using a private IP and VPC connector.
+C. Set the Cloud SQL instance to require SSL and connect to the public IP address from Cloud Run.
+D. Place both Cloud Run and Cloud SQL in the same VPC and connect directly via internal IP without SSL.
+
+Correct answer
+B. Use the Cloud SQL Auth Proxy sidecar or connect via the built-in Cloud SQL connector using a private IP and VPC connector.
+
+Feedback
+A: Incorrect. Connecting via a public IP exposes the database to the internet. Dynamic IP ranges for Cloud Run also make maintaining an authorized networks list impractical.
+B: Correct. The recommended approach is to use a Serverless VPC Access connector to route Cloud Run traffic into the VPC and connect to Cloud SQL via private IP, or to use the Cloud SQL connector library which handles authentication and encryption automatically over the public IP with IAM-based auth—never exposing credentials.
+C: Incorrect. While SSL encrypts the connection, connecting via public IP still exposes the database instance to the internet and requires managing IP allowlists.
+D: Incorrect. Connecting without SSL over an internal IP omits transport layer encryption, which may violate security policies and compliance requirements.
+
+https://cloud.google.com/sql/docs/mysql/connect-run
+https://cloud.google.com/sql/docs/mysql/sql-proxy
+
+---
+
+Question 33
+
+Your team manages infrastructure using Terraform. A junior engineer accidentally ran terraform destroy on the production environment. You need to restore the infrastructure. What should you do?
+
+A. Manually recreate all resources using the Google Cloud console.
+B. Run terraform apply from the same Terraform configuration and state to re-create the destroyed resources.
+C. Restore the Terraform state file from a Cloud Storage backup and run terraform apply.
+D. Raise a support ticket with Google Cloud to restore the destroyed resources.
+
+Correct answer
+B. Run terraform apply from the same Terraform configuration and state to re-create the destroyed resources.
+
+Feedback
+A: Incorrect. Manually recreating resources via the console is error-prone and time-consuming. It bypasses Infrastructure as Code practices.
+B: Correct. After terraform destroy, the state file reflects that resources no longer exist. Running terraform apply with the same configuration will re-create all destroyed resources to match the desired state. If the state was also lost, option C applies first.
+C: Incorrect. If the state file was also lost or corrupted, restoring it from a versioned Cloud Storage backup is a prerequisite before running terraform apply. This is why state file versioning is important. C is only necessary if the state file was lost; if it exists, B alone is sufficient.
+D: Incorrect. Google Cloud support cannot restore resources deleted by user-initiated Terraform operations.
+
+https://developer.hashicorp.com/terraform/cli/commands/apply
+https://cloud.google.com/docs/terraform/best-practices-for-terraform#state-location
+
+---
+
+Question 34
+
+Your organization wants to ensure that only approved base images from Artifact Registry are used in all Cloud Build pipelines. You want an automated, enforceable control. What should you do?
+
+A. Document the approved base images and train developers to use only those images.
+B. Configure a Cloud Build private pool and restrict outbound network access so the pool can only pull images from your Artifact Registry.
+C. Create a Cloud Function that scans each new Cloud Build trigger and verifies the base image.
+D. Use Cloud Armor to restrict traffic between Cloud Build and external container registries.
+
+Correct answer
+B. Configure a Cloud Build private pool and restrict outbound network access so the pool can only pull images from your Artifact Registry.
+
+Feedback
+A: Incorrect. Documentation and training are not enforceable controls. Developers could still use unapproved images.
+B: Correct. Private pools allow you to configure VPC network settings that restrict where Cloud Build workers can access images. With VPC Service Controls or firewall rules, you can prevent the pool from pulling images from external registries, enforcing use of only your approved Artifact Registry images.
+C: Incorrect. A Cloud Function that scans triggers at creation time does not prevent unapproved images from being used at build time. It would also miss manual trigger runs.
+D: Incorrect. Cloud Armor is a Layer 7 security service for external HTTP traffic. It cannot control network access between Cloud Build and external container registries.
+
+https://cloud.google.com/build/docs/private-pools/private-pools-overview
+https://cloud.google.com/build/docs/private-pools/using-vpc-service-controls
+
+---
+
+Question 35
+
+You are responsible for a GKE cluster that runs hundreds of microservices. You want to automatically enforce network policies that restrict which services can communicate with each other, following a zero-trust networking approach. What should you do?
+
+A. Configure Kubernetes Network Policies and use Cilium or Calico as the network plugin to enforce them.
+B. Configure Google Cloud Armor to inspect and block inter-service traffic within the cluster.
+C. Use VPC firewall rules to restrict traffic between all Pod IP address ranges.
+D. Require all services to use mTLS by deploying Anthos Service Mesh (ASM) and enforcing STRICT mTLS peer authentication.
+
+Correct answer
+D. Require all services to use mTLS by deploying Anthos Service Mesh (ASM) and enforcing STRICT mTLS peer authentication.
+
+Feedback
+A: Correct (also valid). Kubernetes Network Policies provide Layer 3/4 restrictions on which Pods can communicate. They are a foundational zero-trust control and are supported by GKE's built-in Dataplane V2 (based on Cilium).
+B: Incorrect. Cloud Armor is a perimeter security service for external HTTP/HTTPS traffic. It does not inspect east-west (service-to-service) traffic within a GKE cluster.
+C: Incorrect. VPC firewall rules operate at the node level, not the Pod level. They cannot enforce per-Pod or per-service communication restrictions without significant complexity.
+D: Correct. Anthos Service Mesh enforces mutual TLS (mTLS) between all services, ensuring every service authenticates its peer. STRICT mode prevents any plaintext communication, implementing zero-trust at the service mesh level. This is the most comprehensive approach.
+
+https://cloud.google.com/service-mesh/docs/security/security-overview
+https://cloud.google.com/kubernetes-engine/docs/how-to/network-policy
+
+---
+
+Question 36
+
+You have a Cloud Monitoring alerting policy that sends notifications to your team. The alert fires too frequently for minor, transient issues, causing alert fatigue. You want to reduce unnecessary alerts while still catching real incidents. What should you do?
+
+A. Increase the alert threshold so it only fires for more severe conditions.
+B. Configure an alert duration so the condition must persist for a set period before an alert is triggered.
+C. Remove the alerting policy and rely on users to report issues.
+D. Switch from an alerting policy to a log-based metric for incident detection.
+
+Correct answer
+B. Configure an alert duration so the condition must persist for a set period before an alert is triggered.
+
+Feedback
+A: Incorrect. Raising the threshold may reduce alerts but could also cause you to miss real incidents that fall below the new threshold.
+B: Correct. Setting a duration (also called an alignment period and condition duration) in Cloud Monitoring alerts ensures that a spike must be sustained for a defined period before an alert fires. Transient spikes that self-resolve do not trigger the alert, which directly reduces alert fatigue.
+C: Incorrect. Relying on users to report issues eliminates proactive monitoring and violates SRE principles of observing systems before users are affected.
+D: Incorrect. Log-based metrics can also be used for alerting, but they suffer from the same transience problem if not configured with an appropriate duration.
+
+https://cloud.google.com/monitoring/alerts/concepts-indepth
+https://cloud.google.com/monitoring/alerts/using-alerting-ui#conditions
+
+---
+
+Question 37
+
+Your organization's security policy requires all Compute Engine VM instances to have OS Login enabled, disabling the use of project-level SSH keys. You need to enforce this across all projects in the organization. What should you do?
+
+A. Document the policy and train all project owners to enable OS Login on their instances.
+B. Create a Cloud Monitoring alert to detect VMs that do not have OS Login enabled.
+C. Set the "compute.requireOsLogin" organization policy constraint to enforce OS Login across the entire organization.
+D. Create a Cloud Function triggered by Compute Engine instance creation events to enable OS Login on each new instance.
+
+Correct answer
+C. Set the "compute.requireOsLogin" organization policy constraint to enforce OS Login across the entire organization.
+
+Feedback
+A: Incorrect. Documentation and training are not enforceable. Project owners could still create VMs without OS Login.
+B: Incorrect. An alert detects non-compliant VMs after they are created but does not prevent their creation or enforce compliance automatically.
+C: Correct. The compute.requireOsLogin organization policy constraint enforces OS Login for all instances in the organization. It is a preventive control that applies at resource creation time and cannot be overridden by project-level settings.
+D: Incorrect. A Cloud Function that reacts to instance creation events can apply OS Login after the fact, but there is a window between creation and enforcement during which the instance is non-compliant. Organization policy is a stronger, preventive control.
+
+https://cloud.google.com/compute/docs/oslogin/manage-oslogin-in-an-org
+https://cloud.google.com/resource-manager/docs/organization-policy/overview
+
+---
+
+Question 38
+
+Your team is building a new service and needs to decide how to handle configuration that varies between development, staging, and production environments (such as database connection strings and feature flags). What is the Google-recommended approach?
+
+A. Hard-code configuration values in the application binary for each environment and build separate images for each environment.
+B. Store configuration in environment variables and inject them at deploy time from Secret Manager or Cloud Run/GKE configuration.
+C. Read configuration from a YAML file checked into the source code repository for each environment.
+D. Use a command-line flag for each configuration value and pass them when starting the application.
+
+Correct answer
+B. Store configuration in environment variables and inject them at deploy time from Secret Manager or Cloud Run/GKE configuration.
+
+Feedback
+A: Incorrect. Building separate images per environment violates the principle of building once and deploying everywhere. Different images are harder to test and increase the risk that the tested image is not the one deployed to production.
+B: Correct. The Twelve-Factor App methodology and Google-recommended practices advocate for storing configuration in the environment. Using environment variables injected at deploy time from secure sources like Secret Manager keeps sensitive values out of source code and enables the same image to run in all environments.
+C: Incorrect. Checking environment-specific configuration into source code can expose sensitive values and makes it harder to maintain the principle of build once, deploy everywhere.
+D: Incorrect. Command-line flags are not secret-safe and require modifying process startup scripts for each environment, which is operationally complex.
+
+https://cloud.google.com/run/docs/configuring/environment-variables
+https://cloud.google.com/run/docs/configuring/secrets
+
+---
+
+Question 39
+
+Your Kubernetes application has a Deployment that manages a web server. The web server is slow to start and takes 30 seconds before it can serve traffic. Kubernetes is killing the Pod as unhealthy before it finishes starting. What should you do?
+
+A. Increase the Deployment's progressDeadlineSeconds to give the Pod more time to roll out.
+B. Configure a startupProbe with a sufficient failureThreshold and periodSeconds to give the container time to start before liveness checks begin.
+C. Increase the terminationGracePeriodSeconds of the Pod to delay container shutdown.
+D. Reduce the CPU request for the container so it receives more CPU resources during startup.
+
+Correct answer
+B. Configure a startupProbe with a sufficient failureThreshold and periodSeconds to give the container time to start before liveness checks begin.
+
+Feedback
+A: Incorrect. progressDeadlineSeconds applies to the overall rollout, not to individual container startup. It would not prevent liveness probe failures from killing the Pod.
+B: Correct. A startupProbe delays liveness and readiness probe checks until the container has had enough time to start. By setting failureThreshold * periodSeconds to be greater than the startup time, you prevent Kubernetes from killing the Pod during its initialization phase.
+C: Incorrect. terminationGracePeriodSeconds controls how long Kubernetes waits after sending SIGTERM before force-killing a container. It does not affect startup probe or liveness probe behavior.
+D: Incorrect. Reducing CPU requests could actually make the container start more slowly if it is competing for CPU. It does not address the probe timeout issue.
+
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+https://cloud.google.com/kubernetes-engine/docs/concepts/health-checks
+
+---
+
+Question 40
+
+Your organization wants to reduce the time it takes to detect and respond to security incidents in Google Cloud. You want a centralized view of security findings across all projects. What should you do?
+
+A. Set up a Cloud Monitoring dashboard per project and have the security team review each dashboard manually.
+B. Enable Security Command Center at the organization level and configure it to aggregate and prioritize findings from all projects.
+C. Enable Cloud Audit Logs in each project and export them to a central BigQuery dataset for manual review.
+D. Configure VPC Flow Logs in each project and send alerts to the security team for anomalous traffic patterns.
+
+Correct answer
+B. Enable Security Command Center at the organization level and configure it to aggregate and prioritize findings from all projects.
+
+Feedback
+A: Incorrect. Per-project dashboards require the security team to review each project individually, which does not scale and increases mean time to detect.
+B: Correct. Security Command Center (SCC) is Google's centralized security and risk management platform. When enabled at the organization level, it automatically aggregates findings from all projects, provides prioritization, and integrates with other security services for comprehensive visibility.
+C: Incorrect. Exporting audit logs to BigQuery and reviewing them manually is reactive, labor-intensive, and does not provide the automated threat detection and prioritization of SCC.
+D: Incorrect. VPC Flow Logs are useful for network forensics but cover only network traffic. They do not provide the comprehensive security findings coverage (misconfigurations, vulnerabilities, IAM issues) that SCC offers.
+
+https://cloud.google.com/security-command-center/docs/concepts-security-command-center-overview
+https://cloud.google.com/security-command-center/docs/how-to-use-security-command-center
+
+---
+
+Question 41
+
+You are running a Cloud Build pipeline that builds Docker images. The pipeline downloads many external dependencies during each build. This adds significant time to each build. You want to reduce the time spent downloading dependencies without caching the full image. What should you do?
+
+A. Use a multi-stage Dockerfile to separate the dependency download stage from the build stage.
+B. Use a Cloud Build worker pool with a persistent disk that caches downloaded dependencies.
+C. Configure Cloud Build to use a custom virtual machine with pre-installed dependencies.
+D. Store downloaded dependencies in a Cloud Storage bucket and restore them at the start of each build.
+
+Correct answer
+D. Store downloaded dependencies in a Cloud Storage bucket and restore them at the start of each build.
+
+Feedback
+A: Incorrect. Multi-stage Dockerfiles reduce final image size but do not reduce the time spent downloading external dependencies during the build. Each stage still downloads its dependencies fresh.
+B: Incorrect. Cloud Build private pools do not provide persistent disk caching of dependencies between builds. The worker environment is ephemeral.
+C: Incorrect. Using a custom VM with pre-installed dependencies is complex to maintain and update. It is not a Google-recommended practice for Cloud Build.
+D: Correct. Caching dependencies in Cloud Storage and restoring them at build start is the recommended approach for Cloud Build. Cloud Build provides a caching mechanism using Cloud Storage to persist build artifacts between runs, significantly reducing dependency download time.
+
+https://cloud.google.com/build/docs/optimize-builds/speeding-up-builds#caching_directories_with
+https://cloud.google.com/build/docs/optimize-builds/speeding-up-builds
+
+---
+
+Question 42
+
+Your application deployment on GKE is failing because the Pods cannot be scheduled. kubectl describe pod shows "Insufficient memory" as the reason. The nodes have unused CPU but the node pool has reached its memory capacity. What is the most scalable solution?
+
+A. Increase the memory requests of the Pods to request less memory.
+B. Enable Cluster Autoscaler to automatically add new nodes when Pods cannot be scheduled due to insufficient resources.
+C. Manually add more nodes to the cluster.
+D. Reduce the number of replicas in the Deployment to free up memory.
+
+Correct answer
+B. Enable Cluster Autoscaler to automatically add new nodes when Pods cannot be scheduled due to insufficient resources.
+
+Feedback
+A: Incorrect. Reducing memory requests means the Pods are allocated less memory. If they actually need that memory, they will be OOMKilled. This does not solve the underlying capacity issue.
+B: Correct. Cluster Autoscaler monitors for unschedulable Pods and automatically adds nodes to the cluster to accommodate them. It also removes underutilized nodes to optimize cost. This is the scalable, automated solution.
+C: Incorrect. Manually adding nodes is not scalable. It requires operator intervention for every capacity event and cannot respond to traffic spikes automatically.
+D: Incorrect. Reducing replicas reduces the application's capacity to serve traffic and is a degradation of service, not a solution to the resource shortage.
+
+https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler
+https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-autoscaler
+
+---
+
+Question 43
+
+Your team runs Cloud Run services. A recent deployment caused a significant increase in 5xx errors. You need to identify the root cause quickly. What is the most effective first step?
+
+A. Roll back the deployment to the previous revision and investigate the logs afterward.
+B. Check Cloud Logging for error logs and stack traces from the new revision to identify the failing code path.
+C. Increase the Cloud Run service's memory limit to rule out OOM errors.
+D. Contact Google Cloud support with the project ID and service name.
+
+Correct answer
+B. Check Cloud Logging for error logs and stack traces from the new revision to identify the failing code path.
+
+Feedback
+A: Incorrect. Rolling back is important for restoring service, but it should happen alongside, not instead of, investigating the root cause. Understanding the issue is essential to prevent recurrence.
+B: Correct. Cloud Logging captures stdout, stderr, and request logs for Cloud Run. Inspecting error logs and stack traces from the new revision is the fastest way to identify the failing code path and root cause.
+C: Incorrect. Increasing memory is a guess-based approach. You should first examine the evidence in logs before changing configuration.
+D: Incorrect. Google Cloud support is for platform issues, not application code debugging. The logs contain the information needed to diagnose application-level 5xx errors.
+
+https://cloud.google.com/run/docs/logging
+https://cloud.google.com/logging/docs/view/logs-explorer-interface
+
+---
+
+Question 44
+
+Your organization processes sensitive customer data in Google Cloud. Compliance regulations require that you maintain an audit trail of all administrative actions taken on Cloud resources. What should you do?
+
+A. Enable Cloud Audit Logs (Admin Activity logs) at the organization level to capture all administrative API calls.
+B. Configure VPC Flow Logs to capture all network traffic for auditing purposes.
+C. Enable Cloud Monitoring and set up alerts for all API calls made against your resources.
+D. Require all administrators to submit change tickets in a ticketing system before making changes.
+
+Correct answer
+A. Enable Cloud Audit Logs (Admin Activity logs) at the organization level to capture all administrative API calls.
+
+Feedback
+A: Correct. Cloud Audit Logs Admin Activity logs record all administrative API calls that modify configuration or metadata of Google Cloud resources. They are always enabled and cannot be disabled. Ensuring they are captured and retained at the organization level provides a comprehensive, immutable audit trail.
+B: Incorrect. VPC Flow Logs capture network traffic metadata, not administrative API actions on Google Cloud resources. They do not provide an audit trail of administrative actions.
+C: Incorrect. Cloud Monitoring alerts can notify you of changes but do not provide a complete, immutable audit log of all administrative actions.
+D: Incorrect. A ticketing system records intended changes, not actual changes. An administrator could still take actions without creating a ticket.
+
+https://cloud.google.com/logging/docs/audit
+https://cloud.google.com/logging/docs/audit/best-practices
+
+---
+
+Question 45
+
+You need to deploy an application update to production with the ability to immediately serve 100% of traffic to the new version if it passes validation, while also being able to instantly roll back to the old version if needed. What deployment strategy should you use?
+
+A. Canary deployment with 1% initial traffic split.
+B. Rolling update replacing Pods one at a time.
+C. Blue/green deployment keeping both versions running simultaneously.
+D. Recreate deployment that terminates all old Pods before starting new ones.
+
+Correct answer
+C. Blue/green deployment keeping both versions running simultaneously.
+
+Feedback
+A: Incorrect. Canary deployment is excellent for gradual validation, but it does not allow instant switch of 100% traffic at a specific moment. It requires gradual traffic increase.
+B: Incorrect. Rolling updates are gradual and do not provide an instant switch to 100% new traffic, nor do they keep the old version available for instant rollback.
+C: Correct. Blue/green deployment runs both versions simultaneously. When validation passes, traffic can be switched 100% to the new (green) version instantly. If issues arise, traffic can be switched back to the old (blue) version with equal speed.
+D: Incorrect. Recreate deployment causes downtime by terminating all old Pods before starting new ones, and does not allow instant rollback because the old version no longer exists.
+
+https://cloud.google.com/deploy/docs/deployment-strategies/bluegreen
+https://sre.google/workbook/canarying-releases/
+
+---
+
+Question 46
+
+Your team uses a Cloud Build pipeline to deploy infrastructure with Terraform. You want to ensure that the Terraform plan is reviewed and approved by a human before terraform apply runs. What should you do?
+
+A. Add a sleep step in the Cloud Build pipeline to give the team time to review the plan before apply runs.
+B. Split the pipeline into two: a plan pipeline that stores the plan output, and an apply pipeline that is triggered manually after human review.
+C. Configure Cloud Build to send the plan output to Cloud Logging and approve the apply by updating a configuration file.
+D. Run terraform plan and apply in the same Cloud Build step and review the Cloud Build log after the apply.
+
+Correct answer
+B. Split the pipeline into two: a plan pipeline that stores the plan output, and an apply pipeline that is triggered manually after human review.
+
+Feedback
+A: Incorrect. A sleep step does not provide a real human review gate. The apply will run after the sleep regardless of whether anyone reviewed the plan.
+B: Correct. Separating plan and apply into distinct pipelines with a manual trigger for the apply pipeline is the standard approach for human review gates in Terraform pipelines. The plan output can be stored in Cloud Storage or shown in the Cloud Build log for review.
+C: Incorrect. Approving by updating a configuration file is complex and indirect. It does not provide a clear, auditable approval workflow.
+D: Incorrect. Reviewing the log after apply has already run defeats the purpose of a human review gate.
+
+https://cloud.google.com/docs/terraform/best-practices-for-terraform#plan-apply
+https://cloud.google.com/deploy/docs/deploy-app-run#approving_or_rejecting_a_rollout
+
+---
+
+Question 47
+
+Your application uses Pub/Sub for asynchronous messaging. Messages that fail processing repeatedly are piling up. You want to isolate these failed messages so they can be analyzed and reprocessed without blocking the main message pipeline. What should you do?
+
+A. Increase the Pub/Sub subscription acknowledgment deadline so messages have more time to be processed.
+B. Configure a dead-letter topic on the Pub/Sub subscription and forward undeliverable messages to it after a maximum number of delivery attempts.
+C. Create a separate Cloud Function to periodically check for old unacknowledged messages and reprocess them.
+D. Increase the Pub/Sub message retention duration so failed messages are kept longer.
+
+Correct answer
+B. Configure a dead-letter topic on the Pub/Sub subscription and forward undeliverable messages to it after a maximum number of delivery attempts.
+
+Feedback
+A: Incorrect. Increasing the acknowledgment deadline gives each delivery attempt more time, but it does not remove persistently failing messages from the pipeline. They will continue to be retried indefinitely.
+B: Correct. A dead-letter topic (also called a dead-letter queue) is specifically designed to capture messages that have failed delivery beyond a configured maximum number of attempts. They are removed from the main pipeline so they do not block other messages, and can be analyzed and reprocessed separately.
+C: Incorrect. Building a custom function to detect and reprocess old messages duplicates functionality available natively in Pub/Sub and is more complex to maintain.
+D: Incorrect. Increasing message retention keeps failed messages available for longer, but they will continue to be retried in the main subscription and block other messages.
+
+https://cloud.google.com/pubsub/docs/dead-letter-topics
+https://cloud.google.com/pubsub/docs/handling-failures
+
+---
+
+Question 48
+
+You are responsible for a GKE-based application that must meet strict compliance requirements. All container images must come from a known, approved list, and any image not on the list must be blocked from running on the cluster. What should you do?
+
+A. Train developers to only use approved images and conduct quarterly audits.
+B. Configure a Kubernetes admission controller using Binary Authorization with an allowlist policy that only permits images from approved Artifact Registry repositories.
+C. Use Cloud Armor to block network traffic from containers running unapproved images.
+D. Set up a Cloud Monitoring alert to detect Pods running images from unapproved repositories and terminate them.
+
+Correct answer
+B. Configure a Kubernetes admission controller using Binary Authorization with an allowlist policy that only permits images from approved Artifact Registry repositories.
+
+Feedback
+A: Incorrect. Training and audits are not preventive controls. Unapproved images can still be deployed between audit cycles.
+B: Correct. Binary Authorization integrates as a Kubernetes admission controller. An allowlist policy can specify exact Artifact Registry repositories from which images are permitted. Any Pod spec referencing an image from outside the allowlist is rejected at admission time before the container runs.
+C: Incorrect. Cloud Armor is a network security service and cannot inspect which container image a running container was built from.
+D: Incorrect. Detecting and terminating running Pods is reactive. There is a window between deployment and detection where unapproved containers run. Admission control is a preventive control that blocks deployment before it happens.
+
+https://cloud.google.com/binary-authorization/docs/policy-compliance-overview
+https://cloud.google.com/binary-authorization/docs/overview
+
+---
+
+Question 49
+
+Your application on Compute Engine generates large amounts of log data. You need to reduce Cloud Logging costs while still retaining logs that contain ERROR or CRITICAL severity entries for 30 days. What should you do?
+
+A. Disable all logging for the application to eliminate Cloud Logging costs entirely.
+B. Create an exclusion filter in Cloud Logging to exclude DEBUG and INFO logs from being ingested, and keep ERROR and CRITICAL logs with a 30-day retention setting.
+C. Export all logs to Cloud Storage and delete them from Cloud Logging immediately after export.
+D. Reduce the application's log verbosity by rewriting the application code to emit fewer log entries.
+
+Correct answer
+B. Create an exclusion filter in Cloud Logging to exclude DEBUG and INFO logs from being ingested, and keep ERROR and CRITICAL logs with a 30-day retention setting.
+
+Feedback
+A: Incorrect. Disabling all logging means you lose visibility into errors and critical issues, which is not acceptable for a production application.
+B: Correct. Log exclusion filters prevent specified logs from being ingested into Cloud Logging, eliminating ingestion costs for those logs. Excluding high-volume DEBUG and INFO logs while retaining ERROR and CRITICAL logs reduces cost while preserving the most operationally important data.
+C: Incorrect. Exporting and immediately deleting logs from Cloud Logging may cause you to lose log data that was not yet exported, and managing this export pipeline adds operational complexity.
+D: Incorrect. Rewriting application code to emit fewer logs is a valid long-term approach but requires development effort and may remove useful diagnostic information.
+
+https://cloud.google.com/logging/docs/exclusions
+https://cloud.google.com/logging/docs/routing/overview
+
+---
+
+Question 50
+
+Your company has a zero-downtime requirement for a stateful application running on GKE that uses persistent volumes. You need to upgrade the Kubernetes nodes in the cluster. What should you do?
+
+A. Delete and recreate the entire node pool with the new version, and restore the application from a backup.
+B. Configure the node pool with a blue/green upgrade strategy to bring up new nodes before draining old ones, and ensure PodDisruptionBudgets are configured for the application.
+C. Use the surge upgrade strategy (max-surge=1, max-unavailable=0) and ensure the application has PodDisruptionBudgets that allow no more than one unavailable replica.
+D. Manually drain each node one at a time during a maintenance window and replace it with a new node.
+
+Correct answer
+C. Use the surge upgrade strategy (max-surge=1, max-unavailable=0) and ensure the application has PodDisruptionBudgets that allow no more than one unavailable replica.
+
+Feedback
+A: Incorrect. Deleting and recreating the node pool causes downtime and requires restoring from backup, which violates the zero-downtime requirement.
+B: Correct (also valid). Blue/green node pool upgrades are an excellent approach for zero-downtime upgrades, particularly for stateful workloads. They create new nodes before removing old ones.
+C: Correct. Setting max-surge=1 and max-unavailable=0 ensures that at least one new node is available before any old node is drained, maintaining overall cluster capacity. Combined with a PodDisruptionBudget that prevents all replicas from being unavailable simultaneously, this achieves zero-downtime node upgrades.
+D: Incorrect. Manual drain-and-replace is operational overhead and error-prone. It does not benefit from automated orchestration and is not recommended for large clusters.
+
+https://cloud.google.com/kubernetes-engine/docs/concepts/node-pool-upgrade-strategies
+https://cloud.google.com/kubernetes-engine/docs/how-to/disruption-budgets
+
+---
+
+Question 51
+
+Your GKE workloads access Google Cloud APIs such as Cloud Storage and Pub/Sub. Currently the Pods use a Kubernetes service account annotated to a Google Cloud service account with broad permissions. You want to follow the principle of least privilege by granting each workload only the permissions it needs. What should you do?
+
+A. Create a single shared Google Cloud service account with the minimum permissions needed by any workload and use it for all Pods.
+B. Configure Workload Identity and bind each Kubernetes service account to a dedicated Google Cloud service account with only the permissions required by that specific workload.
+C. Mount a downloaded JSON key file for a Google Cloud service account into each Pod as a Kubernetes secret.
+D. Use the Compute Engine default service account for all GKE workloads and grant it only the required roles.
+
+Correct answer
+B. Configure Workload Identity and bind each Kubernetes service account to a dedicated Google Cloud service account with only the permissions required by that specific workload.
+
+Feedback
+A: Incorrect. A single shared service account violates the principle of least privilege because all workloads receive the combined permissions of all other workloads.
+B: Correct. Workload Identity is the recommended way for GKE workloads to access Google Cloud APIs. Each workload gets its own Kubernetes service account bound to a dedicated Google Cloud service account with only the permissions it needs. No long-lived credentials are stored in the cluster.
+C: Incorrect. Storing JSON key files in Kubernetes secrets is a security risk because the long-lived keys can be exfiltrated from the cluster. Workload Identity eliminates the need for key files.
+D: Incorrect. The default service account often has broad permissions. Using it for all workloads violates least privilege.
+
+https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity
+https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
+
+---
+
+Question 52
+
+Your team wants to enforce that all Terraform code changes go through a pull request review before being applied, and you want the Terraform plan output automatically posted as a comment on the pull request. What should you do?
+
+A. Require team members to copy the Terraform plan output into a pull request comment manually.
+B. Configure a Cloud Build trigger on pull request events that runs terraform plan and posts the output to the pull request using the source repository API.
+C. Run terraform apply in dry-run mode and attach the output to an email sent to reviewers.
+D. Use Cloud Scheduler to run terraform plan nightly and email the output to the team.
+
+Correct answer
+B. Configure a Cloud Build trigger on pull request events that runs terraform plan and posts the output to the pull request using the source repository API.
+
+Feedback
+A: Incorrect. Requiring manual copy-paste of plan output is error-prone and may be skipped. It is not an enforceable or automated process.
+B: Correct. Triggering terraform plan automatically on pull requests and posting the output as a comment is a standard CI/CD practice for Terraform. It gives reviewers a clear, accurate, and automated view of what will change before they approve.
+C: Incorrect. There is no dry-run mode for terraform apply. This approach is also not integrated into the pull request review workflow.
+D: Incorrect. Running nightly plans is not tied to specific code changes and does not help reviewers understand what a particular pull request will modify.
+
+https://cloud.google.com/docs/terraform/best-practices-for-terraform#plan-apply
+https://cloud.google.com/build/docs/automating-builds/create-manage-triggers
+
+---
+
+Question 53
+
+Your application is deployed as a GKE Autopilot cluster. You need to run a one-time database migration job after each deployment. You want a Kubernetes-native approach that automatically tracks the job's success or failure. What should you do?
+
+A. Create a Kubernetes CronJob scheduled to run one minute after each deployment.
+B. Create a Kubernetes Job resource for the migration, reference it in the deployment pipeline, and check the Job's completion status before proceeding.
+C. Add the migration logic as an init container in the application Deployment.
+D. Run the migration as an additional step in the Cloud Build pipeline using kubectl exec into a running Pod.
+
+Correct answer
+B. Create a Kubernetes Job resource for the migration, reference it in the deployment pipeline, and check the Job's completion status before proceeding.
+
+Feedback
+A: Incorrect. A CronJob runs on a schedule, not tied to a deployment event. A one-minute delay is arbitrary and may not be sufficient for the deployment to complete.
+B: Correct. A Kubernetes Job is designed for one-off tasks. It tracks completion and failure states, supports retries, and integrates naturally with deployment pipelines. Checking the Job's completion status before proceeding is a reliable pattern.
+C: Incorrect. Init containers run before the main container on every Pod start including restarts. Running a database migration on every Pod restart is dangerous and could corrupt data.
+D: Incorrect. Using kubectl exec to run commands in a running Pod is fragile, does not track success or failure natively, and tightly couples the migration to a specific Pod instance.
+
+https://kubernetes.io/docs/concepts/workloads/controllers/job/
+https://cloud.google.com/kubernetes-engine/docs/how-to/jobs
+
+---
+
+Question 54
+
+Your organization's Cloud Run services receive traffic from the public internet. You need to protect these services from common web application attacks such as SQL injection and cross-site scripting (XSS). What should you do?
+
+A. Deploy the Cloud Run services in a private VPC and restrict public access using firewall rules.
+B. Place a global external Application Load Balancer in front of the Cloud Run services and configure Google Cloud Armor with a preconfigured WAF ruleset.
+C. Enable Cloud CDN in front of Cloud Run to cache and filter malicious requests.
+D. Configure the Cloud Run service to reject requests that contain SQL injection patterns in the application code.
+
+Correct answer
+B. Place a global external Application Load Balancer in front of the Cloud Run services and configure Google Cloud Armor with a preconfigured WAF ruleset.
+
+Feedback
+A: Incorrect. Placing services in a private VPC prevents public internet access entirely, making them unavailable to legitimate users. This does not protect services that must be publicly accessible.
+B: Correct. Google Cloud Armor integrates with the global external Application Load Balancer and provides preconfigured WAF rulesets (based on OWASP ModSecurity Core Rule Set) that automatically detect and block SQL injection, XSS, and other common web attacks.
+C: Incorrect. Cloud CDN is designed for caching content to reduce latency and origin load. It does not perform deep packet inspection or WAF-level filtering of malicious requests.
+D: Incorrect. Implementing WAF logic in application code is error-prone, difficult to maintain, and bypasses dedicated security infrastructure.
+
+https://cloud.google.com/armor/docs/waf-rules
+https://cloud.google.com/armor/docs/cloud-run-configuration
+
+---
+
+Question 55
+
+Your organization runs multiple GKE clusters across different teams. You want a single centralized place to view the configuration compliance of all clusters—such as which clusters have network policies enabled and which have Workload Identity configured. What should you do?
+
+A. Write a Cloud Function that queries each cluster's API server and stores compliance data in BigQuery.
+B. Enable GKE Enterprise and use the Fleet feature to get a unified compliance and health view across all registered clusters.
+C. Configure Cloud Monitoring to collect custom metrics from each cluster and build a compliance dashboard.
+D. Run kubectl get commands against each cluster from a Cloud Build pipeline and log the results.
+
+Correct answer
+B. Enable GKE Enterprise and use the Fleet feature to get a unified compliance and health view across all registered clusters.
+
+Feedback
+A: Incorrect. Building a custom compliance reporting system requires significant engineering effort and duplicates functionality available in GKE Enterprise Fleets.
+B: Correct. GKE Enterprise Fleets provide a centralized management plane for multiple GKE clusters including built-in compliance dashboards showing configuration status—such as Workload Identity, network policy, and Binary Authorization—across all registered clusters.
+C: Incorrect. Cloud Monitoring can show infrastructure metrics but does not natively report on Kubernetes configuration compliance settings.
+D: Incorrect. Running kubectl commands in Cloud Build is operationally fragile and does not provide a persistent, queryable compliance view.
+
+https://cloud.google.com/kubernetes-engine/enterprise/fleet-management/docs/fleet-overview
+https://cloud.google.com/kubernetes-engine/enterprise/docs/concepts/overview
+
+---
+
+Question 56
+
+Your application logs contain both operational logs and security audit logs. Regulations require that security audit logs be stored for 5 years with tamper-evident protection, while operational logs can be deleted after 30 days. What should you do?
+
+A. Store all logs in a single Cloud Logging bucket with a 5-year retention period to satisfy the compliance requirement.
+B. Create two Cloud Logging buckets: one for audit logs with a 5-year locked retention policy, and one for operational logs with a 30-day retention. Route logs to the appropriate bucket using log sinks.
+C. Export all logs to BigQuery and configure separate table expiration policies for audit and operational log tables.
+D. Enable Cloud Audit Logs with a 5-year retention and delete operational logs manually each month.
+
+Correct answer
+B. Create two Cloud Logging buckets: one for audit logs with a 5-year locked retention policy, and one for operational logs with a 30-day retention. Route logs to the appropriate bucket using log sinks.
+
+Feedback
+A: Incorrect. Storing all logs for 5 years satisfies the audit requirement but incurs unnecessary cost by retaining operational logs far beyond their required 30-day period.
+B: Correct. Creating separate buckets with different retention policies and routing the right logs to each bucket using log sinks is the recommended approach. A locked retention policy on the audit log bucket provides tamper-evident protection by preventing the policy from being shortened.
+C: Incorrect. BigQuery lacks the locked retention policy feature required for tamper-evident audit logging.
+D: Incorrect. Manually deleting operational logs each month is operationally burdensome and does not scale. Automated retention policies are the recommended approach.
+
+https://cloud.google.com/logging/docs/buckets#lock-bucket
+https://cloud.google.com/logging/docs/routing/overview
+
+---
+
+Question 57
+
+Your team wants to implement feature flags in your application so that new features can be enabled or disabled without deploying new code. The flag state must be consistent across all running instances and changes must take effect in near real-time. What is the most appropriate approach?
+
+A. Store feature flag values in a Cloud Storage JSON file that each application instance reads on startup.
+B. Hard-code feature flags as environment variables in the Cloud Run or GKE deployment configuration.
+C. Store feature flag values in Cloud Firestore and have each application instance listen for real-time updates using the Firestore real-time listener.
+D. Store feature flag values as Kubernetes ConfigMaps and apply updated ConfigMaps when a flag changes.
+
+Correct answer
+C. Store feature flag values in Cloud Firestore and have each application instance listen for real-time updates using the Firestore real-time listener.
+
+Feedback
+A: Incorrect. Reading from Cloud Storage on startup means flag changes require application restarts to take effect. Multiple instances may also read the file at different times leading to inconsistency.
+B: Incorrect. Hard-coding feature flags as environment variables in the deployment configuration requires a new deployment to change a flag value, defeating the purpose of feature flags.
+C: Correct. Cloud Firestore's real-time listener feature pushes updates to all connected clients immediately when a flag value changes. This ensures that all application instances receive the flag update consistently without restarts or polling.
+D: Incorrect. ConfigMap updates propagate to mounted volumes within about a minute, but environment variables sourced from ConfigMaps require a Pod restart. This is not near-real-time.
+
+https://cloud.google.com/firestore/docs/query-data/listen
+https://cloud.google.com/run/docs/configuring/environment-variables
+
+---
+
+Question 58
+
+Your Cloud Build pipeline runs unit tests, integration tests, and static analysis sequentially, taking 45 minutes total. You have confirmed these three stages are independent of each other. What should you do to reduce total build time?
+
+A. Run all test types sequentially in a single Cloud Build step to simplify the configuration.
+B. Run all test types in parallel by defining them as separate Cloud Build steps with waitFor: ['-'].
+C. Split tests across separate Cloud Build pipelines triggered by different branches.
+D. Increase the machine type of the Cloud Build worker to run tests faster.
+
+Correct answer
+B. Run all test types in parallel by defining them as separate Cloud Build steps with waitFor: ['-'].
+
+Feedback
+A: Incorrect. Running tests sequentially means the total duration is the sum of all test durations, which is the slowest possible configuration.
+B: Correct. Cloud Build supports parallel step execution using the waitFor field. Setting waitFor: ['-'] for multiple steps causes them to start simultaneously at the beginning of the build, reducing total build time to the duration of the longest parallel step.
+C: Incorrect. Splitting tests by branch does not run them in parallel for a single commit.
+D: Incorrect. Increasing machine type provides more resources per step but does not parallelize independent test suites. The improvement is limited compared to true parallelism.
+
+https://cloud.google.com/build/docs/configuring-builds/configure-build-step-order#run_build_steps_in_parallel
+https://cloud.google.com/build/docs/optimize-builds/speeding-up-builds
+
+---
+
+Question 59
+
+Your organization has a hybrid cloud setup with on-premises infrastructure connected to Google Cloud via Cloud Interconnect. Services running on-premises need to call Google Cloud APIs without traffic traversing the public internet. What should you do?
+
+A. Configure the on-premises services to use the public API endpoints and allow outbound internet access.
+B. Enable Private Google Access for on-premises hosts on the VPC subnet connected via Cloud Interconnect, so on-premises hosts can reach Google APIs via private IP ranges over the Interconnect.
+C. Deploy a proxy server in Google Cloud that the on-premises services connect to for API requests.
+D. Use Cloud VPN instead of Cloud Interconnect to enable private API access.
+
+Correct answer
+B. Enable Private Google Access for on-premises hosts on the VPC subnet connected via Cloud Interconnect, so on-premises hosts can reach Google APIs via private IP ranges over the Interconnect.
+
+Feedback
+A: Incorrect. Routing API traffic through the public internet defeats the purpose of a dedicated Cloud Interconnect connection and exposes traffic to the public network.
+B: Correct. Private Google Access for on-premises hosts allows traffic from on-premises to reach Google APIs using the restricted.googleapis.com or private.googleapis.com virtual IP ranges. This traffic flows over the Cloud Interconnect connection, never traversing the public internet.
+C: Incorrect. Deploying a custom proxy server is unnecessary complexity when Private Google Access provides the same capability natively.
+D: Incorrect. Cloud VPN also supports Private Google Access, but switching from Cloud Interconnect to Cloud VPN for this purpose is unnecessary and would reduce bandwidth and increase latency.
+
+https://cloud.google.com/vpc/docs/configure-private-google-access-hybrid
+https://cloud.google.com/vpc/docs/private-google-access
+
+---
+
+Question 60
+
+Your application is deployed on Compute Engine using Managed Instance Groups (MIGs). You want to implement a health check that removes unhealthy instances from the load balancer and automatically recreates them. What should you do?
+
+A. Configure a Cloud Monitoring alerting policy to detect unhealthy instances and trigger a Cloud Function to delete them.
+B. Configure an autohealing policy on the MIG with a health check that verifies the application's HTTP health endpoint.
+C. Use Cloud Load Balancing backend health checks to remove unhealthy instances from the backend.
+D. Use Cloud Scheduler to periodically run a health check script and restart failed instances.
+
+Correct answer
+B. Configure an autohealing policy on the MIG with a health check that verifies the application's HTTP health endpoint.
+
+Feedback
+A: Incorrect. Using Cloud Monitoring alerts and Cloud Functions introduces latency in the healing response and adds unnecessary operational complexity.
+B: Correct. MIG autohealing policies use health checks to detect unhealthy instances and automatically recreate them. This is the purpose-built, automated solution.
+C: Incorrect. Load balancer backend health checks remove unhealthy instances from the backend pool (stopping traffic to them), but they do not restart or recreate the instances. Autohealing is required for instance recreation.
+D: Incorrect. Cloud Scheduler with custom scripts is manual and fragile. MIG autohealing is the recommended automated approach.
+
+https://cloud.google.com/compute/docs/instance-groups/autohealing-instances-in-migs
+https://cloud.google.com/compute/docs/instance-groups/working-with-managed-instances
+
+---
+
+Question 61
+
+Your team manages many GKE clusters across multiple teams. You want to provide each team with an isolated namespace with resource quotas and network isolation, enforced from a central configuration. What should you do?
+
+A. Create separate GKE clusters per team to provide complete isolation.
+B. Use GKE namespaces with ResourceQuotas, NetworkPolicies, and Config Sync to centrally manage and enforce policies across all teams' namespaces.
+C. Have each team manage their own namespace independently and conduct monthly compliance reviews.
+D. Use Kubernetes RBAC to restrict access to namespaces and rely on developer discipline for resource management.
+
+Correct answer
+B. Use GKE namespaces with ResourceQuotas, NetworkPolicies, and Config Sync to centrally manage and enforce policies across all teams' namespaces.
+
+Feedback
+A: Incorrect. Separate clusters per team provide strong isolation but significantly increase operational overhead, cost, and complexity for managing and upgrading multiple clusters.
+B: Correct. Namespaces with ResourceQuotas provide resource isolation, NetworkPolicies provide network isolation, and Config Sync enforces consistent policies from a central Git repository. This is the recommended multi-tenant GKE pattern.
+C: Incorrect. Monthly compliance reviews are reactive and do not prevent teams from violating policies. Automated enforcement is required.
+D: Incorrect. RBAC controls who can do what in a namespace but does not enforce resource limits or network isolation.
+
+https://cloud.google.com/kubernetes-engine/docs/best-practices/enterprise-multitenancy
+https://cloud.google.com/kubernetes-engine/enterprise/config-sync/docs/overview
+
+---
+
+Question 62
+
+Your company has a production incident. An engineer discovers that a recent Cloud Run deployment introduced a bug causing increased error rates. The fix will take several hours. You need to restore service to users as quickly as possible. What should you do first?
+
+A. Immediately begin debugging the code and deploy a fix as quickly as possible.
+B. Roll back the Cloud Run service to the previous stable revision by shifting 100% of traffic back to it.
+C. Scale up the number of Cloud Run instances to handle the increased error load.
+D. Enable Google Cloud Armor to filter out requests that trigger the bug.
+
+Correct answer
+B. Roll back the Cloud Run service to the previous stable revision by shifting 100% of traffic back to it.
+
+Feedback
+A: Incorrect. Debugging and fixing code under production pressure often leads to mistakes. The first priority in an incident is to restore service, not fix the root cause.
+B: Correct. Cloud Run keeps previous revisions available. Rolling back by shifting traffic to the last known-good revision is the fastest way to restore service. The proper fix can then be developed without time pressure.
+C: Incorrect. Scaling up instances does not fix a bug. It scales the failure.
+D: Incorrect. Cloud Armor cannot identify and filter requests based on application-level bugs.
+
+https://cloud.google.com/run/docs/rollouts-rollbacks-traffic-migration#rollback
+https://sre.google/workbook/incident-management/
+
+---
+
+Question 63
+
+Your application uses Cloud Spanner as its database. You want to monitor the abort rate of transactions and create an alert when it exceeds a threshold. What should you do?
+
+A. Parse Cloud Spanner logs in Cloud Logging for transaction abort messages and create a log-based metric.
+B. Use the built-in Cloud Spanner metrics in Cloud Monitoring, specifically filtering the API request count metric by ABORTED status, to create an alerting policy.
+C. Enable Cloud Trace for Cloud Spanner and alert on traces that show ABORTED status.
+D. Query the SPANNER_SYS.TXN_STATS_TOTAL table in Cloud Spanner and export results to Cloud Monitoring.
+
+Correct answer
+B. Use the built-in Cloud Spanner metrics in Cloud Monitoring, specifically filtering the API request count metric by ABORTED status, to create an alerting policy.
+
+Feedback
+A: Incorrect. Parsing logs for abort messages is possible but less precise than using dedicated metrics. Log-based metrics also have ingestion delays that make them less suitable for real-time alerting.
+B: Correct. Cloud Spanner exports detailed metrics to Cloud Monitoring including request counts broken down by response status. Filtering by ABORTED status gives a precise abort rate metric that can be used directly in an alerting policy.
+C: Incorrect. Cloud Trace records request latency and flow, not transaction abort rates.
+D: Incorrect. Querying SPANNER_SYS tables provides historical transaction stats but cannot be used directly to create Cloud Monitoring alerting policies.
+
+https://cloud.google.com/spanner/docs/monitoring-cloud
+https://cloud.google.com/monitoring/alerts/using-alerting-ui
+
+---
+
+Question 64
+
+You need to implement a solution that automatically retries failed HTTP requests made by your Cloud Run service to an external dependency, with increasing wait time between attempts. What is the recommended approach?
+
+A. Wrap all HTTP calls in a retry loop with a fixed 1-second sleep between attempts.
+B. Use a client library that supports automatic retries with exponential backoff and jitter, or implement the algorithm following Google's guidelines.
+C. Configure Cloud Run to automatically retry any failed outbound requests.
+D. Use Cloud Tasks to queue all outbound HTTP requests and rely on Cloud Tasks' built-in retry with exponential backoff.
+
+Correct answer
+B. Use a client library that supports automatic retries with exponential backoff and jitter, or implement the algorithm following Google's guidelines.
+
+Feedback
+A: Incorrect. A fixed sleep does not implement exponential backoff. It causes thundering herd problems if many instances fail simultaneously and does not increase wait time between successive failures.
+B: Correct. Exponential backoff with jitter is the Google-recommended retry strategy for transient errors. Many Google Cloud client libraries implement this automatically. For custom HTTP calls, implementing the algorithm with jitter prevents thundering herd issues.
+C: Incorrect. Cloud Run does not provide automatic retry of outbound requests made by the application.
+D: Incorrect. Cloud Tasks is designed for asynchronous task queuing, not for wrapping synchronous outbound HTTP calls with retry logic. Using it for this purpose adds significant latency and complexity.
+
+https://cloud.google.com/storage/docs/retry-strategy
+https://cloud.google.com/iot/docs/how-tos/exponential-backoff
+
+---
+
+Question 65
+
+Your GKE cluster serves stateless HTTP services. You want to automatically scale the number of Pod replicas based on requests per second. What should you do?
+
+A. Configure the Vertical Pod Autoscaler (VPA) with CPU as the scaling metric.
+B. Configure the Horizontal Pod Autoscaler (HPA) with a custom metric from Cloud Monitoring that measures requests per second per replica.
+C. Use GKE Node Auto Provisioning to add nodes when request rates increase.
+D. Configure a Cloud Monitoring alerting policy to notify the team to manually scale the Deployment.
+
+Correct answer
+B. Configure the Horizontal Pod Autoscaler (HPA) with a custom metric from Cloud Monitoring that measures requests per second per replica.
+
+Feedback
+A: Incorrect. VPA adjusts the resource requests of individual Pods (vertical scaling). It does not change the number of Pod replicas.
+B: Correct. HPA scales the number of Pod replicas horizontally. GKE supports using Cloud Monitoring custom or external metrics with HPA, including HTTP request rate metrics. Scaling on requests per second per replica is the most direct signal of application load.
+C: Incorrect. Node Auto Provisioning adds nodes to the cluster when Pods cannot be scheduled, but Pods must first be created by HPA before they need nodes. Node scaling follows Pod scaling.
+D: Incorrect. Manual scaling is not reactive and does not scale with traffic spikes. Automated scaling is the recommended approach.
+
+https://cloud.google.com/kubernetes-engine/docs/concepts/horizontalpodautoscaler
+https://cloud.google.com/kubernetes-engine/docs/how-to/custom-metrics-hpa
+
+---
+
+Question 66
+
+Your organization wants a fully managed CI/CD pipeline triggered by code commits that builds container images, runs tests, and deploys to GKE without managing any pipeline infrastructure. Which combination of services is the Google-recommended approach?
+
+A. Jenkins on GKE + Artifact Registry + kubectl
+B. Cloud Source Repositories or GitHub + Cloud Build + Artifact Registry + Cloud Deploy
+C. GitLab CI on Compute Engine + Docker Hub + Helm
+D. Cloud Composer + Artifact Registry + Cloud Run
+
+Correct answer
+B. Cloud Source Repositories or GitHub + Cloud Build + Artifact Registry + Cloud Deploy
+
+Feedback
+A: Incorrect. Jenkins is a self-managed CI tool that requires operational overhead for installation, updates, and scaling. It does not meet the requirement to avoid managing pipeline infrastructure.
+B: Correct. Cloud Build is Google's fully managed CI service, Artifact Registry is the managed container registry, and Cloud Deploy is the managed CD service for GKE and other targets. Together they form Google's recommended fully managed CI/CD pipeline.
+C: Incorrect. GitLab CI on Compute Engine and Docker Hub both require infrastructure management. This approach does not use fully managed services.
+D: Incorrect. Cloud Composer is an orchestration service for data pipelines (Apache Airflow). It is not designed for CI/CD pipelines.
+
+https://cloud.google.com/build/docs/overview
+https://cloud.google.com/deploy/docs/overview
+
+---
+
+Question 67
+
+Your organization needs to demonstrate that changes to production infrastructure were approved by at least two reviewers before being applied. You use Terraform for infrastructure management. What should you do?
+
+A. Send a Slack message to the team before running terraform apply and wait for two emoji reactions.
+B. Use branch protection rules that require two pull request approvals before merging to the main branch, and trigger terraform apply only from the main branch via Cloud Build.
+C. Store approval records in Firestore and require the Cloud Build pipeline to check for two approvals before running terraform apply.
+D. Have two team members physically present at the keyboard when running terraform apply.
+
+Correct answer
+B. Use branch protection rules that require two pull request approvals before merging to the main branch, and trigger terraform apply only from the main branch via Cloud Build.
+
+Feedback
+A: Incorrect. Slack emoji reactions are not a verifiable, auditable approval mechanism.
+B: Correct. Branch protection rules enforce required reviewer approvals before a pull request can be merged. Limiting the terraform apply trigger to the main branch ensures that only approved code is applied, creating an auditable, version-controlled approval trail.
+C: Incorrect. Building a custom approval system in Firestore duplicates functionality already available in source control systems' native pull request review features.
+D: Incorrect. Physical presence is not auditable, not scalable, and impractical for remote teams.
+
+https://cloud.google.com/build/docs/automating-builds/create-manage-triggers
+https://cloud.google.com/docs/terraform/best-practices-for-terraform#plan-apply
+
+---
+
+Question 68
+
+Your application produces high-cardinality metric data with thousands of unique label values per minute, causing Cloud Monitoring costs to increase significantly. You want to reduce costs while retaining aggregate query capability. What should you do?
+
+A. Delete the high-cardinality metric and rely on logs for this data.
+B. Reduce the number of distinct label values by grouping them into broader categories before writing the metric to Cloud Monitoring.
+C. Increase the metric sampling interval to reduce the number of data points written.
+D. Export metrics to BigQuery for cheaper storage and query them there.
+
+Correct answer
+B. Reduce the number of distinct label values by grouping them into broader categories before writing the metric to Cloud Monitoring.
+
+Feedback
+A: Incorrect. Deleting the metric entirely removes visibility. The goal is to reduce cost while retaining aggregate queryability.
+B: Correct. High cardinality in metric labels is a primary driver of Cloud Monitoring cost because each unique label combination creates a separate time series. Grouping values into fewer, broader categories drastically reduces the number of time series while preserving aggregate query capability.
+C: Incorrect. Reducing sampling interval reduces data point frequency but does not address high cardinality. The number of time series and thus the main cost driver remains the same.
+D: Incorrect. Cloud Monitoring does not directly export metrics to BigQuery, and this approach removes the ability to use Cloud Monitoring alerting and dashboarding.
+
+https://cloud.google.com/monitoring/custom-metrics/creating-metrics#metric-kinds
+https://cloud.google.com/monitoring/quotas#custom_metrics_usage
+
+---
+
+Question 69
+
+You run a critical application on GKE and need to back up cluster workload configuration and persistent volume data daily so you can restore to a new cluster within one hour. What should you do?
+
+A. Take daily snapshots of the persistent disks attached to cluster nodes and restore them to a new cluster.
+B. Use GKE Backup to schedule daily backups of the cluster's workload configuration and persistent volume data, and test restoring to a new cluster.
+C. Export kubectl get all -o yaml output to Cloud Storage daily and restore with kubectl apply.
+D. Enable Velero on the cluster and configure it to back up to Cloud Storage.
+
+Correct answer
+B. Use GKE Backup to schedule daily backups of the cluster's workload configuration and persistent volume data, and test restoring to a new cluster.
+
+Feedback
+A: Incorrect. Backing up node persistent disks captures the underlying disk data but not Kubernetes configuration. Restoring from disk snapshots to a new cluster is complex and does not reliably meet a one-hour RTO.
+B: Correct. GKE Backup is the Google-managed backup solution for GKE. It captures both workload configuration and persistent volume data, supports scheduled backups, and supports restore to the same or different cluster. It is specifically designed for RTO/RPO compliance scenarios.
+C: Incorrect. kubectl get all does not capture all Kubernetes resource types. This approach is incomplete and unreliable for disaster recovery.
+D: Incorrect. Velero is a valid open-source backup solution, but GKE Backup is the Google-managed, recommended solution that integrates natively with GKE.
+
+https://cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/concepts/overview
+https://cloud.google.com/kubernetes-engine/docs/add-on/backup-for-gke/how-to/create-backup-plan
+
+---
+
+Question 70
+
+Your team manages many Cloud Run services. You want to ensure no Cloud Run service is deployed without specifying CPU and memory limits. You want to enforce this at deploy time without relying on developer discipline. What should you do?
+
+A. Create a checklist and require all developers to follow it before submitting a deployment request.
+B. Use an Organization Policy custom constraint to enforce CPU/memory limit configuration on Cloud Run services.
+C. Deploy a Cloud Function that monitors Cloud Run service deployments and alerts when these settings are missing.
+D. Create a Cloud Build step that validates the Cloud Run service configuration before deploying.
+
+Correct answer
+B. Use an Organization Policy custom constraint to enforce CPU/memory limit configuration on Cloud Run services.
+
+Feedback
+A: Incorrect. Checklists are not enforceable controls. Developers can skip steps or make mistakes.
+B: Correct. Organization Policy custom constraints allow you to define and enforce specific resource configurations including Cloud Run service settings at the organization, folder, or project level. Non-compliant deployments are rejected automatically.
+C: Incorrect. Monitoring and alerting is reactive. A misconfigured service is deployed before the alert fires, violating the requirement to enforce at deploy time.
+D: Incorrect. Pipeline-level validation only works if all deployments go through that specific pipeline. A developer using the console or gcloud directly would bypass the check.
+
+https://cloud.google.com/resource-manager/docs/organization-policy/custom-constraints
+https://cloud.google.com/run/docs/configuring/cpu-allocation
+
+---
+
+Question 71
+
+Your application needs to process messages from Pub/Sub exactly once, even if Pub/Sub delivers a message multiple times. What should you do?
+
+A. Enable Pub/Sub exactly-once delivery on the subscription to guarantee that messages are delivered and acknowledged exactly once.
+B. Implement idempotent message processing in the consumer application so that processing a message multiple times produces the same result.
+C. Use message deduplication IDs in Pub/Sub to automatically filter duplicate deliveries at the broker level.
+D. Set the Pub/Sub subscription acknowledgment deadline to a very short value to minimize the window for duplicate delivery.
+
+Correct answer
+A. Enable Pub/Sub exactly-once delivery on the subscription to guarantee that messages are delivered and acknowledged exactly once.
+
+Feedback
+A: Correct. Pub/Sub supports an exactly-once delivery feature on subscriptions that guarantees each message is delivered and acknowledged exactly once within a configurable retention window, eliminating duplicates at the infrastructure level.
+B: Incorrect. Idempotent processing is a good defensive practice but does not prevent duplicate deliveries. It only ensures that processing a duplicate does not cause harm.
+C: Incorrect. Pub/Sub does not have a message deduplication ID feature. Deduplication must be handled by exactly-once delivery or application-level idempotency.
+D: Incorrect. A short acknowledgment deadline does not eliminate duplicate delivery. It may even increase duplicates if processing is slow and the deadline expires before acknowledgment.
+
+https://cloud.google.com/pubsub/docs/exactly-once-delivery
+https://cloud.google.com/pubsub/docs/subscription-overview
+
+---
+
+Question 72
+
+Your Cloud Build pipeline needs to access a private GitHub repository to pull a shared library. You want to authenticate securely without storing credentials in the build configuration file. What should you do?
+
+A. Hard-code the GitHub personal access token in the Cloud Build YAML file as a substitution variable.
+B. Store the GitHub SSH key or personal access token in Secret Manager and reference the secret in the Cloud Build configuration using the availableSecrets field.
+C. Create a GitHub webhook that pushes the library to Cloud Storage on each commit and pull from there in the build.
+D. Grant the Cloud Build service account read access to the private GitHub repository using OAuth.
+
+Correct answer
+B. Store the GitHub SSH key or personal access token in Secret Manager and reference the secret in the Cloud Build configuration using the availableSecrets field.
+
+Feedback
+A: Incorrect. Substitution variables containing secrets may be logged or exposed. Storing secrets in Secret Manager is the recommended practice.
+B: Correct. Cloud Build's availableSecrets field allows build steps to access secrets stored in Secret Manager at runtime. The secret is injected as an environment variable without being stored in the configuration file or build logs.
+C: Incorrect. Creating a webhook to push to Cloud Storage adds complexity and requires additional infrastructure. It does not address the authentication requirement directly.
+D: Incorrect. Cloud Build service accounts authenticate to Google Cloud services using their identity, but GitHub is an external service that requires explicit credential-based authentication.
+
+https://cloud.google.com/build/docs/securing-builds/use-secrets
+https://cloud.google.com/build/docs/access-private-github-repos
+
+---
+
+Question 73
+
+Your team practices continuous delivery and deploys to production multiple times per day. Leadership wants to implement a change management process that reduces risk without slowing deployments. What is the SRE-recommended approach?
+
+A. Require all changes to go through a weekly change advisory board (CAB) review before deployment.
+B. Implement automated testing, canary deployments, and progressive delivery with automated rollback, and track change failure rate as a DORA metric.
+C. Reduce deployment frequency to once per week to give teams more time for manual testing.
+D. Require manual approval for every deployment from a senior engineer.
+
+Correct answer
+B. Implement automated testing, canary deployments, and progressive delivery with automated rollback, and track change failure rate as a DORA metric.
+
+Feedback
+A: Incorrect. Weekly CAB reviews slow down deployment velocity significantly, contradicting the goal of continuous delivery. DORA research shows high-performing teams use lightweight automated approvals, not heavy manual change processes.
+B: Correct. The DORA research shows that elite performers deploy frequently and have low change failure rates through automation, not through slowing down. Canary deployments, automated testing, and progressive delivery reduce risk at high velocity.
+C: Incorrect. Reducing deployment frequency increases batch size, which paradoxically increases risk because each deployment contains more changes.
+D: Incorrect. Manual approval from a senior engineer introduces a bottleneck that reduces deployment frequency and does not scale.
+
+https://dora.dev/research/
+https://sre.google/workbook/canarying-releases/
+
+---
+
+Question 74
+
+Your company runs a web application on Compute Engine behind a global external Application Load Balancer. During a large marketing campaign you expect a tenfold increase in traffic. You want the application to scale automatically while remaining cost-effective. What should you do?
+
+A. Pre-provision ten times the normal number of VM instances before the campaign starts.
+B. Configure a Managed Instance Group with autoscaling based on HTTP load balancing utilization, setting an appropriate target per instance.
+C. Increase the machine type of existing Compute Engine instances to handle more traffic on each VM.
+D. Add more regional load balancers to distribute traffic across more backend instances.
+
+Correct answer
+B. Configure a Managed Instance Group with autoscaling based on HTTP load balancing utilization, setting an appropriate target per instance.
+
+Feedback
+A: Incorrect. Pre-provisioning ten times the normal capacity is costly, as those instances will be running and billing even during low-traffic periods before and after the campaign.
+B: Correct. MIG autoscaling based on HTTP load balancing utilization automatically adds instances as traffic increases and removes them as traffic decreases. This ensures capacity during the campaign while being cost-effective at other times.
+C: Incorrect. Increasing machine type is limited by the maximum available machine type and requires instance restarts. It does not scale as effectively as horizontal autoscaling.
+D: Incorrect. Load balancers distribute traffic across backend instances but do not create those instances. Autoscaling in the MIG is what actually provisions additional capacity.
+
+https://cloud.google.com/compute/docs/autoscaler/scaling-lb
+https://cloud.google.com/compute/docs/instance-groups/creating-groups-of-managed-instances
+
+---
+
+Question 75
+
+You are setting up a new Google Cloud project for a development team. You want to ensure that all API calls made by team members and services in the project are logged for security auditing purposes, including data reads and writes. What should you do?
+
+A. Enable Data Access audit logs (DATA_READ and DATA_WRITE) for all services in the project in addition to the always-on Admin Activity logs.
+B. Enable VPC Flow Logs on all subnets in the project.
+C. Configure Cloud Monitoring to alert on all API calls made in the project.
+D. Deploy the Ops Agent on all Compute Engine VMs in the project to capture API call logs.
+
+Correct answer
+A. Enable Data Access audit logs (DATA_READ and DATA_WRITE) for all services in the project in addition to the always-on Admin Activity logs.
+
+Feedback
+A: Correct. Admin Activity logs are always enabled and capture administrative actions. Data Access logs must be enabled explicitly and capture reads and writes to data. Enabling both gives a complete audit trail of all Google Cloud API calls in the project.
+B: Incorrect. VPC Flow Logs capture network traffic metadata. They do not capture Google Cloud API call details such as which service was called, by whom, and with what parameters.
+C: Incorrect. Cloud Monitoring is for metrics and alerting, not for capturing a full audit log of all API calls.
+D: Incorrect. The Ops Agent captures OS-level and application logs from Compute Engine VMs. It does not capture Google Cloud API calls made by services across the project.
+
+https://cloud.google.com/logging/docs/audit/configure-data-access
+https://cloud.google.com/logging/docs/audit
+
+---
+
+Question 76
+
+Your organization uses Artifact Registry to store container images. You want to automatically delete old container image versions that are no longer used to control storage costs. What should you do?
+
+A. Set up a Cloud Scheduler job to run a script that lists and deletes images older than 90 days using the gcloud CLI.
+B. Configure an Artifact Registry cleanup policy that automatically deletes image versions based on age or the number of versions kept.
+C. Use a Cloud Build trigger to delete unused images after every successful build.
+D. Manually review and delete old images from the Google Cloud console each quarter.
+
+Correct answer
+B. Configure an Artifact Registry cleanup policy that automatically deletes image versions based on age or the number of versions kept.
+
+Feedback
+A: Incorrect. Using Cloud Scheduler with gcloud scripts requires maintaining the script and scheduling infrastructure. Artifact Registry native cleanup policies are simpler and lower maintenance.
+B: Correct. Artifact Registry supports native cleanup policies that automatically delete image versions based on criteria such as the number of versions to keep per tag or the age of untagged images. This is the built-in, recommended way to manage storage costs.
+C: Incorrect. Triggering deletions on every build is too frequent and risky. Builds may delete images that are currently in use by running workloads.
+D: Incorrect. Quarterly manual reviews are too infrequent for cost control and are operationally intensive.
+
+https://cloud.google.com/artifact-registry/docs/repositories/cleanup-policy
+https://cloud.google.com/artifact-registry/docs/docker/manage-images
+
+---
+
+Question 77
+
+Your GKE application uses a ConfigMap to store configuration. After a ConfigMap update, the application Pods need to automatically reload the new configuration without being restarted. How should you implement this?
+
+A. Delete and recreate the Pods after each ConfigMap update so the new configuration is loaded on startup.
+B. Mount the ConfigMap as a volume in the Pod. Kubernetes automatically updates the mounted files when the ConfigMap changes, and the application watches for file changes and reloads configuration.
+C. Store configuration in environment variables sourced from the ConfigMap. Kubernetes updates environment variables automatically when the ConfigMap changes.
+D. Create a new ConfigMap for each configuration change and update the Deployment to reference it.
+
+Correct answer
+B. Mount the ConfigMap as a volume in the Pod. Kubernetes automatically updates the mounted files when the ConfigMap changes, and the application watches for file changes and reloads configuration.
+
+Feedback
+A: Incorrect. Restarting Pods on every ConfigMap update causes unnecessary downtime and does not take advantage of Kubernetes' ability to update mounted volumes dynamically.
+B: Correct. When a ConfigMap is mounted as a volume, Kubernetes automatically propagates updates to the mounted files. If the application is designed to watch for file changes and reload configuration, this achieves live reload without Pod restarts.
+C: Incorrect. Environment variables sourced from a ConfigMap are set at Pod startup and are NOT automatically updated when the ConfigMap changes. The Pod must be restarted to pick up new values.
+D: Incorrect. Creating a new ConfigMap for each change and updating the Deployment reference triggers a rolling restart of Pods, which is not a live reload.
+
+https://kubernetes.io/docs/concepts/configuration/configmap/#using-configmaps
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#add-configmap-data-to-a-volume
+
+---
+
+Question 78
+
+Your application is deployed on Cloud Run and needs to write files to a shared location that persists across requests and container instances. What should you do?
+
+A. Write files to the /tmp directory in the container, which persists across all instances.
+B. Mount a Cloud Storage bucket as a volume in the Cloud Run service using Cloud Storage FUSE.
+C. Use the container's local filesystem, which is shared between all container instances automatically.
+D. Deploy a Network File System (NFS) server on Compute Engine and mount it from Cloud Run.
+
+Correct answer
+B. Mount a Cloud Storage bucket as a volume in the Cloud Run service using Cloud Storage FUSE.
+
+Feedback
+A: Incorrect. The /tmp directory is local to each container instance and is not shared between instances. Its contents are also lost when the container instance is recycled.
+B: Correct. Cloud Run supports mounting Cloud Storage buckets as volumes using Cloud Storage FUSE. This provides a shared, persistent filesystem that all container instances can read from and write to, and that persists across container restarts.
+C: Incorrect. The local container filesystem is not shared between Cloud Run instances. Each instance has its own isolated filesystem.
+D: Incorrect. Deploying and managing an NFS server on Compute Engine is operationally complex and unnecessary when Cloud Storage FUSE volumes provide the same shared filesystem capability.
+
+https://cloud.google.com/run/docs/tutorials/network-filesystems-fuse
+https://cloud.google.com/run/docs/configuring/services/cloud-storage-volume-mounts
+
+---
+
+Question 79
+
+Your organization wants to implement continuous compliance scanning to detect when Google Cloud resources drift from approved configuration baselines. You need automated, ongoing detection rather than a one-time scan. What should you do?
+
+A. Schedule weekly manual reviews of the Google Cloud console to compare resources against approved baselines.
+B. Enable Security Command Center with the Security Health Analytics module to continuously scan for configuration drift and misconfigurations against Google-recommended baselines.
+C. Run terraform plan periodically against all projects and alert when drift is detected.
+D. Use Cloud Asset Inventory to export resource configurations daily and compare them against baseline snapshots using a custom script.
+
+Correct answer
+B. Enable Security Command Center with the Security Health Analytics module to continuously scan for configuration drift and misconfigurations against Google-recommended baselines.
+
+Feedback
+A: Incorrect. Weekly manual reviews are insufficient for continuous compliance. Misconfigurations could exist for days before being detected.
+B: Correct. Security Command Center's Security Health Analytics module continuously evaluates Google Cloud resources against built-in security best practices and CIS benchmarks. It provides near-real-time findings for configuration drift without additional infrastructure.
+C: Incorrect. Running terraform plan detects drift only for resources managed by that specific Terraform configuration and requires running the plan against every project.
+D: Incorrect. Building a custom comparison pipeline with Cloud Asset Inventory introduces a 24-hour detection delay and requires significant custom engineering. SCC provides near-real-time detection.
+
+https://cloud.google.com/security-command-center/docs/concepts-security-health-analytics-overview
+https://cloud.google.com/security-command-center/docs/how-to-use-security-command-center
+
+---
+
+Question 80
+
+Your Cloud Build pipeline takes a long time to start because the build worker must download a large base Docker image at the beginning of every build. You want to reduce this startup time. What should you do?
+
+A. Use a smaller base Docker image to reduce download time.
+B. Store the base Docker image in Artifact Registry in the same region as the Cloud Build worker.
+C. Preload the base image onto Cloud Build workers by adding a pull step at the beginning of each build configuration.
+D. Enable Kaniko caching in Cloud Build to cache Docker image layers in Cloud Storage between builds.
+
+Correct answer
+D. Enable Kaniko caching in Cloud Build to cache Docker image layers in Cloud Storage between builds.
+
+Feedback
+A: Incorrect. Using a smaller base image is a good practice but does not eliminate the download on every build. The image still needs to be pulled each time.
+B: Incorrect. Storing the image in the same region reduces pull time, but the image is still pulled on every build. It helps but is not as effective as layer caching.
+C: Incorrect. Adding a pull step makes the existing behavior explicit but does not cache the layers between builds.
+D: Correct. Kaniko caching in Cloud Build stores intermediate Docker image layers in Cloud Storage. Subsequent builds that use the same layers retrieve them from the cache rather than rebuilding or downloading them, significantly reducing build time.
+
+https://cloud.google.com/build/docs/optimize-builds/kaniko-cache
+https://cloud.google.com/build/docs/optimize-builds/speeding-up-builds
+
+---
+
+Question 81
+
+You are designing a multi-region active-active deployment for a critical application on GKE. You need traffic to be routed to the nearest healthy region automatically if a region becomes unavailable. What should you do?
+
+A. Deploy the application to two regions, use separate regional load balancers, and update DNS manually when a region fails.
+B. Deploy the application to multiple regions, use a global external Application Load Balancer with backend services pointing to each regional GKE cluster, and rely on the load balancer's built-in health checks to route traffic away from unhealthy regions.
+C. Deploy the application to multiple regions and configure Cloud DNS with weighted round-robin routing across regional IP addresses.
+D. Deploy the application to two regions and use Cloud CDN to cache and serve content from the nearest region.
+
+Correct answer
+B. Deploy the application to multiple regions, use a global external Application Load Balancer with backend services pointing to each regional GKE cluster, and rely on the load balancer's built-in health checks to route traffic away from unhealthy regions.
+
+Feedback
+A: Incorrect. Manually updating DNS when a region fails introduces significant human latency in the failover process and is unreliable during an incident.
+B: Correct. The global external Application Load Balancer uses a single anycast IP and routes traffic to the nearest healthy backend. Built-in health checks detect unhealthy backends and automatically redirect traffic to healthy regions, providing fast, automated failover.
+C: Incorrect. Cloud DNS weighted round-robin does not perform health checks or automatic failover. Traffic will still be sent to a failed region until DNS records are manually updated.
+D: Incorrect. Cloud CDN caches static content at edge locations. It does not route dynamic application traffic or provide compute failover between regions.
+
+https://cloud.google.com/load-balancing/docs/https/setting-up-https
+https://cloud.google.com/run/docs/multiple-regions
+
+---
+
+Question 82
+
+Your development team frequently creates Cloud SQL instances for short-term testing and forgets to delete them, resulting in ongoing costs. You want to automatically identify and remediate these orphaned resources. What should you do?
+
+A. Send a weekly email reminder to developers to clean up their Cloud SQL instances.
+B. Use Cloud Asset Inventory to query for Cloud SQL instances by age and label, and configure automated deletion using Cloud Scheduler and Cloud Functions for instances older than a defined threshold.
+C. Enable Cloud SQL Admin API audit logs and review them monthly to identify unused instances.
+D. Require developers to submit a Cloud SQL instance request form and manually track approvals.
+
+Correct answer
+B. Use Cloud Asset Inventory to query for Cloud SQL instances by age and label, and configure automated deletion using Cloud Scheduler and Cloud Functions for instances older than a defined threshold.
+
+Feedback
+A: Incorrect. Email reminders are not reliable or enforceable. Developers may ignore them or forget.
+B: Correct. Cloud Asset Inventory can query all resources and their metadata. Combining it with Cloud Scheduler for periodic execution and Cloud Functions for automation logic enables automated identification and deletion of stale test instances. Labeling instances with owner and purpose at creation time enhances this workflow.
+C: Incorrect. Monthly review is too infrequent for cost control and is manual work that does not scale.
+D: Incorrect. A request form and manual tracking is bureaucratic overhead that does not automate cleanup of existing orphaned resources.
+
+https://cloud.google.com/asset-inventory/docs/overview
+https://cloud.google.com/blog/topics/developers-practitioners/protecting-your-google-cloud-resources-ttl-policies
+
+---
+
+Question 83
+
+Your application deployed on GKE connects to an external payment processing API that requires all connections to originate from a specific fixed IP address. GKE Pods use dynamic egress IPs by default. What should you do?
+
+A. Request a static external IP address from Google Cloud and assign it to each GKE node.
+B. Configure Cloud NAT with a reserved static external IP address and route all egress traffic from the GKE cluster through Cloud NAT.
+C. Use a Compute Engine VM with a static IP as a proxy for all outbound requests to the payment API.
+D. Ask the payment processor to allowlist the entire Google Cloud IP range.
+
+Correct answer
+B. Configure Cloud NAT with a reserved static external IP address and route all egress traffic from the GKE cluster through Cloud NAT.
+
+Feedback
+A: Incorrect. Assigning a static IP to each node would require allowlisting multiple IPs and would need to be updated whenever nodes change. It does not scale.
+B: Correct. Cloud NAT translates the egress IP of all Pods in a cluster to a set of reserved static external IP addresses. The payment processor only needs to allowlist these static IPs, regardless of how many nodes or Pods exist in the cluster.
+C: Incorrect. A VM proxy is a single point of failure and adds latency. Cloud NAT is the managed, purpose-built solution for this use case.
+D: Incorrect. Google Cloud IP ranges are vast and shared with all customers. Allowlisting the entire range would open the payment processor's API to all Google Cloud users.
+
+https://cloud.google.com/nat/docs/overview
+https://cloud.google.com/nat/docs/gke-example
+
+---
+
+Question 84
+
+Your team uses Helm to deploy applications to GKE and wants to integrate Helm deployments into Cloud Deploy to use its promotion, rollback, and approval features. What should you do?
+
+A. Convert all Helm charts to plain Kubernetes YAML manifests and use kubectl apply in Cloud Deploy.
+B. Use Cloud Deploy with a Skaffold render step that runs helm template to render manifests before Cloud Deploy applies them.
+C. Run helm upgrade directly in a Cloud Build pipeline without using Cloud Deploy.
+D. Store the rendered Helm manifests in Cloud Storage and have Cloud Deploy apply them using kubectl.
+
+Correct answer
+B. Use Cloud Deploy with a Skaffold render step that runs helm template to render manifests before Cloud Deploy applies them.
+
+Feedback
+A: Incorrect. Converting Helm charts to plain YAML removes the parameterization and reusability benefits of Helm. It is also a significant migration effort.
+B: Correct. Cloud Deploy supports a Skaffold rendering step that can invoke helm template to render Kubernetes manifests. Cloud Deploy then applies the rendered manifests, providing promotion, rollback, and approval features while preserving Helm's templating capabilities.
+C: Incorrect. Running helm upgrade in Cloud Build without Cloud Deploy loses the promotion, rollback, and manual approval features.
+D: Incorrect. Storing rendered manifests in Cloud Storage bypasses Helm's dynamic rendering capabilities and complicates the pipeline.
+
+https://cloud.google.com/deploy/docs/deploying-helm
+https://skaffold.dev/docs/renderers/helm/
+
+---
+
+Question 85
+
+Your organization runs critical workloads on Compute Engine and wants to minimize the performance impact of live migrations during maintenance events. What should you do?
+
+A. Configure your VMs to use the TERMINATE maintenance policy so they are stopped rather than migrated.
+B. Use a Managed Instance Group with autohealing so that any VM impacted by maintenance is automatically replaced.
+C. Configure your VMs to detect the upcoming maintenance event using the Metadata server and gracefully drain connections before migration begins.
+D. Schedule your workloads on Spot VMs to avoid live migrations.
+
+Correct answer
+C. Configure your VMs to detect the upcoming maintenance event using the Metadata server and gracefully drain connections before migration begins.
+
+Feedback
+A: Incorrect. The TERMINATE maintenance policy stops the VM instead of migrating it, which causes downtime rather than just a brief performance impact.
+B: Incorrect. MIG autohealing replaces unhealthy VMs, not VMs being live migrated. Live migration is transparent to the instance (it remains running), so autohealing would not trigger.
+C: Correct. The Compute Engine Metadata server notifies VMs of upcoming live migration. Applications can detect this signal and gracefully drain active connections before the migration begins, minimizing performance impact.
+D: Incorrect. Spot VMs are subject to preemption and do not receive live migration signals. They are not suitable for critical workloads.
+
+https://cloud.google.com/compute/docs/instances/live-migration-process
+https://cloud.google.com/compute/docs/instances/setting-vm-host-options
+
+---
+
+Question 86
+
+Your Cloud Run services need to communicate with each other privately without traffic leaving Google's network. You want to avoid exposing any service to the public internet. What should you do?
+
+A. Deploy all Cloud Run services with public access and use HTTPS for encryption between services.
+B. Configure internal ingress for Cloud Run services that are only called by other services, and use a Serverless VPC Access connector to route inter-service traffic through an internal VPC.
+C. Deploy services to the same Google Cloud project and communicate via Cloud Pub/Sub to avoid direct HTTP calls.
+D. Use Cloud Endpoints to manage inter-service communication and authentication.
+
+Correct answer
+B. Configure internal ingress for Cloud Run services that are only called by other services, and use a Serverless VPC Access connector to route inter-service traffic through an internal VPC.
+
+Feedback
+A: Incorrect. Using public access means traffic traverses the public internet even if encrypted. This exposes services unnecessarily and increases attack surface.
+B: Correct. Setting Cloud Run service ingress to "internal" restricts it to traffic from within the VPC, other Cloud Run services in the same project, and load balancers. Combined with a Serverless VPC Access connector, inter-service traffic stays on Google's internal network.
+C: Incorrect. Using Pub/Sub for inter-service communication adds latency and complexity for synchronous request-response patterns and does not prevent traffic from traversing the public internet.
+D: Incorrect. Cloud Endpoints manages API configuration and authentication but does not control the network path of inter-service traffic.
+
+https://cloud.google.com/run/docs/securing/ingress
+https://cloud.google.com/run/docs/tutorials/secure-services
+
+---
+
+Question 87
+
+A single runaway Pod is consuming excessive CPU and degrading other workloads on the same GKE node. You want to prevent this from happening in the future. What should you do?
+
+A. Restart the runaway Pod to stop it from consuming excessive resources.
+B. Define CPU requests and limits for all Pods using LimitRange objects in each namespace to ensure every Pod has bounded resource consumption.
+C. Add more nodes to the cluster so the runaway Pod has more CPU available.
+D. Migrate all other workloads to a different node pool away from the runaway Pod.
+
+Correct answer
+B. Define CPU requests and limits for all Pods using LimitRange objects in each namespace to ensure every Pod has bounded resource consumption.
+
+Feedback
+A: Incorrect. Restarting the Pod fixes the immediate problem but does not prevent it from happening again.
+B: Correct. CPU limits set a maximum amount of CPU a container can use. LimitRange objects enforce default and maximum resource limits for all Pods in a namespace, preventing any single Pod from consuming unlimited CPU. This is a preventive control.
+C: Incorrect. Adding nodes gives the cluster more total capacity but does not prevent a single Pod from consuming all available CPU on whichever node it runs on.
+D: Incorrect. Moving other workloads is a reactive workaround that does not fix the root cause.
+
+https://kubernetes.io/docs/concepts/policy/limit-range/
+https://cloud.google.com/kubernetes-engine/docs/how-to/namespace-level-resources
+
+---
+
+Question 88
+
+Your organization uses a Shared VPC model. You want to ensure that all Cloud Run services in service projects use the shared VPC for egress traffic. What should you do?
+
+A. Create separate VPCs in each service project and peer them with the host project VPC.
+B. Configure Serverless VPC Access connectors in the service projects, attaching them to the shared VPC subnets in the host project, and configure Cloud Run services to use these connectors.
+C. Use Cloud Interconnect to connect each service project to the host project VPC.
+D. Configure VPC Service Controls around all service projects to route traffic through the host VPC.
+
+Correct answer
+B. Configure Serverless VPC Access connectors in the service projects, attaching them to the shared VPC subnets in the host project, and configure Cloud Run services to use these connectors.
+
+Feedback
+A: Incorrect. Creating separate VPCs per service project and peering them defeats the purpose of Shared VPC and adds complexity.
+B: Correct. Serverless VPC Access connectors can be created in service projects and attached to subnets in the Shared VPC host project. Cloud Run services configured to use these connectors route their egress traffic through the shared VPC, enabling access to resources in the host VPC and on-premises networks connected to it.
+C: Incorrect. Cloud Interconnect connects on-premises networks to Google Cloud. It does not connect service projects to a host VPC within Google Cloud.
+D: Incorrect. VPC Service Controls create security perimeters around services but do not route Cloud Run egress traffic through a specific VPC.
+
+https://cloud.google.com/run/docs/configuring/connecting-shared-vpc
+https://cloud.google.com/vpc/docs/shared-vpc
+
+---
+
+Question 89
+
+Your team wants to measure deployment frequency, lead time for changes, change failure rate, and time to restore service. What is the primary value of tracking these four DORA metrics?
+
+A. To identify which individual engineers are performing poorly and address their performance.
+B. To benchmark your team's DevOps performance against industry data and identify specific areas for improvement in your software delivery process.
+C. To determine whether the application meets its SLA commitments to customers.
+D. To calculate the total cost of your CI/CD pipeline infrastructure.
+
+Correct answer
+B. To benchmark your team's DevOps performance against industry data and identify specific areas for improvement in your software delivery process.
+
+Feedback
+A: Incorrect. DORA metrics measure team and organizational process performance, not individual engineer performance.
+B: Correct. The four DORA metrics are research-backed indicators of software delivery and operational performance. They help teams identify bottlenecks and improvements in their delivery pipeline and benchmark against industry cohorts (Elite, High, Medium, Low performers).
+C: Incorrect. SLA commitments are customer-facing agreements measured by SLOs and SLIs. DORA metrics are internal engineering process metrics.
+D: Incorrect. DORA metrics do not measure infrastructure costs. They measure process velocity and stability.
+
+https://dora.dev/research/
+https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance
+
+---
+
+Question 90
+
+Your application stores user session data in Memorystore for Redis. When the Redis instance restarts for maintenance, all session data is lost. You want to minimize session loss during maintenance. What should you do?
+
+A. Increase the Memorystore instance size so restarts happen less frequently.
+B. Enable Redis persistence (RDB snapshots or AOF) on the Memorystore instance so data is written to disk and can be recovered after a restart.
+C. Store session data in both Redis and Cloud Datastore as a backup.
+D. Configure the application to redirect users to a static maintenance page during Redis restarts.
+
+Correct answer
+B. Enable Redis persistence (RDB snapshots or AOF) on the Memorystore instance so data is written to disk and can be recovered after a restart.
+
+Feedback
+A: Incorrect. Instance size does not affect restart frequency during maintenance.
+B: Correct. Memorystore for Redis supports persistence via RDB (periodic snapshots) and AOF (append-only file). Enabling persistence allows Redis to restore data from disk after a restart, minimizing session loss during maintenance events.
+C: Incorrect. Dual-writing to Redis and Cloud Datastore requires significant application changes and adds latency to every write. It is an over-engineered solution when Redis persistence is available.
+D: Incorrect. Showing a maintenance page during Redis restarts is a poor user experience and does not solve the session loss problem.
+
+https://cloud.google.com/memorystore/docs/redis/persistence-overview
+https://cloud.google.com/memorystore/docs/redis/about-maintenance
+
+---
+
+Question 91
+
+Your organization wants to implement a policy that prevents developers from creating publicly accessible Cloud Storage buckets. You need to enforce this organization-wide. What should you do?
+
+A. Enable Cloud Asset Inventory and schedule weekly reports to identify public buckets.
+B. Configure the "storage.publicAccessPrevention" organization policy constraint at the organization level.
+C. Set up a Cloud Function triggered by Cloud Storage bucket creation events to automatically make any new public bucket private.
+D. Train developers on the security risks of public buckets and conduct quarterly reviews.
+
+Correct answer
+B. Configure the "storage.publicAccessPrevention" organization policy constraint at the organization level.
+
+Feedback
+A: Incorrect. Weekly reports are reactive and allow public buckets to exist for up to a week before being detected. This is not a preventive control.
+B: Correct. The storage.publicAccessPrevention organization policy is a built-in constraint that prevents buckets from being made publicly accessible. Applying it at the organization level enforces this for all projects without requiring individual review.
+C: Incorrect. A Cloud Function that reacts to bucket creation events has a window between creation and remediation during which the bucket is publicly accessible. Organization policy is a preventive control with no such gap.
+D: Incorrect. Training and quarterly reviews are not enforceable controls.
+
+https://cloud.google.com/storage/docs/public-access-prevention
+https://cloud.google.com/resource-manager/docs/organization-policy/overview
+
+---
+
+Question 92
+
+Your Cloud Run application calls a downstream API that occasionally becomes slow, causing your service to time out and return errors to users. You want to make your application more resilient to downstream API slowness. What pattern should you implement?
+
+A. Increase the Cloud Run service timeout to allow the downstream API more time to respond.
+B. Implement the Circuit Breaker pattern: stop sending requests to the downstream API when the failure rate exceeds a threshold, and return a cached or default response instead.
+C. Cache all responses from the downstream API in Memorystore for Redis indefinitely.
+D. Use Cloud Tasks to queue all requests to the downstream API and process them asynchronously.
+
+Correct answer
+B. Implement the Circuit Breaker pattern: stop sending requests to the downstream API when the failure rate exceeds a threshold, and return a cached or default response instead.
+
+Feedback
+A: Incorrect. Increasing the timeout makes each slow request consume a Cloud Run instance for longer, increasing cost and reducing capacity. It does not protect users from slow responses.
+B: Correct. The Circuit Breaker pattern is a standard resiliency pattern for handling downstream dependency failures. When the downstream API is slow or failing, the circuit breaker opens and returns a fallback response immediately, preventing cascading failures.
+C: Incorrect. Caching responses indefinitely would serve stale data and is not appropriate for most dynamic APIs.
+D: Incorrect. Asynchronous processing via Cloud Tasks changes the user experience from synchronous to asynchronous, which may not be acceptable for real-time user-facing requests.
+
+https://cloud.google.com/architecture/scalable-and-resilient-apps#circuit_breaker
+https://sre.google/workbook/implementing-slos/
+
+---
+
+Question 93
+
+Your organization must ensure that all Google Cloud projects are tagged with specific labels (environment, team, cost-center) before any resources can be created. You want a preventive control. What should you do?
+
+A. Create a label validation Cloud Function triggered by project creation events.
+B. Configure an organization policy custom constraint that requires the specified labels to be present on all new projects.
+C. Set up a Cloud Monitoring alert to notify administrators when projects without required labels are detected.
+D. Train project creators to add labels and review compliance monthly.
+
+Correct answer
+B. Configure an organization policy custom constraint that requires the specified labels to be present on all new projects.
+
+Feedback
+A: Incorrect. Cloud Functions triggered by events are reactive. They cannot prevent a project from being created without labels; they can only react after the fact.
+B: Correct. Organization policy custom constraints can enforce that specific labels are required on new projects. A project creation request without the required labels would be rejected, making this a preventive control.
+C: Incorrect. Monitoring alerts are reactive and detect non-compliant projects after they have already been created.
+D: Incorrect. Training and monthly reviews are not enforceable and detect violations late.
+
+https://cloud.google.com/resource-manager/docs/organization-policy/custom-constraints
+https://cloud.google.com/resource-manager/docs/labels/overview
+
+---
+
+Question 94
+
+Your team runs a microservices application on GKE and wants to implement Chaos Engineering to proactively identify weaknesses in the system's resilience. You want to run controlled experiments that introduce failures safely. What should you do?
+
+A. Wait for production incidents to identify weaknesses and learn from them retrospectively.
+B. Use a chaos engineering tool such as LitmusChaos to inject controlled failures—Pod deletions, network latency, CPU stress—in a staging environment that mirrors production, while monitoring SLIs.
+C. Disable autohealing on the GKE cluster to simulate what happens when Pods fail without automatic recovery.
+D. Intentionally misconfigure network policies to create network partitions and observe the impact.
+
+Correct answer
+B. Use a chaos engineering tool such as LitmusChaos to inject controlled failures—Pod deletions, network latency, CPU stress—in a staging environment that mirrors production, while monitoring SLIs.
+
+Feedback
+A: Incorrect. Waiting for production incidents is a reactive approach. Chaos Engineering proactively finds weaknesses before they manifest as incidents.
+B: Correct. Chaos Engineering best practices involve running controlled experiments with defined hypotheses in a safe environment, injecting specific failure types, and monitoring the system's response via SLIs. This reveals weaknesses in a controlled way.
+C: Incorrect. Disabling autohealing is destructive and tests only one failure mode without following controlled experiment methodology.
+D: Incorrect. Intentionally misconfiguring network policies is dangerous and difficult to reverse quickly. This is not a controlled chaos experiment.
+
+https://sre.google/workbook/eliminating-toil/
+https://cloud.google.com/architecture/devops/devops-tech-continuous-testing
+
+---
+
+Question 95
+
+Your application team wants to track which features were deployed to production and when, to help correlate deployments with changes in performance or error rates in Cloud Monitoring. What should you do?
+
+A. Have developers send an email to the team every time a deployment occurs.
+B. Create Cloud Monitoring annotation markers or use Cloud Deploy deployment events that appear on metric charts to correlate deployment times with metric changes visually.
+C. Store deployment metadata in a Firestore collection and manually cross-reference it with Cloud Monitoring dashboards.
+D. Use Cloud Trace to capture deployment timestamps as trace annotations.
+
+Correct answer
+B. Create Cloud Monitoring annotation markers or use Cloud Deploy deployment events that appear on metric charts to correlate deployment times with metric changes visually.
+
+Feedback
+A: Incorrect. Email notifications are informal and cannot be overlaid on monitoring charts for visual correlation.
+B: Correct. Cloud Monitoring supports event markers that appear as vertical lines on time-series charts. Cloud Deploy integration surfaces deployment events automatically, making it visually easy to correlate a deployment event with a change in error rate, latency, or other metrics.
+C: Incorrect. Manually cross-referencing Firestore records with monitoring charts is tedious and error-prone, especially during incidents when speed is critical.
+D: Incorrect. Cloud Trace captures distributed request traces, not deployment events, and does not support overlaying deployment markers on metric charts.
+
+https://cloud.google.com/monitoring/dashboards/api-examples#create-event-annotations
+https://cloud.google.com/deploy/docs/view-release#deployment-events
+
+---
+
+Question 96
+
+Your company runs a GKE workload that requires a GPU for machine learning inference. You want to ensure that GPU nodes are only provisioned when needed and automatically removed when idle to minimize cost. What should you do?
+
+A. Create a static node pool with GPU nodes and always keep it running.
+B. Enable GKE Node Auto Provisioning (NAP) with GPU accelerator constraints so GPU nodes are automatically created when Pods with GPU requests are scheduled and removed when no longer needed.
+C. Manually add GPU nodes before inference jobs and manually delete them after completion.
+D. Use Spot VMs for GPU nodes and manage scaling manually.
+
+Correct answer
+B. Enable GKE Node Auto Provisioning (NAP) with GPU accelerator constraints so GPU nodes are automatically created when Pods with GPU requests are scheduled and removed when no longer needed.
+
+Feedback
+A: Incorrect. Static GPU node pools run continuously whether or not GPU workloads are running, incurring cost even during idle periods. GPU instances are expensive.
+B: Correct. Node Auto Provisioning extends Cluster Autoscaler to automatically create node pools with the right machine types and accelerators including GPUs when Pods with specific resource requests are unschedulable, and removes them when the Pods are no longer running.
+C: Incorrect. Manually managing GPU nodes requires operator intervention for every job and does not scale.
+D: Incorrect. Spot GPU VMs are cost-effective but still require manual scaling management. Node Auto Provisioning is the automated approach.
+
+https://cloud.google.com/kubernetes-engine/docs/how-to/node-auto-provisioning
+https://cloud.google.com/kubernetes-engine/docs/how-to/gpus-autopilot
+
+---
+
+Question 97
+
+Your organization wants to allow services in a consumer VPC to privately access Cloud SQL in a producer VPC without VPC peering or exposing the service to the public internet. What is the primary advantage of Private Service Connect over VPC peering for this use case?
+
+A. Private Service Connect is free, while VPC peering incurs egress charges.
+B. Private Service Connect allows access to specific services without exposing the entire producer VPC network, avoiding transitive routing and IP address space conflicts.
+C. Private Service Connect provides higher bandwidth than VPC peering.
+D. Private Service Connect allows resources in the consumer VPC to communicate with all resources in the producer VPC.
+
+Correct answer
+B. Private Service Connect allows access to specific services without exposing the entire producer VPC network, avoiding transitive routing and IP address space conflicts.
+
+Feedback
+A: Incorrect. Both VPC peering and Private Service Connect incur network costs. The primary advantage of Private Service Connect is architectural, not cost-based.
+B: Correct. VPC peering exposes all IP ranges between two VPCs and can create routing complexity, transitive routing issues, and IP address conflicts. Private Service Connect allows consumers to access a specific service endpoint via a private IP in their own VPC without any of these issues.
+C: Incorrect. Both mechanisms use Google's internal network. Private Service Connect does not inherently provide higher bandwidth.
+D: Incorrect. This describes VPC peering, not Private Service Connect. Private Service Connect provides access to specific service endpoints, not the entire producer network.
+
+https://cloud.google.com/vpc/docs/private-service-connect
+https://cloud.google.com/sql/docs/mysql/private-service-connect
+
+---
+
+Question 98
+
+You need to run a Cloud Build pipeline that provisions infrastructure using Terraform in a target Google Cloud project. You want the Cloud Build service account to have the permissions it needs while following the principle of least privilege. What should you do?
+
+A. Grant the Cloud Build service account the Owner role on the target project.
+B. Grant the Cloud Build service account only the specific IAM roles required to create the resources defined in the Terraform configuration on the target project.
+C. Create a new service account with Owner permissions on the target project and download its JSON key to use in Cloud Build.
+D. Grant the Cloud Build service account the Editor role on the target project.
+
+Correct answer
+B. Grant the Cloud Build service account only the specific IAM roles required to create the resources defined in the Terraform configuration on the target project.
+
+Feedback
+A: Incorrect. The Owner role grants full control of all project resources including IAM. Granting it violates the principle of least privilege and creates significant security risk if the Cloud Build pipeline is compromised.
+B: Correct. Granting only the specific roles needed by the Terraform configuration follows the principle of least privilege. If the pipeline is compromised, the blast radius is limited to only the permissions explicitly granted.
+C: Incorrect. Creating a separate service account with Owner permissions and downloading a JSON key is a security anti-pattern. Long-lived JSON keys are a credential management risk and Owner is overprivileged.
+D: Incorrect. The Editor role is broad and grants write access to most resource types. It is not least-privilege and should be avoided in favor of specific predefined or custom roles.
+
+https://cloud.google.com/iam/docs/understanding-roles
+https://cloud.google.com/build/docs/cloud-build-service-account
+
+---
+
+Question 99
+
+Your GKE application experiences slow Pod startup during scale-out events because each new Pod downloads a large ML model file from Cloud Storage on startup. You want to reduce Pod startup time. What should you do?
+
+A. Increase the size of GKE nodes so fewer Pods need to start at the same time.
+B. Pre-bake the ML model file into the container image so it is included in the image layers and does not need to be downloaded at startup.
+C. Use an init container to download the ML model and cache it in an emptyDir volume shared with the main container.
+D. Configure a Kubernetes DaemonSet to pre-download the ML model to each node's local disk and mount it as a hostPath volume.
+
+Correct answer
+B. Pre-bake the ML model file into the container image so it is included in the image layers and does not need to be downloaded at startup.
+
+Feedback
+A: Incorrect. Larger nodes do not reduce per-Pod startup time. They allow more Pods to run on fewer nodes but do not eliminate the model download latency.
+B: Correct. Including the ML model file in the container image means it is pulled once when the image is first downloaded to a node (leveraging image layer caching) and is immediately available to all Pods on that node without individual downloads, significantly reducing startup time.
+C: Incorrect. An init container that downloads the model still requires each Pod to download the model individually on every startup.
+D: Incorrect. A DaemonSet with hostPath volumes is operationally complex and creates tight coupling between Pods and specific nodes. It also does not work well with Cluster Autoscaler since new nodes would not have the model until the DaemonSet Pod runs.
+
+https://cloud.google.com/kubernetes-engine/docs/concepts/node-images
+https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images
+
+---
+
+Question 100
+
+Your organization runs a large-scale application on GKE across multiple clusters. You want to implement centralized policy enforcement that prevents Pods from running as the root user across all clusters automatically without manual per-cluster configuration. What should you do?
+
+A. Update each Deployment's security context manually to set runAsNonRoot: true.
+B. Use Policy Controller (based on Open Policy Agent Gatekeeper) with Config Sync to centrally define and automatically distribute a ConstraintTemplate and Constraint that enforce runAsNonRoot across all registered clusters.
+C. Configure a Cloud Monitoring alert to detect Pods running as root and alert the security team.
+D. Add a Cloud Build step to each pipeline that scans Kubernetes manifests for runAsNonRoot before deploying.
+
+Correct answer
+B. Use Policy Controller (based on Open Policy Agent Gatekeeper) with Config Sync to centrally define and automatically distribute a ConstraintTemplate and Constraint that enforce runAsNonRoot across all registered clusters.
+
+Feedback
+A: Incorrect. Manually updating each Deployment requires significant ongoing effort, is prone to human error, and does not prevent new Deployments from being created without the security context.
+B: Correct. Policy Controller is GKE Enterprise's policy enforcement engine based on Open Policy Agent Gatekeeper. It enforces policies as admission controller webhooks on each cluster. Combined with Config Sync, policy definitions are stored in a central Git repository and automatically distributed to all registered clusters, providing centralized, automated, and consistent enforcement.
+C: Incorrect. Monitoring alerts are reactive. A Pod running as root is already deployed and potentially exploitable before the alert fires and the team responds.
+D: Incorrect. Pipeline-level scanning only works for deployments made through that specific pipeline. Direct kubectl apply or console deployments would bypass the check.
+
+https://cloud.google.com/kubernetes-engine/enterprise/policy-controller/docs/overview
+https://cloud.google.com/kubernetes-engine/enterprise/config-sync/docs/overview

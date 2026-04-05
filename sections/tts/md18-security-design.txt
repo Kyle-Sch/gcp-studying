@@ -1,0 +1,29 @@
+Section 18: Security Design.
+
+Let's begin with the shared responsibility model, which defines the boundary between what Google secures and what you as the customer are responsible for securing.
+
+Google is responsible for the physical infrastructure: the hardware, the data centers, the hypervisor, the network fabric, the verified boot process, and DDoS protection at the network edge. You are responsible for everything above that layer: your IAM policies, your firewall rules, your choices around data encryption, your application code, and your access controls. Understanding this boundary clearly is essential, because assuming Google handles something it actually leaves to you is one of the most common sources of cloud security gaps.
+
+Now let's walk through the four core security principles that should guide every design decision.
+
+The first is Least Privilege. You should grant only the minimum permissions required for a given task. This principle applies equally to human users, service accounts, and automated processes. Granting more access than necessary creates unnecessary risk.
+
+The second is Separation of Duties. No single person or account should be able to perform a complete sensitive workflow from end to end without checks. For example, the same person should not be able to create, delete, and audit resources without oversight. Similarly, developers and the systems that deploy to production should be different identities with different permissions.
+
+The third is Defense in Depth. Security should be implemented in multiple independent layers. No single control should be your only protection. If one layer is bypassed or fails, another layer should still protect you. This means using IAM, network controls, encryption, and monitoring together rather than relying on any one of them alone.
+
+The fourth is Regular Audits. You should use audit logs actively to detect attacks in progress and to identify compliance violations. Security is not a one-time configuration; it requires ongoing review.
+
+Moving on to the key security tools available on GCP. IAM, which stands for Identity and Access Management, handles authentication and authorization for both human users and service accounts. It is the foundational layer for controlling who can do what in your environment.
+
+Identity-Aware Proxy, often abbreviated as IAP, provides application-level access control without requiring a VPN. It verifies the identity of users attempting to reach an application before allowing any traffic through, regardless of the network they are coming from.
+
+Security Command Center is Google's centralized platform for vulnerability scanning and threat detection across your GCP environment. It surfaces misconfigurations, active threats, and compliance issues in a single dashboard.
+
+Cloud Armor provides DDoS protection and web application firewall capabilities for workloads behind external load balancers. It lets you define rules to block or allow traffic based on IP ranges, geographic location, and request attributes.
+
+VPC Service Controls creates a security perimeter around GCP APIs. Its primary purpose is preventing data exfiltration: even if a credential is compromised, VPC Service Controls can prevent data from being copied outside the defined perimeter.
+
+Organization Policies provide governance guardrails that can be applied at the organization, folder, or project level. They let you enforce constraints such as restricting which regions resources can be deployed in, or preventing public access to storage buckets across the entire organization.
+
+Finally, Private Google Access allows virtual machines that do not have a public IP address to still reach GCP APIs and services. This lets you run fully private workloads without internet exposure while still being able to use Google Cloud services.

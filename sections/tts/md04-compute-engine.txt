@@ -1,0 +1,19 @@
+Section 4: Compute Engine.
+
+Compute Engine is Google Cloud's IaaS, or Infrastructure as a Service, offering. It lets you run virtual machines in the cloud. One of the most important topics to understand about Compute Engine is how pricing discounts work, because there are four distinct types and the exam tests you on the differences between them.
+
+The first discount type is Sustained-use discounts. These are automatically applied when a virtual machine runs for more than twenty-five percent of a billing month. You don't have to do anything to receive them — Google applies them automatically as a reward for running workloads consistently.
+
+The second type is Committed-use discounts. These require you to commit to using a certain amount of resources for either one year or three years. In exchange for that commitment, you can save up to fifty-seven percent off the standard price. These are ideal for stable, predictable workloads.
+
+The third type is Preemptible VMs. Preemptible virtual machines can be up to ninety percent cheaper than regular VMs. However, they come with two important limitations. First, Google can terminate them at any time when it needs those resources back. Second, they have a maximum runtime of twenty-four hours. Even if Google doesn't terminate them early, they will always shut down after twenty-four hours.
+
+The fourth type is Spot VMs. Spot VMs are priced the same as Preemptible VMs, so you get the same discount of up to ninety percent. The key difference is that Spot VMs have no maximum runtime limit. Google can still terminate them at any time, but unlike Preemptible VMs, they are not automatically stopped after twenty-four hours. This makes them a slightly better option for longer-running fault-tolerant workloads.
+
+Now let's look at VM storage options. There are five types of storage you can attach to or use with a Compute Engine virtual machine. The first is Zonal Persistent Disk, which is the default option. It provides reliable block storage but exists within a single zone, so if that zone has an outage, the disk is unavailable.
+
+The second option is Regional Persistent Disk. This replicates your data across two zones within the same region, giving you higher availability. The third option is Local SSD, which stands for Solid State Drive. Local SSDs offer very high performance because they are physically attached to the server running your VM. However, they are transient, meaning the data is lost when the VM stops or is deleted.
+
+The fourth option is Cloud Storage, which is object storage. It is more affordable than persistent disks but is not designed to function as a traditional disk drive. The fifth option is Filestore, which provides high-performance NFS, or Network File System, storage for applications that need a shared file system.
+
+Finally, let's talk about scaling. When you need to handle more load, Compute Engine gives you two approaches. The recommended approach is to scale out, which means adding more virtual machines to share the workload. This is done using Managed Instance Groups, often abbreviated as MIGs, combined with autoscaling policies. Scaling out is preferred over scaling up. Scaling up means giving a single virtual machine more CPU or memory, which has practical limits and tends to be more expensive. Designing your workloads to scale out horizontally is considered a cloud best practice.

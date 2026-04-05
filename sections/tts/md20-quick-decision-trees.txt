@@ -1,0 +1,44 @@
+Section 20: Quick Decision Trees.
+
+This section walks you through a series of decision trees to help you quickly choose the right Google Cloud service for a given scenario. Think of these as mental shortcuts. When you encounter a scenario on the exam, run through the conditions and let the right answer surface naturally.
+
+
+The first decision tree covers Compute options, meaning the services you use to run your workloads.
+
+If you need full operating system control with a persistent workload, choose Compute Engine. It gives you a virtual machine you manage directly, with full access to the OS.
+
+If you need container orchestration at scale, choose Google Kubernetes Engine, or GKE. This is your go-to when you need to manage many containerized applications and want Kubernetes handling the orchestration.
+
+If you need a serverless container that responds to HTTP requests or Pub/Sub messages, choose Cloud Run. Cloud Run lets you deploy containers without managing any infrastructure.
+
+If you need an event-driven single function, choose Cloud Run Functions. This is the right fit for lightweight tasks that trigger in response to a single event.
+
+If you need a simple web application with a managed runtime, choose App Engine Standard. It handles the environment for you and can scale down to zero when there is no traffic.
+
+If you need a custom runtime but do not require scale-to-zero behavior, choose App Engine Flexible. Keep in mind that Flexible runs on Compute Engine virtual machines under the hood, which is why it cannot scale all the way to zero.
+
+
+The second decision tree covers Storage options.
+
+If you are storing blobs, images, video files, or backups, choose Cloud Storage. It is object storage, not a file system or a database, and it is ideal for large unstructured data.
+
+If you need a relational SQL database and your data size is up to 64 terabytes, choose Cloud SQL. It is a fully managed relational database service supporting MySQL, PostgreSQL, and SQL Server.
+
+If you need SQL at global scale with petabytes of data, choose Cloud Spanner. Spanner combines the consistency of a relational database with the horizontal scale of a distributed system.
+
+If you are building a mobile or web application that needs real-time NoSQL sync and offline support, choose Firestore. It is designed for that low-latency, user-facing use case.
+
+If you are dealing with Internet of Things data, AdTech workloads, or extremely heavy read and write event streams, choose Bigtable. Bigtable excels at high-throughput, low-latency access patterns without the need for SQL joins.
+
+If you need SQL-style analytics or a data warehouse, choose BigQuery. BigQuery is optimized for running analytical queries over massive datasets.
+
+
+The third decision tree covers your options for connecting to Google's network.
+
+If you need a service-level agreement and a dedicated private circuit directly to Google, choose Dedicated Interconnect. This is the highest-tier private connectivity option.
+
+If you need private connectivity through an internet service provider, or you need lower bandwidth than Dedicated Interconnect provides but still want a service-level agreement, choose Partner Interconnect. Your provider connects to Google on your behalf.
+
+If you only need Border Gateway Protocol peering and do not require a service-level agreement, choose Direct Peering or Carrier Peering. These are useful when you primarily need to exchange traffic with Google services but do not need contractual uptime guarantees.
+
+If you need an encrypted tunnel over the public internet, choose Cloud VPN. It is quicker to set up than Interconnect options and works well when a fully private circuit is not necessary.

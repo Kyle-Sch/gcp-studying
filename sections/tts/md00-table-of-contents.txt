@@ -1,0 +1,11 @@
+Section 0: Table of Contents.
+
+This study guide covers 22 topics and includes 70 practice questions spanning all subject areas.
+
+Section one covers Cloud Fundamentals. Section two covers Resource Hierarchy. Section three covers IAM and Access. Section four covers Compute Engine. Section five covers VPC Networking. Section six covers Cloud Storage.
+
+Section seven covers Databases. Section eight covers Containers and GKE, which stands for Google Kubernetes Engine. Section nine covers Serverless Compute. Section ten covers AI and Generative AI. Section eleven covers Monitoring and Observability. Section twelve covers Cloud Logging.
+
+Section thirteen covers Alerting and SLOs, which stands for Service Level Objectives. Section fourteen covers Audit Logs. Section fifteen covers SRE Practices, where SRE stands for Site Reliability Engineering. Section sixteen covers Terraform on GCP. Section seventeen covers Infrastructure Design. Section eighteen covers Security Design.
+
+Section nineteen covers Gemini Cloud Assist. Section twenty covers Quick Decision Trees. Section twenty-one covers Exam Traps to Avoid. And section twenty-two contains Practice Questions one through seventy.

@@ -1,0 +1,161 @@
+Section 22: Practice Questions.
+
+Welcome to the practice question review. Work through each question at your own pace. After each one, a prompt will give you a moment to think before the answer is revealed. These questions cover the full range of topics from the course, grouped by subject area.
+
+
+The first set of questions covers Cloud Fundamentals and Identity and Access Management, questions one through ten.
+
+Question 1. Which NIST cloud characteristic means you can provision resources without any human assistance from the provider? Think about it. The answer is: On-demand self-service. This is one of the five essential characteristics defined by the National Institute of Standards and Technology for cloud computing.
+
+Question 2. In the Google Cloud resource hierarchy, policies are inherited in which direction? Think about it. The answer is: Downward. Parent policies apply to all children below them in the hierarchy, meaning an organization-level policy flows down to folders, then to projects, then to resources.
+
+Question 3. Which project attribute is globally unique, assigned by Google, but can be changed only during the creation process? Think about it. The answer is: The Project ID. Once the project is created, the Project ID is immutable and cannot be changed.
+
+Question 4. Services and APIs are enabled on a per-blank basis. Fill in the blank. Think about it. The answer is: Per project. Each project has its own set of enabled or disabled APIs, independent of any folder or organization settings.
+
+Question 5. What is the correct order of IAM roles from broadest to finest-grained? Think about it. The answer is: Basic roles first, then Predefined roles, then Custom roles. Basic roles are the most permissive and coarse. Custom roles give you the most granular control.
+
+Question 6. A company wants each department to manage its own Google Cloud resources independently, without interference from other departments. Which resource hierarchy feature enables this? Think about it. The answer is: Folders. Folders allow you to group projects by department, team, or environment and apply policies at the folder level.
+
+Question 7. A company that does not use Google Workspace wants to create an Organization node in Google Cloud. What do they use to set this up? Think about it. The answer is: Cloud Identity. Cloud Identity is Google's identity platform for organizations that do not have a Google Workspace subscription.
+
+Question 8. What is the primary reason to choose a Preemptible virtual machine for a workload? Think about it. The answer is: To reduce cost. Preemptible VMs can be up to 90 percent cheaper than standard VMs, making them ideal for fault-tolerant, interruptible workloads.
+
+Question 9. What is the key difference between a Spot VM and a Preemptible VM? Think about it. The answer is: Spot VMs have no maximum runtime. Preemptible VMs are limited to a maximum of 24 hours before Google will reclaim them. Spot VMs can run indefinitely as long as capacity is available.
+
+Question 10. You need block storage that is replicated across two zones for high availability. Which option should you choose? Think about it. The answer is: Regional Persistent Disk. Regional Persistent Disk synchronously replicates data across two zones within a region, providing protection against a single zone failure.
+
+
+The next set of questions covers Networking and Storage, questions eleven through twenty-two.
+
+Question 11. What is the scope of a Virtual Private Cloud network in Google Cloud? Think about it. The answer is: Global. A VPC is a global resource that spans all regions.
+
+Question 12. What is the scope of a VPC subnet? Think about it. The answer is: Regional. Each subnet exists within a specific region and spans all zones within that region.
+
+Question 13. Which load balancer provides a single global IP address with automatic multi-region failover for HTTPS traffic? Think about it. The answer is: The Global External Application Load Balancer. This load balancer operates at the application layer and routes traffic intelligently across regions.
+
+Question 14. Which interconnect option comes with a service-level agreement from Google? Think about it. The answer is: Dedicated Interconnect. Only Dedicated Interconnect carries a contractual SLA from Google. Partner Interconnect and peering options do not.
+
+Question 15. How do private virtual machines access the internet when they do not have a public IP address? Think about it. The answer is: Cloud NAT, which stands for Network Address Translation. Cloud NAT allows outbound internet access from private VMs without exposing them to inbound connections.
+
+Question 16. Which Cloud Storage class is best for data that is accessed less than once per year? Think about it. The answer is: Archive. Archive has the lowest storage cost but the highest retrieval cost, making it appropriate only for data that is almost never accessed.
+
+Question 17. Which Cloud Storage class is best for data that is accessed approximately once per month? Think about it. The answer is: Nearline. Nearline is designed for data accessed infrequently but more often than Archive-tier data.
+
+Question 18. What does enabling object versioning on a Cloud Storage bucket allow you to do? Think about it. The answer is: It keeps a full history of all overwrites and deletions, allowing you to restore objects to earlier versions. This is useful for protecting against accidental data loss.
+
+Question 19. What type of storage is Cloud Storage? Think about it. The answer is: Object storage. It is not file storage, not block storage, and not a database. This is a common exam trap, so make sure the distinction is clear in your mind.
+
+Question 20. Which database product supports horizontal SQL scaling to petabytes of data? Think about it. The answer is: Cloud Spanner. Spanner is Google's globally distributed relational database that maintains strong consistency while scaling horizontally.
+
+Question 21. Which database is best for Internet of Things data with extremely heavy read and write event loads and no need for SQL joins? Think about it. The answer is: Bigtable. Bigtable is a wide-column NoSQL database optimized for high-throughput, low-latency workloads at massive scale.
+
+Question 22. Which database is best for a mobile application that needs real-time synchronization and offline support? Think about it. The answer is: Firestore. Firestore is a document-based NoSQL database with built-in real-time sync and offline capabilities, designed specifically for mobile and web clients.
+
+
+The next set of questions covers Containers, Serverless computing, and Artificial Intelligence, questions twenty-three through thirty-five.
+
+Question 23. What is a Kubernetes Pod? Think about it. The answer is: A Pod is one or more containers that are deployed together and share a network IP address and storage volume. The Pod is the smallest deployable unit in Kubernetes.
+
+Question 24. Where do Google Kubernetes Engine cluster nodes come from? Think about it. The answer is: Compute Engine virtual machines. GKE provisions and manages Compute Engine VMs as the underlying node infrastructure.
+
+Question 25. In Google Kubernetes Engine, which mode has Google manage the node infrastructure for you? Think about it. The answer is: Autopilot mode. In Autopilot, Google handles node provisioning, scaling, and maintenance. In Standard mode, you are responsible for managing nodes yourself.
+
+Question 26. Why should you use a Kubernetes Service instead of connecting directly to Pod IP addresses? Think about it. The answer is: Services provide a stable IP address and DNS name. Pod IP addresses change whenever a Pod is restarted or rescheduled, but a Service maintains a consistent endpoint that other components can rely on.
+
+Question 27. What open-source platform is Cloud Run built on? Think about it. The answer is: Knative. Cloud Run is Google's managed serverless platform built on top of the open-source Knative project.
+
+Question 28. What is Cloud Run's billing granularity? Think about it. The answer is: The nearest 100 milliseconds of active request handling. You are only billed for the time your container is actually processing requests.
+
+Question 29. Which scenario fits Cloud Run better than Cloud Run Functions? Think about it. The answer is: A full web application with ongoing HTTP traffic. Cloud Run Functions are designed for single event-triggered tasks, while Cloud Run is better suited for full containerized applications that handle multiple types of requests.
+
+Question 30. How does App Engine Standard differ from App Engine Flexible? Think about it. The answer is: App Engine Standard can scale to zero when there is no traffic, reducing costs during idle periods. App Engine Flexible runs on Compute Engine virtual machines and cannot scale to zero.
+
+Question 31. What is a hallucination in the context of a generative AI model? Think about it. The answer is: A hallucination is when the model produces output that sounds plausible and confident but is factually incorrect or completely fabricated. It is one of the key risks to manage when working with large language models.
+
+Question 32. What is the best practice when a prompt-based model might not know the answer to a question? Think about it. The answer is: Include a fallback response in the prompt itself. For example, instruct the model: if you are unsure, respond with "I don't have that information." This prevents confident-sounding hallucinations.
+
+Question 33. What are the three prompt engineering techniques that involve controlling how many examples are provided to the model? Think about it. The answer is: Zero-shot prompting, which provides no examples. Few-shot prompting, which provides a small number of examples. And chain-of-thought prompting, which guides the model to reason through a problem step by step.
+
+Question 34. Gemini Cloud Assist's "Diagnose and Resolve" feature uses which underlying tool? Think about it. The answer is: Cloud Assist Investigations. This tool helps teams investigate and resolve issues more quickly by surfacing relevant signals and context.
+
+Question 35. What metric does Cloud Assist Investigations primarily help reduce? Think about it. The answer is: MTTR, which stands for Mean Time to Recovery. By surfacing relevant diagnostic information faster, investigations help teams restore service more quickly.
+
+
+The next set of questions covers Monitoring, Logging, and Alerts, questions thirty-six through fifty.
+
+Question 36. What are the four golden signals of site reliability engineering? Think about it. The answer is: Latency, Traffic, Saturation, and Errors. These four signals provide a complete picture of how a system is performing under real conditions.
+
+Question 37. Which Cloud Monitoring feature verifies that an endpoint is reachable from multiple global locations? Think about it. The answer is: Uptime checks. Uptime checks send synthetic requests from various regions to confirm your service is accessible.
+
+Question 38. What does the Ops Agent do on a Compute Engine virtual machine? Think about it. The answer is: The Ops Agent collects process metrics and third-party application metrics and logs from Compute Engine VMs, then sends them to Cloud Monitoring and Cloud Logging.
+
+Question 39. What is a log sink? Think about it. The answer is: A log sink is a configured destination for routed log data. Log sinks can send logs to a Cloud Logging bucket, BigQuery, Pub/Sub, or Cloud Storage, depending on your analysis or archival needs.
+
+Question 40. You want to count occurrences of a specific error pattern in your logs and trigger an alert when the count exceeds a threshold. What do you create first? Think about it. The answer is: First, create a log-based metric. Then create an alerting policy on that metric. You cannot alert directly on raw log text, so the metric is the required intermediate step.
+
+Question 41. Upgrading a Cloud Logging bucket to use Log Analytics is what kind of change? Think about it. The answer is: It is permanent and cannot be undone. Once you upgrade a logging bucket to Log Analytics, there is no way to reverse that change.
+
+Question 42. Which audit log records events like a user creating a virtual machine or a user changing an IAM policy? Think about it. The answer is: The Admin Activity audit log. Admin Activity logs capture all administrative write operations and are always enabled and cannot be disabled.
+
+Question 43. Data Access audit logs are enabled by default only for which service? Think about it. The answer is: BigQuery. For all other services, Data Access audit logs must be explicitly enabled. BigQuery is the one exception where they are on by default.
+
+Question 44. Which audit log records changes initiated by Google's internal systems rather than by human users? Think about it. The answer is: The System Event audit log. These are non-human, automated changes made by Google infrastructure on your behalf.
+
+Question 45. Which audit log records an event where a security policy blocked access to a resource? Think about it. The answer is: The Policy Denied audit log. These logs capture situations where a request was denied by a security policy such as a VPC Service Control or an organization policy.
+
+Question 46. How long are Admin Activity audit logs retained, and what is the cost? Think about it. The answer is: Admin Activity audit logs are retained for 400 days, free of charge. No additional storage costs apply.
+
+Question 47. Your service level objective is 99.9 percent availability over a 30-day period. Approximately how many minutes of error budget does that give you each month? Think about it. The answer is: Approximately 43 minutes per month. That is the 0.1 percent of downtime that is acceptable before the SLO is breached.
+
+Question 48. According to Site Reliability Engineering principles, when should a team slow down or pause new feature releases? Think about it. The answer is: When the error budget is exhausted. The error budget is the mechanism that balances reliability work against feature development. No budget left means no more risk-taking until reliability improves.
+
+Question 49. What kind of failure can a windows-based service level objective hide? Think about it. The answer is: Burst failures. If an error occurs and recovers entirely within a single measurement window, the window may still be counted as compliant, making the SLO appear healthy even when users experienced a real disruption.
+
+Question 50. You want to query your log data using SQL and join it with other BigQuery tables for analysis. What do you need to enable? Think about it. The answer is: Log Analytics on the Cloud Logging bucket. Enabling Log Analytics creates a BigQuery read-only linked dataset that you can query directly with SQL.
+
+
+The final set of questions covers Site Reliability Engineering, Terraform, and Infrastructure design, questions fifty-one through seventy.
+
+Question 51. What is the key difference between Site Reliability Engineering, or SRE, and DevOps? Think about it. The answer is: DevOps is a philosophy or cultural movement. SRE is a concrete, opinionated implementation of that philosophy, with specific practices, tools, and metrics.
+
+Question 52. What makes a postmortem "blameless"? Think about it. The answer is: A blameless postmortem focuses on systemic root causes rather than individual mistakes. The goal is to understand what conditions allowed the failure to happen, not to assign personal fault.
+
+Question 53. Name three characteristics that define toil in the SRE sense. Think about it. The answer is: Toil is manual, repetitive, and automatable. Additional characteristics include being tactical rather than strategic, providing no enduring value once completed, and scaling linearly with the size of the system rather than being absorbed by automation.
+
+Question 54. What does the terraform init command do? Think about it. The answer is: It downloads the required provider plugins and initializes the working directory for Terraform. This is always the first command you run when setting up a new Terraform configuration.
+
+Question 55. Which Terraform command lets you preview changes without actually making them? Think about it. The answer is: terraform plan. Running terraform plan shows you exactly what Terraform will create, modify, or destroy before you commit to the changes.
+
+Question 56. What is an implicit dependency in Terraform? Think about it. The answer is: An implicit dependency is created when one resource references an attribute from another resource. Terraform automatically detects this reference and ensures the referenced resource is created first, without you needing to declare the dependency explicitly.
+
+Question 57. Why should teams store Terraform state files remotely rather than locally? Think about it. The answer is: Remote state provides three important benefits: state locking to prevent simultaneous conflicting changes, shared access so all team members work from the same state, and encryption to protect sensitive data stored in the state file.
+
+Question 58. What does the gcloud beta terraform vet command do? Think about it. The answer is: It validates a Terraform plan against your organization's policy constraints before you apply it. This helps catch compliance violations before infrastructure is provisioned.
+
+Question 59. What is the DRY principle as applied to Terraform? Think about it. The answer is: DRY stands for Don't Repeat Yourself. In Terraform, you apply this principle by extracting reusable infrastructure patterns into modules, then calling those modules with different input variables for each environment, rather than duplicating configuration files.
+
+Question 60. What does RPO stand for, and what does it measure? Think about it. The answer is: RPO stands for Recovery Point Objective. It measures the maximum acceptable amount of data loss, expressed as a time duration. For example, an RPO of one hour means you can afford to lose up to one hour of data in a disaster scenario.
+
+Question 61. What does RTO stand for, and what does it measure? Think about it. The answer is: RTO stands for Recovery Time Objective. It measures the maximum acceptable time it takes to restore a service after a failure. A shorter RTO means you need more redundancy and faster failover capabilities.
+
+Question 62. Which resilience pattern stops a struggling downstream service from being overwhelmed by continued retry attempts? Think about it. The answer is: The circuit breaker pattern. A proxy or middleware layer monitors failure rates and, when they exceed a threshold, stops forwarding requests to the struggling service until it has had time to recover.
+
+Question 63. What is truncated exponential backoff? Think about it. The answer is: It is a retry strategy where each successive retry waits progressively longer than the previous one, with random jitter added to spread out retries across clients, and a maximum cap so the wait time does not grow indefinitely.
+
+Question 64. What does N plus 2 deployment mean in the context of capacity planning? Think about it. The answer is: You deploy N instances to handle normal load, plus one additional instance to absorb traffic during rolling upgrades, plus one more instance to handle unexpected failures. This ensures your service remains available and performant even during maintenance windows.
+
+Question 65. Which Google Cloud service provides Distributed Denial of Service, or DDoS, protection? Think about it. The answer is: Cloud Armor. Cloud Armor protects your applications from DDoS attacks and allows you to configure web application firewall rules.
+
+Question 66. What does Identity-Aware Proxy, or IAP, do? Think about it. The answer is: IAP controls access to your applications by verifying user identity before allowing access, without requiring users to connect through a VPN. It is a zero-trust access control layer for web applications and virtual machines.
+
+Question 67. What creates a security perimeter around Google Cloud APIs to prevent data exfiltration? Think about it. The answer is: VPC Service Controls. VPC Service Controls let you define a perimeter around specific Google Cloud services, preventing data from being moved outside that perimeter even by authorized users.
+
+Question 68. What is canarying as a deployment strategy? Think about it. The answer is: Canarying means deploying a change to a small, representative subset of users before rolling it out to everyone. You evaluate the change on that small group, and if it performs well you proceed with a full rollout. If problems appear, you roll back with minimal impact.
+
+Question 69. What is the root module in Terraform? Think about it. The answer is: The root module is the working directory from which you run your Terraform commands. It is where Terraform loads your dot-tf configuration files and begins building the dependency graph.
+
+Question 70. What is the Cloud Foundation Toolkit, or CFT? Think about it. The answer is: The Cloud Foundation Toolkit is Google's collection of pre-built Terraform modules for Google Cloud, published to the Terraform Registry. These modules encode Google's best practices and make it faster to set up compliant, production-ready infrastructure.
+
+
+That concludes all seventy practice questions. These questions draw from Google Cloud Fundamentals, the Cloud Operations Suite, Site Reliability Engineering Foundations, Terraform for Google Cloud, Infrastructure Design and Architecture, and Gemini Cloud Assist. Review any areas where you were uncertain and revisit the corresponding sections before your exam.

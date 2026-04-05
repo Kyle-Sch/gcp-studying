@@ -1,0 +1,19 @@
+Section 13: Alerting and SLOs.
+
+Let's begin by looking at the components that make up an alert policy in Google Cloud. Every alert policy is built from three parts. The first is the condition, which defines what actually triggers the alert. A condition can be based on a metric crossing a threshold, the absence of expected data, a rate of change, or an uptime check failure. The second part is notification channels, which is where Cloud Monitoring sends the alert when it fires. Supported channels include email, SMS, PagerDuty, Slack, Pub/Sub, and webhooks. The third part is documentation, which is a runbook link or description that appears inside the alert to help whoever responds to it.
+
+Now let's look at four closely related terms you need to understand: SLI, SLO, SLA, and Error Budget.
+
+An SLI, which stands for Service Level Indicator, is a metric that measures one specific aspect of reliability. The standard formula is: good events divided by all events. Engineering teams are responsible for defining SLIs.
+
+An SLO, which stands for Service Level Objective, takes an SLI and adds a target to it. For example, you might say "99.9% of requests should succeed." The SLO is an internal reliability goal, set jointly by product and engineering teams. It is important to note that the SLO must always be stricter than the SLA.
+
+An SLA, which stands for Service Level Agreement, is the contractual promise made to customers. If the SLA is breached, the business typically owes the customer compensation. SLAs are set by business and legal teams.
+
+An Error Budget is simply 100% minus the SLO target. So if your SLO is 99.9%, your error budget is 0.1%, which translates to roughly 43 minutes of allowable downtime per month. The error budget is a shared concept owned across the organization. When the budget is healthy, teams can ship features quickly. When the budget is exhausted, the focus shifts to slowing releases and improving reliability.
+
+Moving on to what makes a good SLO. A well-designed SLO should follow the S.M.A.R.T. criteria. It should be Specific, Measurable, Achievable, Relevant, and Time-bound. It is very important to note that "100% availability" is never a valid SLO. Nothing in practice achieves 100%, so setting that target is unrealistic and counterproductive.
+
+Now let's talk about the two types of SLO calculations. The first is request-based, which divides good requests by total requests. This approach is more precise because it reflects individual user experiences. The second is windows-based, which divides the number of good time windows by the total number of windows. This method is simpler but carries a real risk: it can hide burst failures, where a large number of errors happen within a window but the window still counts as "good" overall.
+
+Finally, let's cover burn rate alerts. A burn rate alert fires when your error budget is being consumed faster than planned. Rather than waiting until the budget is completely gone, burn rate alerts give you early warning. They work by looking back over a defined window of time, such as 60 minutes, and applying a burn rate threshold multiplier. If errors are arriving at a rate that would exhaust the budget far ahead of schedule, the alert triggers. This gives your team time to act before reliability has actually degraded beyond the SLO target.

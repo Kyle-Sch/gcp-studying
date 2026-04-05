@@ -1,0 +1,21 @@
+Section 3: IAM and Access.
+
+IAM, which stands for Identity and Access Management, is the system that controls who can do what on which resources in Google Cloud. Every IAM policy is built from three components: who the policy applies to, what role they are granted, and which resource that role covers.
+
+The "who" is called a Principal. A Principal can be a Google Account, a Google Group, a Service Account, or a Cloud Identity domain. The "what" is a Role, which is simply a collection of individual permissions bundled together. The "which" is the Resource, meaning the specific thing in Google Cloud that the role applies to.
+
+Now let's look at the three types of roles, moving from broadest to most fine-grained. The first type is called Basic roles, sometimes referred to as Primitive roles. Basic roles apply to all resources within an entire project. The three basic roles are Owner, Editor, and Viewer. Because these roles are so broad, they should generally be avoided in favor of more specific roles.
+
+The second type is Predefined roles. Predefined roles are scoped to a specific service. For example, the Storage Object Viewer role grants read access only to objects in Cloud Storage, nothing else. Google provides hundreds of predefined roles across all its services.
+
+The third type is Custom roles. Custom roles let you define exactly which permissions are allowed, giving you complete control. These are useful when neither a predefined role nor a basic role fits your exact needs. The best practice is to always prefer predefined or custom roles over basic roles, since basic roles grant far more access than most situations require.
+
+Moving on to Service Accounts, these are a special type of identity used by machines and workloads rather than humans. When a virtual machine or an application needs to call Google Cloud APIs, it uses a service account to authenticate. Service accounts follow an email-style naming format, using the pattern: name at project-id dot iam dot gserviceaccount dot com.
+
+You can grant IAM roles to service accounts just like you would to a human user. One important caution: the default service account that Google Cloud creates automatically has very broad permissions. You should restrict the default service account's access and ideally create purpose-specific service accounts with only the permissions they need.
+
+Now let's cover the different ways you can interact with Google Cloud. There are six main options. The first is the Cloud Console, which is a graphical web interface. It supports SSH in the browser, billing management, and resource management. The second is the gcloud CLI, which stands for command-line interface, and it is the primary command-line tool for interacting with GCP.
+
+The third tool is the bq command-line tool, which is specifically designed for BigQuery. The fourth is Cloud Shell, a browser-based virtual machine running Debian Linux. Cloud Shell provides five gigabytes of persistent home directory storage and is always authenticated to your Google Cloud account, making it a convenient option when you need a terminal without installing anything locally.
+
+The fifth option is Client Libraries, which are available for many popular programming languages including Java, Python, PHP, C#, Go, Node.js, Ruby, and C++. The sixth and final option is the Cloud Mobile App, which lets you start and stop virtual machines, manage Cloud SQL instances, view logs, and set up billing alerts, all from your mobile device.

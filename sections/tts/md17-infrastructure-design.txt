@@ -1,0 +1,29 @@
+Section 17: Infrastructure Design.
+
+Good infrastructure design starts with understanding requirements, and requirements come in two forms. Qualitative requirements are captured as user stories, written in the format "As a role, I want to do something, so that I achieve a goal." These describe the human needs the system must fulfill. Quantitative requirements are captured as KPIs and SLOs combined with SLIs, which as we've covered, must follow the S.M.A.R.T. criteria to be meaningful.
+
+When choosing a metric to serve as an SLI, you want to pick a signal that is stable during normal operation and clearly different when something is wrong. A good SLI changes distinctly during an outage. A bad SLI is one with high variance, where the healthy and unhealthy ranges overlap, making it hard to distinguish normal fluctuation from a real problem.
+
+Now let's talk about one of the most fundamental architectural decisions you will face: monolith versus microservices.
+
+A monolith is a single codebase where all components of the application share a single database and are deployed together as one unit. Scaling a monolith means scaling the entire application, and a failure in one part can affect everything. A microservices architecture breaks the application into separate services, each with its own codebase and its own data store. Each service can be deployed independently, scaled independently, and a failure in one service has an isolated blast radius rather than taking down the whole system.
+
+When decomposing a monolith into microservices, you can split along three lines: by feature area, by architectural layer such as frontend, backend, and data, or by shared functionality like authentication and authorization services that multiple features need.
+
+Moving on to reliability patterns. The first thing to design against is single points of failure. The recommended approach is to deploy N plus 2 instances: N instances to handle the normal load, one additional instance to absorb traffic during upgrades, and one more to cover unexpected failures. These instances should be spread across multiple zones so that a failure in one zone does not cause a correlated failure across all of them. Individual units should be stateless and interchangeable so that any instance can be replaced without disruption.
+
+A related concept is failure domains. A failure domain is a group of components that can all fail together. Failure domains exist at multiple levels: a single machine, a rack, a zone, a region, a software version, and a shared configuration file are all examples. The mitigation strategy is to distribute your components across failure domains, using separate zones and regions so that no single failure takes everything down.
+
+Cascading failures are another pattern to design against. This is when one service failure creates a load spike that overwhelms another service, which then fails and overwhelms yet another. The key prevention techniques are circuit breakers, load shedding, autoscaling, and health checks.
+
+Let's look at the circuit breaker pattern in more detail. Imagine a client making requests through a circuit breaker proxy to a downstream service. Normally the circuit is closed and requests flow through. If the downstream service becomes unhealthy, the circuit breaker opens, which means it stops forwarding requests immediately rather than letting them queue up and time out. The downstream service gets a chance to recover without being hammered. Once it is healthy again, the circuit breaker closes and traffic resumes gradually. In Google Kubernetes Engine, the Istio service mesh can implement circuit breakers automatically.
+
+Another important reliability pattern is truncated exponential backoff. When a call fails, rather than retrying immediately and potentially making a recovering service worse, the caller waits before retrying. With each successive failure the wait doubles: one second, then two, then four, and so on, up to some maximum limit. A small random value called jitter is added to each wait time to prevent multiple clients from all retrying at exactly the same moment, which is sometimes called the thundering herd problem.
+
+Lazy deletion is a pattern for protecting against accidental data loss. Instead of permanently deleting data immediately when a user requests it, the system marks the data as deleted and retains it for a grace period before permanently purging it. This gives the user and the operations team a window to recover data that was deleted by mistake.
+
+Now let's turn to disaster recovery. There are two key terms here. RPO, which stands for Recovery Point Objective, is the maximum amount of data loss your business can tolerate, expressed as a time value. For example, "we can lose at most one hour of data." RTO, which stands for Recovery Time Objective, is the maximum acceptable downtime, for example "we must be back online within five minutes."
+
+The disaster recovery planning process has six steps. First, brainstorm all the failure scenarios that could affect your system. Second, assign an RPO and an RTO to each scenario. Third, prioritize those scenarios by their business impact. Fourth, define a backup strategy for each. Fifth, document and communicate the recovery steps so that anyone on the team can execute them. Sixth, test your recovery process at least once per year, and more frequently if possible.
+
+Different GCP services call for different backup strategies. For Firestore, the approach is daily automated backups stored in multi-regional Cloud Storage. For Cloud SQL, the approach is binary logging combined with a failover replica in a separate zone. For BigQuery, since it is often backed by source data elsewhere, the approach is to re-import from the source system, provided that source data is retained.

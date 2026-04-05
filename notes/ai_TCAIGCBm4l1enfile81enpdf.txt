@@ -1,0 +1,393 @@
+Troubleshooting with AI Using Cloud Assist Investigations
+Cloud Assist Investigations is an AI-enabled tool for iterative troubleshooting in Google Cloud environments. It aims to help users troubleshoot common issues to find the root cause of problems that may occur when using Google Cloud services. This course equips DevOps, SRE, and platform engineers with the skills to effectively use Cloud Assist Investigations for streamlined troubleshooting of Google Cloud services. The course focuses on foundational knowledge of Cloud Assist Investigations, with the intent to reduce troubleshooting time and enhance overall operational efficiency for users of Google Cloud. Click the Start Course button to begin.
+INTRODUCTION TO CLOUD ASSIST INVESTIGATIONS
+What's in it for me? Gemini Cloud Assist Cloud Assist Investigations overview
+CLOUD ASSIST INVESTIGATIONS INTERFACE AND CORE CONCEPTS
+
+Core concepts Create and review investigations
+CONDUCT INVESTIGATIONS AND PERFORM DIAGNOSTICS
+Investigate and diagnose issues What did I walk away with?
+
+Lesson 1 of 7
+What's in it for me?
+Cloud Assist Investigations is a root-cause analysis (RCA) tool for troubleshooting your infrastructure and applications in complex and distributed cloud environments.
+Cloud Assist Investigations can help you understand, diagnose, and resolve issues on Google Cloud. With Cloud Assist Investigations, you can streamline incident responses, reducing the time to resolution and improving your overall service availability.
+Cloud Assist Investigations is a feature of Gemini Cloud Assist, an AI-powered product that helps you design, optimize, and operate applications in Google Cloud. We'll briefly review Gemini Cloud Assist at the beginning of this course.
+By the end of this course, you will be able to:
+
+ Access and navigate the Cloud Assist Investigations interface.  Utilize core features of Cloud Assist Investigations to diagnose common issues.  Troubleshoot incidents with Cloud Assist Investigations.
+
+Lesson 2 of 7
+Gemini Cloud Assist
+
+Cloud Assist Investigations is a feature of Gemini Cloud Assist, a product that offers AI-powered assistance to help you simplify the application lifecycle on Google
+Cloud.
+
+Types of generative AI assistance
+Gemini Cloud Assist provides the following types of gen AI assistance to build and design applications. Click each tab to learn more.
+
+DESIGN AND BUILD
+
+DIAGNOSE AND RESOLVE
+
+OPTIMIZE COST AND USAGE
+
+Design, build, and manage applications with natural language interaction in the Application Design Center in the Google Cloud console.
+Generate Google Cloud CLI commands and Terraform code for infrastructure and organizational policies.
+
+DESIGN AND BUILD
+
+DIAGNOSE AND RESOLVE
+
+OPTIMIZE COST AND USAGE
+
+Diagnose issues based on logs, errors, or natural language prompts using AI-driven Cloud Assist Investigations.
+Use AI-powered workflows to troubleshoot and resolve database performance issues.
+
+DESIGN AND BUILD
+
+DIAGNOSE AND RESOLVE
+
+OPTIMIZE COST AND USAGE
+
+Optimize cloud spend by analyzing costs, trends, waste, and utilization in FinOps Hub.
+Query project costs and billing information with natural language in Cloud Hub.
+Optimize database costs and generate savings by configuring instances based on usage patterns in Database Center.
+
+You can also get gen AI assistance for your Google Cloud resources with Gemini Cloud Assist chat, Google Cloud Observability, Firebase, and other tools. For more information, visit the documentation.
+Interacting with Gemini Cloud Assist
+You can interact with Gemini Cloud Assist in multiple ways:
+
+Cloud Assist panel: Get conversational assistance using this panel in the Google Cloud console and the Cloud Mobile app.
+Cloud Hub: Optimize resource and application costs and utilization in Cloud Hub in the Google Cloud console.
+Database Center: Learn more about your database fleet health by prompting Gemini to answer questions about fleet health, inventory, and database configuration information.
+Application Design Center: Design optimal cloud applications that can be managed throughout their lifecycle with Gemini in the App Design Center.
+Cloud Assist Investigations: Analyze, troubleshoot, and diagnose technical issues within the Google Cloud console using Cloud Assist Investigations.
+Gemini Cloud Assist is part of the Gemini for Google Cloud portfolio of products and services.
+
+Lesson 3 of 7
+Cloud Assist Investigations overview
+The need for speed in troubleshooting
+When things break and an outage occurs, organizations move into firefighting mode to identify and fix the issues that have caused the outage. Outages can be very costly, so fixing the issue quickly and minimizing the impact are incredibly important.
+
+Mean time to recovery (MTTR)
+A key metric used to measure the efficiency of incident responses Average time taken to restore a service to full operation after a failure
+To reduce the MTTR and improve overall service availability, it is important to streamline incident
+responses.
+Cloud Assist Investigations
+With Cloud Assist Investigations, you can streamline incident responses by reducing the time to resolution and recovery of your service on Google Cloud. Click each button below to learn more about the benefits of Cloud Assist Investigations.
+Integrate your current workflows
+Cloud Assist Investigations is integrated into your current workflows, so you can troubleshoot issues in context. You can trigger investigations from various products and services you use with your application on Google Cloud, such as Logs Explorer.
+
+Understand issues
+Cloud Assist Investigations provides observations and insights on the state of your Google Cloud environment. Data sources, such as logs, configurations, and runbooks are analyzed to help you focus on information most relevant to your issue.
+Diagnose issues
+Cloud Assist Investigations synthesizes observations and uses domain-specific knowledge to identify the probable root cause(s) of an issue. To explain the context around the root cause, public and private knowledge is used.
+Resolve issues
+To help resolve an issue, Cloud Assist Investigations recommends troubleshooting steps or fixes. References to specific resources or time periods provide relevant information and help resolve the issue faster and with less effort.
+Get additional support
+For additional support, your investigation is seamlessly transferred into a Google Cloud support case.
+
+Investigation details with additional context are used by a support engineer who can help resolve the case faster.
+Troubleshoot issues in context
+Troubleshoot issues within the context of your current workflow by triggering investigations from:
+Log messages with a severity of "Warning and higher" in Logs Explorer Product pages such as Google Kubernetes Engine Health & troubleshooting page in Cloud Hub Main Investigations page in the Google Cloud console Gemini Cloud Assist chat panel Cloud Monitoring alerts
+You can also interact and ask questions about your investigations in chat.
+
+Knowledge check
+Which two statements describe MTTR? The rate per minute at which incidents occur with a service. A key metric used to measure the efficiency of incident responses. Average time taken to restore a service to full operation after a failure.
+SUBMIT
+
+Lesson 4 of 7
+Core concepts
+
+Let's discuss the core concepts and terminology used in Cloud Assist Investigations.
+Concepts
+When working with Cloud Assist Investigations, you start an investigation on an issue that may be reported, for example, in Logs Explorer, in the Google Cloud console. Observations are then produced based on the analysis of the issue, and hypotheses about the cause of the issue are generated.
+Click each flashcard to learn more.
+
+Issue
+
+An issue is information that can include errors, a description, a timeline, or the affected resources.
+
+Observation
+
+An observation represents the insights about your environment's state that are most relevant to the issue.
+
+Hypothesis
+
+A hypothesis synthesizes the observations and uses domainspecific knowledge to identify probable root causes for the issue.
+
+Investigations workflow
+Here is a typical workflow when using Cloud Assist Investigations.
+Click each marker to learn more.
+
+
+
+
+
+
+
+
+
+
+User or system
+A user or system interacts with your application resources and generates an issue.
+
+
+Issue The issue is provided to Cloud Assist Investigations and can include error messages, a description, a timeline,
+or the resources that are impacted.
+
+
+Observations Observations that are most relevant to the issue are then generated. They contain insights about your environment's state and help you to quickly understand what is happening in your environment. The context of your Google Cloud environment is used to analyze data sources such as logs, configurations, and metrics. Observations are then ranked and filtered to help you focus on the information that is most relevant to your issue.
+
+
+Hypotheses Investigations synthesize the observations and uses domain-specific knowledge to identify probable root causes that are provided as hypotheses. You can iterate on an investigation and create new revisions to drill deeper into certain areas.
+Watch this video that shows how you can use Gemini Cloud Assist Investigations to troubleshoot issues with your workloads and resources on Google Cloud. Click the play button to watch the video.
+
+Use Gemini Cloud Assist to inve...
+Transcript
+0:00 [MUSIC PLAYING] 0:020:07 KYLE BENSON: Hi. 0:08 My name is Kyle Benson. 0:09 I'm a product manager at Google Cloud. 0:12 Good observability and well-honed troubleshooting 0:14 skills are fundamental to any on-call engineer's success. 0:19 They provide the foundational data and tools 0:21 that we need as humans to think critically about problems. 0:24 But, sometimes, the specter of unknown unknowns 0:27 can make troubleshooting difficult or feel impossible.
+
+Overview
+0:31 We're trying to help make this process easier for customers 0:34 of Google Cloud with our new Investigations tool, which 0:37 is part of Gemini Cloud Assist. 0:40 The Investigations feature is designed 0:42 to aid in the troubleshooting flow started 0:44 by you and your teammates, so you 0:46 can start from scratch or within context across Google Cloud. 0:50 The Investigations feature takes the symptoms or error messages 0:54 you provide, identifies the underlying issues, 0:57 and recommends actionable solutions. 0:59 Let's see how we can create an investigation 1:01 to troubleshoot a live issue in our environment. 1:04
+Create an investigation
+1:10 For this example, we have a sample workload running 1:13 in Google Kubernetes Engine. 1:15 So we've received a page notifying us that there's 1:17 an issue with our service. 1:20 I'm going to open the Google Kubernetes Workloads 1:23 page to take a look at my application. 1:27 It looks like the inventory app is having some issues. 1:31 I can see that there's a CrashLoopBackOff error, 1:33 and it doesn't have the minimum availability. 1:36
+
+To dig into this further, I'm going 1:39 to go into the container logs for this service 1:41 and see what's happening. 1:44 Once Cloud Logging loads these logs, 1:47 I can see that there are some intermittent errors related 1:50 to some kind of failure. 1:52 If I click on this most recent error, 1:55 we can see that Gemini offers this new Investigate button. 1:58 And if I click through, it'll let 2:01 me create a new investigation. 2:04 I'm going to change the name here to System is down. 2:08 And just to show how important and urgent this is, 2:11 I'll add a couple of exclamation points. 2:13 I'm going to leave the start time. 2:15 And then I'm going to scroll down here a little 2:17 to say what type of issue am I facing. 2:20 I can see "I have an error message" 2:22 or "I want to describe what happened." 2:24 In this case, we have an error message 2:25 we think might be related to this failure. 2:28 So I'm going to leave it as is with everything that it 2:31 prepopulated. 2:33 Then I'm going to let the relevant resources stay 2:36 the same as well, and I'm going to click Create. 2:382:41 Once this investigation is created,
+
+2:44 Gemini will analyze the relevant resources 2:47 and any of the things it thinks might 2:48 be relevant to try and solve this issue. 2:51 So we'll give it a few moments to let it complete 2:54 and see what's going on. 2:553:00 It looks like it completed. 3:02 We can first see a few relevant observations. 3:05 So if we wanted to see what was happening here, things that 3:08 might be related to what created this issue, 3:10 we can see that from here. 3:12 We can also go straight to the summary of findings. 3:15 It looks like the application recognizes some error on line 14 3:20 within the Python code. 3:21 What this tells me, as the on-call engineer, 3:24 is that there is some kind of error that 3:26 was pushed to a recent change in this service 3:28 and that the team responsible for this app 3:30 needs to update the code to more gracefully solve these errors so 3:34 that the container doesn't spontaneously crash 3:36 when it hits that problem. 3:38 From here, what we need to do is have the on-call engineer 3:42 contact the other teams, reroll the package, 3:45 and reroll our deployment. 3:46 This should get us back online. 3:48
+
+If you try the suggestions provided by the Investigations 3:51 feature and the issue is still unresolved, 3:53 you can always create a case with Google Cloud Support 3:56 and pass along the steps you've tried already with Gemini. 4:00 In addition to the Logs Explorer, 4:02 there are ways to initiate investigations 4:04 across Google Cloud, such as from the Cloud Console 4:08 chat or other services we're going 4:10 to be introducing soon as well. 4:12 [MUSICAL FLOURISH]
+Learn more
+4:14 Investigations redefines troubleshooting, leveraging 4:17 generative AI to instantly surface insights, guide 4:20 your decisions, and help you resolve issues 4:22 faster than ever before. 4:25 To learn more about investigations 4:26 and other features of Gemini Cloud Assist, visit our website. 4:30 Or you can go to Google Cloud console 4:32 to enable Gemini Cloud Assist today. 4:34 I hope you found this helpful, and we're 4:36 looking forward to getting your feedback on Gemini Cloud Assist. 4:39 [MUSIC PLAYING] 4:42
+
+You can resolve the issue with recommended fixes or additional troubleshooting steps provided by Cloud Assist Investigations.
+
+Knowledge check
+
+Match each concept with its definition.
+
+Investigation Hypothesis Observation Issue
+
+The main workflow used to investigate and diagnose an issue.
+Represents the insights about your environment's state that are most relevant to the issue.
+Information that can include errors, a description, a timeline, or the affected resources.
+Synthesizes the observations and uses domain-specific knowledge to identify probable root causes for the issue.
+SUBMIT
+
+Lesson 5 of 7
+Create and review investigations
+In this lesson, we'll review the steps to create and use investigations. As mentioned earlier, there are multiple entry points where you can initiate an investigation with Cloud Assist Investigations. The entry points in the Google Cloud console are on:
+The Investigations page Logs Explorer The alerting page in Cloud Monitoring The Gemini Cloud Assist chat panel Cloud Hub Supported Google Cloud product pages
+You can also initiate and view investigations in the Google Cloud mobile app by navigating to the Observability tab and selecting Investigations. Note: Additional entry points to access Cloud Assist Investigations are being added.
+
+The Investigations page
+You can access this page by navigating to Cloud Assist Investigations in the Tools section of the products page in the Google Cloud console.
+Access Cloud Assist Investigations from the Google Cloud console
+
+Introduction
+Let's review the process to create an investigation from the Investigations page in the Google Cloud console. Click the Start or Next button (>) to learn more.
+
+Step 2
+Prerequisites
+Before you can create an investigation, you must have the following prerequisites: 1. Required APIs enabled for your Google Cloud project. 2. Required permissions to create an investigation. You can acquire these permissions by having the Investigation Creator IAM role on your project. When you create an investigation, you're granted the Investigation Owner IAM role on that investigation, which enables you to review the results of the investigation.
+3. Access to the Google Cloud product being investigated. The investigation's access to the product's APIs and other information is limited to the access you have, based on your credentials. (We'll review this topic in more detail later).
+4. If you're investigating an application, the application must be contained within App Hub.
+
+Step 3
+Create a new investigation
+To create a new investigation, click the Cloud Assist Investigations link on the Products page in the Cloud console. Then, click Create on the Cloud Assist Investigations home page. This opens the new investigation form, where you provide the following information:
+Investigation name: This helps to identify the investigation in your history (optional). Description: Describe the issue in natural language or with a verbatim error message. Start time: The time when the issue began. End time: The time when the issue ended (optional). Project or Application: To target or scope the investigation. Resources: The resources of supported Google Cloud products in scope that are affected by the issue. Optional if errors messages are provided, but still recommended. For example, a Cloud Storage bucket.
+
+After providing these details, begin the investigation by clicking Create.
+
+Review an investigation
+
+Step 4
+
+After you create an investigation, it can take several minutes to complete.
+Once completed, you can view the details of the investigation from the same entry point or from your project's investigation history in the console.
+The image is an example of the investigation details of an issue related to accessing a Cloud Storage bucket. We'll review these details in the next module.
+
+Summary
+The investigation details contains sections that include information about the issue, the observations, and the hypotheses.
+The details include recommended fixes to help you correct the issue, or include additional troubleshooting steps to confirm or refute the hypotheses.
+Logs Explorer
+The Logs Explorer in the Google Cloud console is another entry point from where you can initiate an investigation.
+The Investigate button appears in the expanded log message for supported resources when the log message has a severity level of "Warning" or higher.
+When initiating an investigation in Logs Explorer, the log message, start time, and any relevant resources from the log are automatically prepopulated into the investigation creation form.
+You can optionally edit or add information before running the investigation.
+Based on your Google Cloud entitlements, if Cloud Assist Investigations is unavailable, the Investigate button provides an explanation of the log entry in the Gemini Cloud Assist chat panel.
+
+Cloud Monitoring alerting
+Cloud Monitoring provides different services that you can use to understand the health and performance of your applications and the other Google Cloud services that you use. The alerting feature of Cloud Monitoring notifies you when the value of a performance metric meets criteria that you define.
+The alerting process helps you respond to issues when the performance of an application fails to meet acceptable values. The Investigate button appears for alerts that have a resource label. When initiating an investigation for an alert, a title, issue description, start time, and relevant resources for the alert are automatically prepopulated into the investigation creation panel.
+Investigate an issue from an alert in Cloud Monitoring
+The alerting process helps you respond to issues when the performance of an application fails to meet acceptable values.
+The Investigate button appears for alerts that have a resource label, such as a Cloud Run service
+revision.
+
+When initiating an investigation for an alert, a title, issue description, start time, and relevant resources for the alert are automatically prepopulated into the investigation creation panel.
+Click to zoom the image.
+The Gemini Cloud Assist chat panel
+The Gemini Cloud Assist chat panel in the Google Cloud console is another entry point from where you can initiate an investigation.
+Setup
+Before you can use Gemini Cloud Assist, you must perform the following setup steps:
+
+Introduction
+Gemini Cloud Assist can be set up for a Google Cloud project or folder. For a project, these steps can be performed in the Google Cloud console using the gcloud CLI or the Google API. To describe these steps, we'll use the gcloud CLI. Click the Start or Next button (>) to learn more.
+
+Step 2
+Enable the Gemini Cloud Assist API
+gcloud command: $ gcloud services enable geminicloudassist.googleapis.com Note: This also enables the Gemini for Google Cloud API, which is also required to use Gemini Cloud Assist.
+
+Step 3
+Grant IAM roles in a Google Cloud project
+Grant the roles/geminicloudassist.user, roles/recommender.viewer roles to the user account: gcloud commands:
+$ gcloud projects add-iam-policy-binding PROJECT_ID --member=PRINCIPAL --
+role=roles/geminicloudassist.user
+$ gcloud projects add-iam-policy-binding PROJECT_ID --member=PRINCIPAL --
+role=roles/recommender.viewer Note: To get investigative assistance with products that the user doesn't already have access to, additional IAM roles might be needed.
+
+Summary
+Gemini Cloud Assist is now ready to use in your project. To set up Gemini Cloud Assist for a folder, you can only use the Google Cloud console.
+To learn about the pricing for Gemini Cloud Assist, visit the documentation.
+Access and use the chat panel
+Now that you have set up the Google Cloud Assist chat panel for your project or folder, you can access it from any page in the Google Cloud console after selecting your project.
+Access the Gemini Cloud Assist chat panel
+
+By writing statements or prompts in natural language in the chat panel, you can:
+Receive explanations, suggested actions, or guided workflows that help you to complete tasks quickly and efficiently. Access information on Google Cloud products and best practices for using them. Inspect your cloud resources, applications, and data. Get help with BigQuery datasets and databases. Investigate and troubleshoot issues with your Cloud resources and applications.
+Click to zoom the image.
+The New investigation option appears in the chat panel's drop-down menu. Click to zoom the image.
+
+Create a new investigation from the Gemini Cloud Assist chat panel
+Cloud Hub
+Cloud Hub provides DevOps and SRE teams with a user interface in the Google Cloud console that contains a centralized view of operations data and insights for your applications and resources. Viewing this data together in one place helps you to take action on important issues, patterns, and trends.
+Health and troubleshooting dashboard in Cloud Hub
+You can:
+Access Cloud Hub from the products page in the console. View active alerts and events, including Google Cloud incidents. View your current investigations and create new ones in the health and troubleshooting dashboard.
+
+Click to zoom the image.
+Supported Google Cloud products
+Cloud Assist Investigations supports the troubleshooting of many Google Cloud products, including Cloud Storage, Cloud Run, and Google Kubernetes Engine.
+To investigate issues with your workloads that use these products, you can create investigations from product-related log messages within Logs Explorer. You can also create investigations from service logs in Cloud Run or container logs in GKE.
+Knowledge check
+You can create an investigation from an expanded log message in Logs Explorer for supported resources when the message has a severity level of _______ or higher. Type your answer here
+SUBMIT
+
+Lesson 6 of 7
+Investigate and diagnose issues
+The investigation details
+In the previous module, we reviewed how to create an investigation in the Cloud Assist Investigations page in the Google Cloud console. Let's now review the details of that investigation. The investigation details includes information about:
+The issue The observations The hypotheses and recommended fixes or additional troubleshooting steps.
+Information about the issue in the investigation details
+
+The issue
+Contains input information that was provided and used to generate the results of the investigation. Includes three types of resources that might be associated with the investigation:
+User-provided resources: These are provided by the user or fetched from the initial error. Discovered resources: Additional resources considered by Gemini while performing the investigation.
+Relevant resources: The resources that Gemini considers relevant to the root cause hypothesis, which always include user-provided resources.
+Click to zoom the image.
+Observations generated by the investigation
+The observations
+Generated by the investigation.
+
+Based on reviews of procedural runbooks, logs, outage messages, and alerts. Used to generate hypotheses on the root cause of the issue. Click to zoom the image.
+Hypotheses generated by the investigation on the root cause of the issue
+The hypotheses
+Generated by the investigation. Based on the data collected and the observations made by the investigation. Contain an overview of what the issue could be. Provide recommended fixes that help you correct the issue, or Provide additional troubleshooting steps to confirm or refute the hypotheses. Click to zoom the image.
+Considerations
+
+Here are some points to consider when using Cloud Assist Investigations to troubleshoot issues. Click each button to expand the items and learn more.
+Product API access
+As mentioned earlier, when you perform an investigation, Cloud Assist Investigations uses your credentials to access relevant product APIs and other information. Each investigation creates and uses an OAuth 2.0 token with a grant scope of API_CLOUD_PLATFORM as part of its normal operation.
+The access provided by the OAuth 2.0 token is limited to the access available to the user or service account that initiates the investigation. This limits the investigation's access based on the access you have to the product APIs. The OAuth 2.0 token is not used for mutating data.
+Data residency compliance
+You shouldn't perform investigations on data that is subject to residency or jurisdictional regulatory
+compliance requirements. The investigation resource that is created includes annotations and observations that can be stored in any Google Cloud data center.
+Global resource analysis
+As part of an investigation, Cloud Assist Investigations analyzes global Google Cloud resources such as logs. Investigations don't analyze:
+Location-specific content, such as data stored in regional log buckets.
+
+Data residing outside of Google Cloud.
+Targeted troubleshooting
+Investigations are designed for targeted troubleshooting within Google Cloud environments. An investigation is limited to diagnosing issues within:
+A single Google Cloud project A single application within App Hub
+Timestamp usage
+Timestamps are a key piece of information in effective investigations. For the best results, verify that the start time reported in the investigation is reasonably accurate.
+An accurate start time enables time-based correlations to be made across seemingly unrelated events.
+Resource usage
+To improve the outcome of an investigation, add the affected resources when creating the investigation. You can only add resources that are in the project or application of the investigation's scope, and supported by Cloud Assist Investigations.
+Dynamic results
+Investigation runs are dynamic, which means re-running the same investigation can produce results with small differences.
+
+Some of the factors that contribute to differences between runs include: The probabilistic nature of output from large-language models such as Gemini. The non-static nature of the overall state of Google Cloud environments.
+Diagnosing an issue from Logs Explorer
+As mentioned earlier, the Logs Explorer in the Google Cloud console is another entry point from where you can initiate an investigation.
+When you click on the Investigate button in the log message, the Create new investigation form opens. The form is prepopulated with information from the warning or error.
+In this example, the warning is generated due to an authentication issue with a Cloud Run service. In this case, the resource identified is the Cloud Run service revision.
+
+The Create new investigation form pre-populated with the log information.
+
+Observation indicating a Cloud Run authentication failure.
+Observations
+The investigation generated an observation that indicates a Cloud Run authentication failure. This example indicates that the Cloud Run service requires authentication and the request did not include the proper credentials.
+Click to zoom the image.
+Hypothesis
+The investigation generated a hypothesis as to the root cause of the issue. In this case, an unauthenticated request was made to the service that required authentication. This produced a 403 error response from the service. Recommended fixes and related information are also provided to resolve the issue.
+Click to zoom the image.
+
+The hypothesis generated from the investigation and recommended fixes.
+Knowledge check
+Consider each factor when using Cloud Assist Investigations, and click the card to check your knowledge. Then click the arrows to navigate to the next or previous card.
+
+How is access to product APIs granted?
+
+To access product APIs when performing an investigation, an OAuth 2.0 token is created using the credentials of the user or service account that initiates the investigation.
+
+1 of 6
+
+Can I perform investigations on data that is subject to residency requirements?
+
+You shouldn't perform investigations on data that is subject to residency or jurisdictional regulatory compliance requirements.
+The investigation resource that is created includes annotations and observations that can be
+
+2 of 6
+
+Can I use investigations to analyze resources in a specific location?
+
+Cloud Assist Investigations analyzes global resources, such as logs that reside in Google Cloud.
+Investigations don't analyze location-specific content, such as data stored in regional log buckets.
+
+3 of 6
+
+What is the scope of a Cloud Assist investigation within a Google Cloud environment?
+
+An investigation is scoped or limited to diagnosing issues within a single Google Cloud project or a single application within App Hub.
+
+4 of 6
+
+Why are timestamps important when creating investigations?
+
+Timestamps are a key piece of information in effective investigations. Verify that the start time reported in the investigation is reasonably accurate.
+An accurate start time enables time-based correlations to be made across seemingly unrelated events.
+5 of 6
+
+Why do results differ slightly between re-runs of the same
+
+Investigation runs are dynamic, which means re-running the same investigation can produce results with small differences.
+
+investigation?
+
+This is partially due to the probabilistic nature of output from large-language models such as Gemini, and the non-
+6 of 6
+
+Lesson 7 of 7
+What did I walk away with?
+You've reached the end of the course. We hope this course has enabled you to:
+ Identify and navigate the Cloud Assist Investigations interface in the Google Cloud console.  Utilize core features of Cloud Assist Investigations to investigate and diagnose common issues.  Troubleshoot incidents with Cloud Assist Investigations.
+
+Congratulations on completing this training!
+
+

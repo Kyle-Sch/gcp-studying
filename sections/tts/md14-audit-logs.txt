@@ -1,0 +1,15 @@
+Section 14: Audit Logs.
+
+Google Cloud provides four distinct types of audit logs, and understanding how they differ is essential for both security and compliance. Let's walk through each one.
+
+The first type is Admin Activity logs. These record configuration and metadata changes, such as creating a virtual machine or modifying an IAM policy. Admin Activity logs are always on by default, they cannot be disabled, and they are retained for 400 days. They are also free of charge.
+
+The second type is System Event logs. These record changes that Google initiates on your behalf, meaning non-human administrative actions. Like Admin Activity logs, System Event logs are always enabled, retained for 400 days, and free of charge.
+
+The third type is Data Access logs. These record reads and writes to user data and resource configurations. Unlike the first two types, Data Access logs are turned off by default. The one exception is BigQuery, where Data Access logging is always enabled. When you do turn them on for other services, they are retained for 30 days and you are charged for the storage. Because of their volume and cost, most organizations enable Data Access logs only for their most sensitive services.
+
+The fourth type is Policy Denied logs. These are generated whenever access is denied by a security policy. Policy Denied logs are always on and cannot be disabled. They are retained for 30 days and are charged, since they can be high-volume in environments with complex access controls.
+
+Now let's talk about who can view these logs. To view Admin Activity or System Event logs, you need either the Logging Logs Viewer role or the Project Viewer role. To view Data Access logs, you need a higher level of permission: either the Logging Private Logs Viewer role or the Project Owner role, because these logs can contain sensitive data.
+
+It is important to note that there is a fifth, separate concept called Access Transparency logs. These are different from the four audit log types above. Access Transparency logs record actions taken by Google employees when they access your data, for example when a Google support engineer works on an issue at your request. This is a distinct category from audit logs, which record actions taken by people inside your own organization. Access Transparency logs require an appropriate Google Cloud support package to be enabled.

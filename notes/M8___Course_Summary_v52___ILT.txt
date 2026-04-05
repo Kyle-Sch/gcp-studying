@@ -1,0 +1,191 @@
+Proprietary + Confidential
+
+07
+
+Course Summary
+
+Proprietary + Confidential
+And this brings us close to the end of this course. Thank you for your time and attention today! Before you go, let's take a few minutes to review what's been covered.
+
+Module 01
+
+Proprietary + Confidential
+01 Google Cloud and cloud computing 02 Managed infrastructure and services with IaaS and PaaS 03 The Google Cloud network 04 Security throughout the infrastructure 05 Open source 06 Pricing structure and billing tools
+
+Module 1 recap
+In module 1, you were introduced to Google Cloud and cloud computing.
+Specifically, you explored:  The concept of managed infrastructure and managed services, through IaaS, or infrastructure as a service, and PaaS, or platform as a service.  The Google Cloud network.  Google Cloud's focus on security throughout our infrastructure.  How Google publishes key elements of technology using open source licenses.  And Google Cloud's pricing structure and billing tools.
+
+Module 02
+
+Proprietary + Confidential
+
+01
+
+Google Cloud Resource Hierarchy:
+ Resources  Projects  Folders  Organization node
+
+02 Policies
+
+03 Identity and Access Management (IAM)
+
+04
+
+Ways to access and interact with Google Cloud:
+ Google Cloud console  Google Cloud SDK and Cloud Shell  APIs  Google Cloud app
+
+Module 2 recap
+In module 2, you learned about the Google Cloud Resource Hierarchy, which is made up of four levels: resources, projects, folders, and an organization node.
+You also learned about:  Defining policies and their downward inheritance.  When to use Cloud Identity and Access Management, or Cloud IAM,  And the four ways to access and interact with Google Cloud: through the Google Cloud console, the Google Cloud SDK and Cloud Shell, APIs, and the Google Cloud app.
+
+Module 03
+
+Proprietary + Confidential
+01 Google Compute Engine 02 Virtual private cloud (VPC) 03 Compute Engine's Autoscaling feature 04 Google Virtual Private Cloud compatibility features:
+routing tables, firewalls, VPC peering, shared VPC
+05 Cloud Load Balancing 06 Google Cloud interconnect
+
+Module 3 recap
+In module 3, you explored how Compute Engine works, with a focus on virtual machines and virtual networking.
+You were introduced to:  The VPC, or virtual private cloud.  Compute Engine's Autoscaling feature.  And important Google Virtual Private Cloud compatibility features, like routing tables, firewalls, VPC peering and shared VPC, all of which result in the need for less network management.
+You also explored Cloud Load Balancing, a fully distributed, software-defined, managed service for all your traffic.
+Finally, you compared how on-premises or other-cloud networks can be interconnected with a Google VPC.
+
+Module 04
+
+Proprietary + Confidential
+
+01
+
+Google Cloud's core storage options
+ Cloud Storage  Bigtable  Cloud SQL  Spanner  Firestore
+
+02 Four Cloud Storage classes
+ Standard  Nearline  Coldline  Archive
+
+Module 4 recap
+In module 4, you explored Google Cloud's five core storage options: Cloud Storage, Bigtable, Cloud SQL, Spanner, and Firestore.
+You also examined the four storage classes that make up Cloud Storage:  Standard Storage, which is used for frequently accessed hot data,  Nearline Storage and Coldline Storage, which are used for less-frequently accessed cool data,  and Archive Storage.
+
+Module 05
+
+Proprietary + Confidential
+01 Containers 02 Kubernetes 03 Google Kubernetes Engine (GKE)
+
+Module 5 recap
+In module 5, you learned about containers, which are invisible boxes around your code and its dependencies.
+You were introduced to containers, along with:
+ Kubernetes, an open-source platform for managing containerized workloads and services.
+ And Google Kubernetes Engine (GKE), a Google-hosted managed Kubernetes service in the cloud.
+
+Module 06
+
+Proprietary + Confidential
+01 Cloud Run 02 Cloud Run functions
+
+Module 6 recap
+Finally, in module 6, the focus was on developing applications in the cloud.
+You explored:  Cloud Run, a managed compute platform that lets you run stateless containers via web requests or Pub/Sub events.  And Cloud Run functions, a lightweight, event-based, asynchronous compute solution to create single-purpose functions.
+
+What's next for Cloud Engineer?
+
+Proprietary + Confidential
+
+Cloud Engineer
+If you're a Cloud Engineer who does or will deploy applications, monitor operations, and manage enterprise solutions.
+
+1 Core Infrastructure
+
+2 Cloud Engineer Learning Path
+
+3
+
+Essential Google Cloud Infrastructure: Foundation
+
+Congratulations on completing today's course. We realize that we've imparted a ton of information to you, but hopefully now you have a thorough understanding of Google Cloud's technology, products, and services, that you can take back with you to your organizations.
+So, what's next? How can you continue your learning journey with Google Cloud?
+Well, we offer learning paths for different cloud roles...
+If you're a Cloud Engineer who does or will deploy applications, monitor operations, and manage enterprise solutions, you should take the Cloud Engineer Learning Path and continue next with the course: Essential Google Cloud Infrastructure: Foundation.
+
+What's next for Cloud Architect?
+
+Proprietary + Confidential
+
+Cloud Architect
+If you're a Cloud Architect who does or will design, develop, and manage robust and scalable cloud architecture solutions.
+
+1 Core Infrastructure
+
+2 Cloud Architect Learning Path
+
+3
+
+Essential Google Cloud Infrastructure: Core services
+
+If you're a Cloud Architect who does or will design, develop, and manage robust and scalable cloud architecture solutions, you should take the Cloud Architect Learning Path and also continue next with the course: Essential Google Cloud Infrastructure: Core Services.
+
+What's next for Cloud Developer?
+
+Proprietary + Confidential
+
+Cloud Developer
+For Cloud Developer who does or will build scalable and highly available cloud applications using Google Cloud and tools that leverage fully managed services.
+
+1 Core Infrastructure
+
+2
+
+Cloud Developer Learning Path
+
+3
+
+Developing Applications with Google Cloud: Foundations
+
+If you're a Cloud Developer who does or will build scalable and highly available cloud applications using Google Cloud and tools that leverage fully managed services, you should take the Cloud Developer Learning Path and then continue next with the course: Developing Applications with Google Cloud: Foundations.
+
+What's next for Cloud DevOps Engineer?
+
+Proprietary + Confidential
+
+Cloud DevOps Engineer
+If you're a Cloud DevOps Engineer who does or will maintain the efficient operations of the full software delivery pipeline.
+
+1 Core Infrastructure
+
+2
+
+Cloud DevOps Engineer Learning Path
+
+3
+
+Architecting with Google Cloud: Design and Process
+
+If you're a Cloud DevOps Engineer who does or will maintain the efficient operations of the full software delivery pipeline, you should take the Cloud DevOps Engineer Learning Path and then continue next with the course: Architecting with Google Cloud: Design and Process.
+
+Google Cloud Certified
+Show the world that you can design, develop, manage, and administer application infrastructure and data solutions on Google Cloud technology
+
+Proprietary + Confidential
+
+By becoming Google Cloud Certified, you can show the world that you can design, develop, manage, and administer application infrastructure and data solutions on Google Cloud technology. The Google Cloud Certified designation means you've demonstrated the necessary skills to leverage Google Cloud technology in a way that transforms businesses and meaningfully impacts the people and customers they serve.
+
+Helpful links
+VMs and Networks Compute Engine cloud.google.com/compute/docs Virtual Private Cloud cloud.google.com/compute/docs/vpc Google Cloud Observability cloud.google.com/stackdriver/docs gcloud CLI cloud.google.com/sdk/gcloud Cloud Source Repositories cloud.google.com/source-repositories/docs
+
+Proprietary + Confidential
+Storage Overview of Cloud Storage cloud.google.com/storage Cloud SQL cloud.google.com/sql/docs Bigtable cloud.google.com/bigtable/docs Spanner cloud.google.com/spanner/docs Firestore firebase.google.com/docs/firestore
+
+So that you can find out a little more about some of the topics we've discussed today, we've put together a list of helpful links that you can access in your own time. You'll have access to a copy of this deck where you'll find these links.
+
+Thank you for attending this training!
+We love your feedback! Please take a minute to complete the survey and help us improve our courses.
+
+Proprietary + Confidential
+
+Feedback
+We hope you've enjoyed today's course. It would be great for us if you could take a couple of minutes to give us feedback to ensure that we can continue to improve our training offering in the future.
+
+Thank you
+Thank you!
+
+
