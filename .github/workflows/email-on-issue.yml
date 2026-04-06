@@ -1,0 +1,23 @@
+name: Email on New Issue
+on:
+  issues:
+    types: [opened]
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send email via Resend
+        run: |
+          curl -X POST https://api.resend.com/emails \
+            -H 'Authorization: Bearer ${{ secrets.RESEND_API_KEY }}' \
+            -H 'Content-Type: application/json' \
+            -d "$(python3 -c "
+import json, sys
+payload = {
+  'from': 'onboarding@resend.dev',
+  'to': ['kyle.schne@gmail.com'],
+  'subject': 'Daily GCP Practice Questions - ${{ github.event.issue.title }}',
+  'html': '<h2>' + '${{ github.event.issue.title }}' + '</h2><pre>' + '${{ github.event.issue.body }}' + '</pre>'
+}
+print(json.dumps(payload))
+")"
