@@ -13,9 +13,23 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_URL: ${{ github.event.issue.html_url }}
         run: |
-          echo "Sending email..."
-          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST https://api.resend.com/emails \
-            -H "Authorization: Bearer $RESEND_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d "{\"from\":\"onboarding@resend.dev\",\"to\":[\"kyle.schne@gmail.com\"],\"subject\":\"$ISSUE_TITLE\",\"text\":\"$ISSUE_BODY\"}")
-          echo "Response: $RESPONSE"
+          python3 - <<'EOF'
+          import os, json, subprocess
+          payload = {
+            "from": "onboarding@resend.dev",
+            "to": ["kyle.schne@gmail.com"],
+            "subject": os.environ["ISSUE_TITLE"],
+            "text": os.environ["ISSUE_BODY"] + "\n\n" + os.environ["ISSUE_URL"]
+          }
+          with open("/tmp/email.json", "w") as f:
+            json.dump(payload, f)
+          result = subprocess.run([
+            "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}",
+            "-X", "POST", "https://api.resend.com/emails",
+            "-H", f"Authorization: Bearer {os.environ['RESEND_API_KEY']}",
+            "-H", "Content-Type: application/json",
+            "-d", f"@/tmp/email.json"
+          ], capture_output=True, text=True)
+          print(result.stdout)
+          print(result.stderr)
+          EOF
