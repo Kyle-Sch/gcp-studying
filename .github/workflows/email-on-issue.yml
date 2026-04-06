@@ -13,21 +13,9 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_URL: ${{ github.event.issue.html_url }}
         run: |
-          python3 - <<'PYEOF'
-          import os, json, urllib.request
-          payload = {
-            "from": "onboarding@resend.dev",
-            "to": ["kyle.schne@gmail.com"],
-            "subject": f"Daily GCP Practice Questions - {os.environ['ISSUE_TITLE']}",
-            "html": f"<h2>{os.environ['ISSUE_TITLE']}</h2><pre style='white-space:pre-wrap'>{os.environ['ISSUE_BODY']}</pre><p><a href='{os.environ['ISSUE_URL']}'>View on GitHub</a></p>"
-          }
-          data = json.dumps(payload).encode()
-          req = urllib.request.Request(
-            "https://api.resend.com/emails",
-            data=data,
-            headers={"Authorization": f"Bearer {os.environ['RESEND_API_KEY']}", "Content-Type": "application/json"},
-            method="POST"
-          )
-          with urllib.request.urlopen(req) as r:
-            print(r.status, r.read().decode())
-          PYEOF
+          echo "Sending email..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST https://api.resend.com/emails \
+            -H "Authorization: Bearer $RESEND_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"from\":\"onboarding@resend.dev\",\"to\":[\"kyle.schne@gmail.com\"],\"subject\":\"$ISSUE_TITLE\",\"text\":\"$ISSUE_BODY\"}")
+          echo "Response: $RESPONSE"
